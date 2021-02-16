@@ -1,12 +1,9 @@
-include(../../mere-utils/mere-utils-lib/mere-utils-lib.pri)
-include(../../mere-store/mere-store-lib/mere-store-lib.pri)
-
 QT      = core
 
 CONFIG += c++11
 CONFIG += shared
 
-TARGET = mere-xdg
+TARGET = mere-xdg-utils
 VERSION= 0.0.1
 TEMPLATE = lib
 
@@ -40,8 +37,8 @@ HEADERS += \
 INCLUDEPATH += /usr/local/include
 
 LIBS += -L/usr/local/lib
-LIBS += -lmere-utils
 
+LIBS += -lmere-utils
 
 #
 # Install
