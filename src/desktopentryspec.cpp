@@ -2,53 +2,21 @@
 
 #include "mere/utils/stringutils.h"
 
+#include <iostream>
 #include <QFile>
 #include <QFileInfo>
 #include <QSettings>
 
-Mere::XDG::DesktopEntrySpec::DesktopEntrySpec()
-{
-
-}
-
+//static
 Mere::XDG::DesktopEntry Mere::XDG::DesktopEntrySpec::parse(const QString &path)
 {
     if(Mere::Utils::StringUtils::isBlank(path))
     {
-        qDebug() << path << " can't be blank. Please check the path.";
+        std::cout << "path can't be blank. please check the path." << std::endl;
         return DesktopEntry();
     }
 
-
-    qDebug() << "Going to read .desktop file";
-    DesktopEntry entry;
-
-    QSettings settings(path, QSettings::IniFormat);
-    settings.beginGroup("Desktop Entry");
-    const QStringList keys = settings.childKeys();
-    foreach (const QString &key, keys)
-    {
-        QVariant value = settings.value(key);
-
-        if (key == "Name")
-            entry.set(DesktopEntry::DESKTOP_ENTRY_NAME, value);
-        else if (key == "Icon")
-            entry.set(DesktopEntry::DESKTOP_ENTRY_ICON, value);
-        else if (key == "Exec")
-            entry.set(DesktopEntry::DESKTOP_ENTRY_EXEC, value);
-        else if (key == "Path")
-            entry.set(DesktopEntry::DESKTOP_ENTRY_PATH, value);
-        else if (key == "URL")
-            entry.set(DesktopEntry::DESKTOP_ENTRY_URL, value);
-        else if (key == "Comment")
-            entry.set(DesktopEntry::DESKTOP_ENTRY_COMMENT, value);
-
-        //qDebug() << key << value;
-    }
-
-    settings.endGroup();
-
-    return entry;
+    return parse(QFileInfo(path));
 }
 
 Mere::XDG::DesktopEntry Mere::XDG::DesktopEntrySpec::parse(const QFileInfo &fileInfo)
@@ -59,19 +27,74 @@ Mere::XDG::DesktopEntry Mere::XDG::DesktopEntrySpec::parse(const QFileInfo &file
         return DesktopEntry();
     }
 
-//    if(!fileInfo.isReadable())
-//    {
-//        qDebug() << fileInfo.absoluteFilePath() << " is not readable. Please check the path.";
-//        return NULL;
-//    }
+    DesktopEntry entry;
 
-    return parse(fileInfo.absoluteFilePath());
+    entry.set(DesktopEntry::Id, fileInfo.fileName());
+
+    QSettings settings(fileInfo.absoluteFilePath(), QSettings::IniFormat);
+
+    settings.beginGroup("Desktop Entry");
+    const QStringList keys = settings.childKeys();
+    for (const QString &key : keys)
+    {
+        QVariant value = settings.value(key);
+
+        if (key == "Type")
+            entry.set(DesktopEntry::Type, value);
+        else if (key == "Version")
+            entry.set(DesktopEntry::Version, value);
+        else if (key == "Name")
+            entry.set(DesktopEntry::Name, value);
+        else if (key == "GenericName")
+            entry.set(DesktopEntry::GenericName, value);
+        else if (key == "NoDisplay")
+            entry.set(DesktopEntry::NoDisplay, value);
+        else if (key == "Comment")
+            entry.set(DesktopEntry::Comment, value);
+        else if (key == "Icon")
+            entry.set(DesktopEntry::Icon, value);
+        else if (key == "Hidden")
+            entry.set(DesktopEntry::Hidden, value);
+        else if (key == "OnlyShowIn")
+            entry.set(DesktopEntry::OnlyShowIn, value);
+        else if (key == "NotShowIn")
+            entry.set(DesktopEntry::NotShowIn, value);
+        else if (key == "DBusActivatable")
+            entry.set(DesktopEntry::DBusActivatable, value);
+        else if (key == "TryExec")
+            entry.set(DesktopEntry::TryExec, value);
+        else if (key == "Exec")
+            entry.set(DesktopEntry::Exec, value);
+        else if (key == "Path")
+            entry.set(DesktopEntry::Path, value);
+        else if (key == "Terminal")
+            entry.set(DesktopEntry::Terminal, value);
+        else if (key == "Actions")
+            entry.set(DesktopEntry::Actions, value);
+        else if (key == "MimeType")
+            entry.set(DesktopEntry::MimeType, value);
+        else if (key == "Categories")
+            entry.set(DesktopEntry::Categories, value);
+        else if (key == "Implements")
+            entry.set(DesktopEntry::Implements, value);
+        else if (key == "Keywords")
+            entry.set(DesktopEntry::Keywords, value);
+        else if (key == "StartupNotify")
+            entry.set(DesktopEntry::StartupNotify, value);
+        else if (key == "StartupWMClass")
+            entry.set(DesktopEntry::StartupWMClass, value);
+        else if (key == "URL")
+            entry.set(DesktopEntry::URL, value);
+        else if (key == "PrefersNonDefaultGPU")
+            entry.set(DesktopEntry::PrefersNonDefaultGPU, value);
+    }
+
+    settings.endGroup();
+
+    return entry;
 }
 
-//FIXME
-bool Mere::XDG::DesktopEntrySpec::isValid(DesktopEntry &entry)
+bool Mere::XDG::DesktopEntrySpec::valid(DesktopEntry &entry)
 {
-    Q_UNUSED(entry);
-
-    return true;
+    return entry.valid();
 }

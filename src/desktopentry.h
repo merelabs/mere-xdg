@@ -2,8 +2,8 @@
 #define MERE_XDG_DESKTOPENTRY_H
 
 #include "global.h"
+#include <map>
 
-#include <QMap>
 #include <QVariant>
 
 namespace Mere
@@ -15,25 +15,46 @@ class MERE_XDG_LIB_SPEC DesktopEntry
 {
 public:
     ~DesktopEntry();
-    explicit DesktopEntry();
-    explicit DesktopEntry(QString &path);
+    DesktopEntry();
+
+    explicit DesktopEntry(const std::string &path);
 
     enum Attribute
     {
-        DESKTOP_ENTRY_ID,
-        DESKTOP_ENTRY_NAME,
-        DESKTOP_ENTRY_ICON,
-        DESKTOP_ENTRY_EXEC,
-        DESKTOP_ENTRY_PATH,
-        DESKTOP_ENTRY_URL,
-        DESKTOP_ENTRY_COMMENT
+        Id,
+        Type,
+        Version,
+        Name,
+        GenericName,
+        NoDisplay,
+        Comment,
+        Icon,
+        Hidden,
+        OnlyShowIn,
+        NotShowIn,
+        DBusActivatable,
+        TryExec,
+        Exec,
+        Path,
+        Terminal,
+        Actions,
+        MimeType,
+        Categories,
+        Implements,
+        Keywords,
+        StartupNotify,
+        StartupWMClass,
+        URL,
+        PrefersNonDefaultGPU
     };
 
-    QVariant  get(Attribute);
-    void set(Attribute, QVariant value);
+    QVariant  get(const Attribute &attribute);
+    void set(const Attribute &attribute, const QVariant &value);
+
+    bool valid();
 
 private:
-    QMap<Attribute, QVariant> attributes;
+    std::map<Attribute, QVariant> m_attributes;
 };
 }
 }

@@ -58,7 +58,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectorySpec::autostar
             {
                 DesktopEntry desktopEntry = DesktopEntrySpec::parse(fileInfo);
 
-                if (Mere::XDG::DesktopEntrySpec::isValid(desktopEntry))
+                if (Mere::XDG::DesktopEntrySpec::valid(desktopEntry))
                     desktopEntries.push_back(desktopEntry);
             }
         }

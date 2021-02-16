@@ -13,13 +13,11 @@ namespace XDG
 
 class MERE_XDG_LIB_SPEC DesktopEntrySpec
 {
-private:
-    DesktopEntrySpec();
-
+    DesktopEntrySpec() = default;
 public:
     static DesktopEntry parse(const QString &path);
     static DesktopEntry parse(const QFileInfo &fileInfo);
-    static bool isValid(DesktopEntry &entry);
+    static bool valid(DesktopEntry &entry);
 };
 }
 }
