@@ -100,10 +100,9 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupRuntimeDirEnv()
 
 std::string Mere::XDG::BaseDirectorySpec::userDataDirectory()
 {
-    std::string dataHome(getenv(XDG::DATA_HOME));
+    const char *home = getenv(XDG::DATA_HOME);
 
-    if(Mere::Utils::StringUtils::isBlank(dataHome))
-        dataHome = XDG::BaseDirectory::DATA_HOME;
+    std::string dataHome(home ? home : XDG::BaseDirectory::DATA_HOME);
 
     Mere::Utils::EnvUtils::expandEnvVar(dataHome);
 
@@ -115,9 +114,9 @@ std::string Mere::XDG::BaseDirectorySpec::userDataDirectory()
 
 std::string Mere::XDG::BaseDirectorySpec::userConfigDirectory()
 {
-    std::string configHome(getenv(XDG::CONFIG_HOME));
-    if(Mere::Utils::StringUtils::isBlank(configHome))
-        configHome = XDG::BaseDirectory::CONFIG_HOME;
+    const char *home = getenv(XDG::CONFIG_HOME);
+
+    std::string configHome(home ? home : XDG::BaseDirectory::CONFIG_HOME);
 
     Mere::Utils::EnvUtils::expandEnvVar(configHome);
 
@@ -129,9 +128,9 @@ std::string Mere::XDG::BaseDirectorySpec::userConfigDirectory()
 
 std::string Mere::XDG::BaseDirectorySpec::userCacheDirectory()
 {
-    std::string cacheHome(getenv(XDG::CACHE_HOME));
-    if(Mere::Utils::StringUtils::isBlank(cacheHome))
-        cacheHome = XDG::BaseDirectory::CACHE_HOME;
+    const char *home = getenv(XDG::CACHE_HOME);
+
+    std::string cacheHome( home ? home : XDG::BaseDirectory::CACHE_HOME);
 
     Mere::Utils::EnvUtils::expandEnvVar(cacheHome);
 
@@ -145,10 +144,9 @@ std::vector<std::string> Mere::XDG::BaseDirectorySpec::dataSearchDirectories()
 {    
     std::vector<std::string> dirs;
 
-    std::string dataDirectories(getenv(XDG::DATA_DIRS));
+    const char *datadirs = getenv(XDG::DATA_DIRS);
 
-    if(Mere::Utils::StringUtils::isBlank(dataDirectories))
-        dataDirectories = XDG::BaseDirectory::DATA_DIRS;
+    std::string dataDirectories(datadirs ? datadirs : XDG::BaseDirectory::DATA_DIRS);
 
     std::string dir;
     std::istringstream iss(dataDirectories);
@@ -168,10 +166,9 @@ std::vector<std::string> Mere::XDG::BaseDirectorySpec::configSearchDirectories()
 {
     std::vector<std::string> dirs;
 
-    std::string configDirectories(getenv(XDG::CONFIG_DIRS));
+    const char *configdirs = getenv(XDG::CONFIG_DIRS);
 
-    if(Mere::Utils::StringUtils::isBlank(configDirectories))
-        configDirectories = XDG::BaseDirectory::CONFIG_DIRS;
+    std::string configDirectories(configdirs ? configdirs : XDG::BaseDirectory::CONFIG_DIRS);
 
     std::string dir;
     std::istringstream iss(configDirectories);
