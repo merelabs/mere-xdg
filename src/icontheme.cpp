@@ -1,6 +1,6 @@
 #include "icontheme.h"
 
-Mere::XDG::IconTheme::IconTheme(const QString &themePath, QObject *parent) : QObject(parent)
+Mere::XDG::IconTheme::IconTheme(const std::string &themePath, QObject *parent) : QObject(parent)
 {
 
 }

@@ -25,17 +25,17 @@ class MERE_XDG_LIB_SPEC IconThemeSpec
 public:
     ~IconThemeSpec();
     explicit IconThemeSpec();
-    static QString path(const QString &icon);
-    static QString path(const QString &icon, unsigned int size);
-    static QString path(const QString &icon, unsigned int size, unsigned int scale);
-    static QString path(const QString &icon, unsigned int size, unsigned int scale, const QString &context);
-    static QString path(const DesktopEntry &entry);
+    static std::string path(const std::string &icon);
+    static std::string path(const std::string &icon, unsigned int size);
+    static std::string path(const std::string &icon, unsigned int size, unsigned int scale);
+    static std::string path(const std::string &icon, unsigned int size, unsigned int scale, const std::string &context);
+    static std::string path(const DesktopEntry &entry);
 
 private:
-    static QString FindIcon(const QString &icon, unsigned int size, unsigned int  scale);
-    static QString FindIconHelper(const QString &icon, unsigned int size, unsigned int scale, const QString &theme);
-    static QString LookupIcon (const QString &icon, unsigned int size, unsigned int  scale, const QString &theme);
-    static QString LookupFallbackIcon (const QString &icon);
+    static std::string FindIcon(const std::string &icon, unsigned int size, unsigned int  scale);
+    static std::string FindIconHelper(const std::string &icon, unsigned int size, unsigned int scale, const std::string &theme);
+    static std::string LookupIcon(const std::string &icon, unsigned int size, unsigned int  scale, const std::string &theme);
+    static std::string LookupFallbackIcon(const std::string &icon);
     static bool DirectoryMatchesSize(const IconDirectoryDefinition &def, unsigned int size, unsigned int scale);
     static int DirectorySizeDistance(const IconDirectoryDefinition &def, unsigned int size, unsigned int scale);
 };

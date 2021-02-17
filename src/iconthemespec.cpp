@@ -20,52 +20,52 @@ Mere::XDG::IconThemeSpec::IconThemeSpec()
 }
 
 //static
-QString Mere::XDG::IconThemeSpec::path(const QString &icon)
+std::string Mere::XDG::IconThemeSpec::path(const std::string &icon)
 {
     return path(icon, 0);
 }
 
 //static
-QString Mere::XDG::IconThemeSpec::path(const QString &icon, unsigned int size)
+std::string Mere::XDG::IconThemeSpec::path(const std::string &icon, unsigned int size)
 {
     return path(icon, size, 0);
 }
 
 //static
-QString Mere::XDG::IconThemeSpec::path(const QString &icon, unsigned int size, unsigned int scale)
+std::string Mere::XDG::IconThemeSpec::path(const std::string &icon, unsigned int size, unsigned int scale)
 {
     return FindIcon(icon, size, scale);
 }
 
 //static
-QString Mere::XDG::IconThemeSpec::path(const QString &icon, unsigned int size, unsigned int scale, const QString &context)
+std::string Mere::XDG::IconThemeSpec::path(const std::string &icon, unsigned int size, unsigned int scale, const std::string &context)
 {
     return FindIcon(icon, size, scale);
 }
 
 //static
-QString Mere::XDG::IconThemeSpec::path(const DesktopEntry &entry)
+std::string Mere::XDG::IconThemeSpec::path(const DesktopEntry &entry)
 {
 
 }
 
-QString Mere::XDG::IconThemeSpec::FindIcon(const QString &icon, unsigned int size, unsigned int scale)
+std::string Mere::XDG::IconThemeSpec::FindIcon(const std::string &icon, unsigned int size, unsigned int scale)
 {
-   qDebug() << "Looking for icon : " << icon;
+   qDebug() << "Looking for icon : " << icon.c_str();
 //  filename = FindIconHelper(icon, size, scale, user selected theme);
 //  if filename != none
 //    return filename
 
-  QString filepath = FindIconHelper(icon, size, scale, "hicolor");
+  std::string filepath = FindIconHelper(icon, size, scale, "hicolor");
   if( Mere::Utils::StringUtils::isNotBlank(filepath))
     return filepath;
 
-  return LookupFallbackIcon (icon);
+  return LookupFallbackIcon(icon);
 }
 
-QString Mere::XDG::IconThemeSpec::FindIconHelper(const QString &icon, unsigned int size, unsigned int  scale, const QString &theme)
+std::string Mere::XDG::IconThemeSpec::FindIconHelper(const std::string &icon, unsigned int size, unsigned int  scale, const std::string &theme)
 {
-  QString filename = LookupIcon(icon, size, scale, theme);
+  std::string filename = LookupIcon(icon, size, scale, theme);
   if( Mere::Utils::StringUtils::isNotBlank(filename))
     return filename;
 
@@ -78,27 +78,34 @@ QString Mere::XDG::IconThemeSpec::FindIconHelper(const QString &icon, unsigned i
 //      return filename
 //  }
 
-  return LookupFallbackIcon (icon);
+  return LookupFallbackIcon(icon);
 }
 
-QString Mere::XDG::IconThemeSpec::LookupIcon(const QString &icon, unsigned int size, unsigned int scale, const QString &theme)
+std::string Mere::XDG::IconThemeSpec::LookupIcon(const std::string &icon, unsigned int size, unsigned int scale, const std::string &theme)
 {
     int minsize = INT_MAX;
-    QString iconPath;
+    std::string iconPath;
 
-    QStringList themeDirectories = IconThemeDirectorySpec::themeDirectories(theme);
-    for ( const QString &themeDirectory : themeDirectories)
+    std::vector<std::string> themeDirectories = IconThemeDirectorySpec::themeDirectories(theme);
+    for ( const std::string &themeDirectory : themeDirectories)
     {
-        qDebug() << "Theme directory:" << themeDirectory;
+//        qDebug() << "Theme directory:" << themeDirectory;
 
         // Lookup into only the desire theme directory
         // it contains all icon size and scale direcoties;
-        QString themeIndex = themeDirectory;
-        QSettings iconTheme(themeIndex.append(QDir::separator()).append("index.theme"), QSettings::IniFormat);
-        QStringList directories;
+        std::string themeIndex = themeDirectory;
+
+        QSettings iconTheme(themeIndex.append("/").append("index.theme").c_str(), QSettings::IniFormat);
+        std::vector<std::string> directories;
 
         iconTheme.beginGroup("Icon Theme");
-        directories = iconTheme.value("Directories").toStringList();
+        //directories = iconTheme.value("Directories").toStringList();
+
+        for( QString str : iconTheme.value("Directories").toStringList())
+        {
+            directories.push_back(str.toStdString());
+        }
+
         iconTheme.endGroup();
 
 //        QStringList filters;
@@ -106,13 +113,19 @@ QString Mere::XDG::IconThemeSpec::LookupIcon(const QString &icon, unsigned int s
 //        for (const QString &extension : extensions)
 //            filters << icon + "." + extension;
 
-        for (const QString &directory : directories)
+        for (const std::string &directory : directories)
         {
-            QDir dir(themeDirectory + QDir::separator() + directory);
-            QFileInfoList list = dir.entryInfoList(QStringList() << icon + ".*", QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+//            QDir dir(themeDirectory + QDir::separator() + directory);
+
+            std::string dirpath(themeDirectory);
+            dirpath.append("/").append(directory);
+
+            QDir dir(dirpath.c_str());
+
+            QFileInfoList list = dir.entryInfoList(QStringList() << QString::fromStdString(icon) + ".*", QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
             if (list.size() == 0) continue;
 
-            iconTheme.beginGroup(directory);
+            iconTheme.beginGroup(directory.c_str());
 
             IconDirectoryDefinition d;
             d.type      = iconTheme.value("Type").toString();
@@ -140,14 +153,14 @@ QString Mere::XDG::IconThemeSpec::LookupIcon(const QString &icon, unsigned int s
 
             if (DirectoryMatchesSize(d, size, scale))
             {
-                return list.at(0).absoluteFilePath();
+                return list.at(0).absoluteFilePath().toStdString();
             }
             else
             {
                 int distance = DirectorySizeDistance(d, size, scale);
                 if( distance < minsize)
                 {
-                    iconPath = list.at(0).absoluteFilePath();
+                    iconPath = list.at(0).absoluteFilePath().toStdString();
                     minsize = distance;
                 }
             }
@@ -157,29 +170,31 @@ QString Mere::XDG::IconThemeSpec::LookupIcon(const QString &icon, unsigned int s
     return iconPath;
 }
 
-QString Mere::XDG::IconThemeSpec::LookupFallbackIcon (const QString &icon)
+std::string Mere::XDG::IconThemeSpec::LookupFallbackIcon (const std::string &icon)
 {
-    QStringList baseDirectories = IconThemeDirectorySpec::baseDirectories();
+    std::vector<std::string> baseDirectories = IconThemeDirectorySpec::baseDirectories();
 
-    const QStringList extensions = {"png", "svg", "xpm"};
-    for (const QString &directory : baseDirectories)
+    const std::vector<std::string> extensions = {"png", "svg", "xpm"};
+    for (const std::string &directory : baseDirectories)
     {
-        QString filePath = directory;
-        filePath.append(QDir::separator()).append(icon).append(".");
+        std::string filePath = directory;
+        filePath.append("/").append(icon).append(".");
 
-        for (const QString &extension : extensions)
+        for (const std::string &extension : extensions)
         {
+            // add extension
             filePath.append(extension);
-            QFileInfo file(filePath);
+
+            QFileInfo file(filePath.c_str());
             if (file.exists() && file.isReadable())
                 return filePath;
 
-            filePath.chop(extension.size());
+            // remove extension
+            filePath.erase(filePath.length() - extension.length());
         }
-
     }
 
-    return QString();
+    return "";
 }
 
 //static

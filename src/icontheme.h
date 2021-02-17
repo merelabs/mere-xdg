@@ -13,7 +13,7 @@ class MERE_XDG_LIB_SPEC IconTheme : public QObject
 {
     Q_OBJECT
 public:
-    explicit IconTheme(const QString &themePath, QObject *parent = nullptr);
+    explicit IconTheme(const std::string &themePath, QObject *parent = nullptr);
 };
 }
 }

@@ -3,11 +3,12 @@
 #include "mere/utils/envutils.h"
 #include "mere/utils/stringutils.h"
 
+#include <sstream>
+#include <fstream>
+#include <iostream>
+
 #include <QDir>
 #include <QDebug>
-#include <QString>
-#include <QStringList>
-#include <QByteArray>
 
 Mere::XDG::BaseDirectorySpec::BaseDirectorySpec()
 {
@@ -30,25 +31,14 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupEnv()
 
 unsigned int Mere::XDG::BaseDirectorySpec::setupEnvVar(const char* env, const char* value, unsigned int err)
 {
-    QString valueStr(value);
-    Mere::Utils::EnvUtils::expandEnvVar(valueStr);
+    std::string str(value);
+    Mere::Utils::EnvUtils::expandEnvVar(str);
 
-//    char* data = valueStr.toLatin1().data();
-    char* data = new char[valueStr.length() + 1];
-    for(int i = 0; i < valueStr.length(); i++)
-    {
-        data[i]  = valueStr.at(i).toLatin1();
-    }
-    data[valueStr.length()] = '\0';
-
-    int result = setenv(env, data, 1);
-    delete[] data;
-
+    int result = setenv(env, value, 1);
     if (result != 0) return err;
 
-    QDir valueDir = QDir(valueStr);
-    if (!valueDir.exists())
-        createPath(valueDir.absolutePath());
+    if (!std::ifstream(str).good())
+        QDir().mkpath(str.c_str());
 
     return 0;
 }
@@ -79,11 +69,11 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupDataDirsEnv()
     int result = setenv(XDG::DATA_DIRS, XDG::BaseDirectory::DATA_DIRS, XDG::ErrorMask::DATA_DIRS);
     if (result != 0) return 4;
 
-    QString dataDirs(getenv(XDG::DATA_DIRS));
+    std::string dataDirs(getenv(XDG::DATA_DIRS));
 
-//    QDir cacheHomeDir = QDir(dataDirs);
-//    if (!cacheHomeDir.exists())
-//        createPath(cacheHomeDir.absolutePath());
+    // FIXME?? CHECK THIS
+    if (!std::ifstream(dataDirs).good())
+        QDir().mkpath(dataDirs.c_str());
 
     return 0;
 }
@@ -108,106 +98,91 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupRuntimeDirEnv()
     return BaseDirectorySpec::setupEnvVar(XDG::RUNTIME_DIR, XDG::BaseDirectory::RUNTIME_DIR, XDG::ErrorMask::RUNTIME_DIR);
 }
 
-QString Mere::XDG::BaseDirectorySpec::userDataDirectory()
+std::string Mere::XDG::BaseDirectorySpec::userDataDirectory()
 {
-    QString dataHome = QString(getenv(XDG::DATA_HOME));
+    std::string dataHome(getenv(XDG::DATA_HOME));
 
     if(Mere::Utils::StringUtils::isBlank(dataHome))
-        dataHome = QString(XDG::BaseDirectory::DATA_HOME);
+        dataHome = XDG::BaseDirectory::DATA_HOME;
 
     Mere::Utils::EnvUtils::expandEnvVar(dataHome);
 
-    QDir dataHomeDir = QDir(dataHome);
-    if (!dataHomeDir.exists())
-        createPath(dataHomeDir.absolutePath());
+    if (!std::ifstream(dataHome).good())
+        QDir().mkpath(dataHome.c_str());
 
     return dataHome;
 }
 
-QString Mere::XDG::BaseDirectorySpec::userConfigDirectory()
+std::string Mere::XDG::BaseDirectorySpec::userConfigDirectory()
 {
-    QString configHome = QString(getenv(XDG::CONFIG_HOME));
+    std::string configHome(getenv(XDG::CONFIG_HOME));
     if(Mere::Utils::StringUtils::isBlank(configHome))
-        configHome = QString(XDG::BaseDirectory::CONFIG_HOME);
+        configHome = XDG::BaseDirectory::CONFIG_HOME;
 
     Mere::Utils::EnvUtils::expandEnvVar(configHome);
 
-    QDir configHomeDir = QDir(configHome);
-    if (!configHomeDir.exists())
-        createPath(configHomeDir.absolutePath());
+    if (!std::ifstream(configHome).good())
+        QDir().mkpath(configHome.c_str());
 
     return configHome;
 }
 
-QString Mere::XDG::BaseDirectorySpec::userCacheDirectory()
+std::string Mere::XDG::BaseDirectorySpec::userCacheDirectory()
 {
-    QString cacheHome = QString(getenv(XDG::CACHE_HOME));
+    std::string cacheHome(getenv(XDG::CACHE_HOME));
     if(Mere::Utils::StringUtils::isBlank(cacheHome))
-        cacheHome = QString(XDG::BaseDirectory::CACHE_HOME);
+        cacheHome = XDG::BaseDirectory::CACHE_HOME;
 
     Mere::Utils::EnvUtils::expandEnvVar(cacheHome);
 
-    QDir cacheHomeDir = QDir(cacheHome);
-    if (!cacheHomeDir.exists())
-        createPath(cacheHomeDir.absolutePath());
+    if (!std::ifstream(cacheHome).good())
+        QDir().mkpath(cacheHome.c_str());
 
     return cacheHome;
 }
 
-QStringList Mere::XDG::BaseDirectorySpec::dataSearchDirectories()
+std::vector<std::string> Mere::XDG::BaseDirectorySpec::dataSearchDirectories()
 {    
-    QString dataDirectories = QString(getenv(XDG::DATA_DIRS));
+    std::vector<std::string> dirs;
+
+    std::string dataDirectories(getenv(XDG::DATA_DIRS));
+
     if(Mere::Utils::StringUtils::isBlank(dataDirectories))
-        dataDirectories = QString(XDG::BaseDirectory::DATA_DIRS);
+        dataDirectories = XDG::BaseDirectory::DATA_DIRS;
 
-    QStringList dirs = dataDirectories.split(":", QString::SkipEmptyParts);
-
-    if (!dirs.isEmpty())
+    std::string dir;
+    std::istringstream iss(dataDirectories);
+    while (std::getline(iss, dir, ':'))
     {
-        for (int i = 0; i < dirs.size(); i++)
-        {
-            QString dir = dirs.at(i);
-            Mere::Utils::EnvUtils::expandEnvVar(dir);
+        Mere::Utils::EnvUtils::expandEnvVar(dir);
+        if (!std::ifstream(dir).good())
+            QDir().mkpath(dir.c_str());
 
-            QDir _dir = QDir(dir);
-            if (!QDir(_dir).exists())
-                createPath(_dir.absolutePath());
-        }
+        dirs.push_back(dir);
     }
 
     return dirs;
 }
 
-QStringList Mere::XDG::BaseDirectorySpec::configSearchDirectories()
+std::vector<std::string> Mere::XDG::BaseDirectorySpec::configSearchDirectories()
 {
-    QString configDirectories = QString(getenv(XDG::CONFIG_DIRS));
+    std::vector<std::string> dirs;
+
+    std::string configDirectories(getenv(XDG::CONFIG_DIRS));
+
     if(Mere::Utils::StringUtils::isBlank(configDirectories))
-        configDirectories = QString(XDG::BaseDirectory::CONFIG_DIRS);
+        configDirectories = XDG::BaseDirectory::CONFIG_DIRS;
 
-    QStringList dirs = configDirectories.split(":", QString::SkipEmptyParts);
-
-    if (!dirs.isEmpty())
+    std::string dir;
+    std::istringstream iss(configDirectories);
+    while (std::getline(iss, dir, ':'))
     {
-        for (int i = 0; i < dirs.size(); i++)
-        {
-            QString dir = dirs.at(i);
-            Mere::Utils::EnvUtils::expandEnvVar(dir);
+        Mere::Utils::EnvUtils::expandEnvVar(dir);
+        if (!std::ifstream(dir).good())
+            QDir().mkpath(dir.c_str());
 
-            QDir _dir = QDir(dir);
-            if (!QDir(_dir).exists())
-                createPath(_dir.absolutePath());
-        }
+        dirs.push_back(dir);
     }
 
     return dirs;
-}
-
-bool Mere::XDG::BaseDirectorySpec::createPath(const QString path)
-{
-    qInfo() << "Going to create folder " << path;
-    bool created = QDir().mkpath(path);
-    if (!created)
-        qWarning() << "Unabled to create " << path;
-
-    return created;
 }

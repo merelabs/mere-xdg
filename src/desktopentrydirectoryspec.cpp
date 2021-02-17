@@ -1,62 +1,38 @@
 #include "desktopentrydirectoryspec.h"
 #include "basedirectoryspec.h"
 
+#include "mere/utils/envutils.h"
 #include "mere/utils/stringutils.h"
 
-#include <QDir>
-#include <QStringList>
-
-Mere::XDG::DesktopEntryDirectorySpec::DesktopEntryDirectorySpec()
-{
-
-}
-
 //static
-QStringList Mere::XDG::DesktopEntryDirectorySpec::applicationDirectories()
+std::vector<std::string> Mere::XDG::DesktopEntryDirectorySpec::applicationDirectories()
 {
-    QStringList applicationDirectories;
+    std::vector<std::string> applicationDirectories;
 
-    QString userDatHome = Mere::XDG::BaseDirectorySpec::userDataDirectory();
-    expandEnvVars(userDatHome);
+    std::string userDatHome = Mere::XDG::BaseDirectorySpec::userDataDirectory();
+
+    Mere::Utils::EnvUtils::expandEnvVar(userDatHome);
     if (Mere::Utils::StringUtils::isNotBlank(userDatHome))
-        applicationDirectories << applicationDirectory(userDatHome);
+        applicationDirectories.push_back(applicationDirectory(userDatHome));
 
-    const QStringList dataSearchDirectories = BaseDirectorySpec::dataSearchDirectories();
-    foreach (QString dataSearchDirectory, dataSearchDirectories)
+    const std::vector<std::string> dataSearchDirectories = BaseDirectorySpec::dataSearchDirectories();
+    for(std::string dataSearchDirectory : dataSearchDirectories)
     {
-        expandEnvVars(dataSearchDirectory);
+        Mere::Utils::EnvUtils::expandEnvVar(dataSearchDirectory);
         if (Mere::Utils::StringUtils::isNotBlank(dataSearchDirectory))
-            applicationDirectories << applicationDirectory(dataSearchDirectory);
+            applicationDirectories.push_back(applicationDirectory(dataSearchDirectory));
     }
 
     return applicationDirectories;
 }
 
 //static
-QString Mere::XDG::DesktopEntryDirectorySpec::applicationDirectory(const QString &path)
+std::string Mere::XDG::DesktopEntryDirectorySpec::applicationDirectory(const std::string &path)
 {
-    QString applicationDirectory(path);
+    std::string applicationDirectory(path);
 
-    if (applicationDirectory.endsWith(QDir::separator()))
-        applicationDirectory = applicationDirectory.append(QString(Mere::XDG::APPLICATION_DIRECTORY));
-    else
-        applicationDirectory = applicationDirectory.append(QString(QDir::separator()).append(QString(XDG::APPLICATION_DIRECTORY)));
+    if (applicationDirectory[applicationDirectory.length() - 1] != '/')
+        applicationDirectory.append("/");
 
-    return applicationDirectory;
-}
-
-//static
-void Mere::XDG::DesktopEntryDirectorySpec::expandEnvVars(QString &path)
-{
-    if (path.contains("$HOME"))
-    {
-        const QString home(getenv("HOME"));
-        path = path.replace("$HOME", home);
-    }
-
-    if (path.contains("$USER"))
-    {
-        const QString user(getenv("USER"));
-        path = path.replace("$USER", user);
-    }
+    return applicationDirectory.append(Mere::XDG::APPLICATION_DIRECTORY);
 }
