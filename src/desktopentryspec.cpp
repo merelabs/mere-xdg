@@ -19,6 +19,18 @@ Mere::XDG::DesktopEntry Mere::XDG::DesktopEntrySpec::parse(const QString &path)
     return parse(QFileInfo(path));
 }
 
+//static
+Mere::XDG::DesktopEntry Mere::XDG::DesktopEntrySpec::parse(const std::string &path)
+{
+    if(Mere::Utils::StringUtils::isBlank(path))
+    {
+        std::cout << "path can't be blank. please check the path." << std::endl;
+        return DesktopEntry();
+    }
+
+    return parse(QFileInfo(path.c_str()));
+}
+
 Mere::XDG::DesktopEntry Mere::XDG::DesktopEntrySpec::parse(const QFileInfo &fileInfo)
 {
     if (!fileInfo.exists())

@@ -16,6 +16,7 @@ class MERE_XDG_LIB_SPEC DesktopEntrySpec
     DesktopEntrySpec() = default;
 public:
     static DesktopEntry parse(const QString &path);
+    static DesktopEntry parse(const std::string &path);
     static DesktopEntry parse(const QFileInfo &fileInfo);
     static bool valid(DesktopEntry &entry);
 };
