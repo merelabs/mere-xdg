@@ -1,11 +1,8 @@
-#ifndef XDGAUTOSTARTDIRECTORYSPEC_H
-#define XDGAUTOSTARTDIRECTORYSPEC_H
+#ifndef MERE_XDG_AUTOSTARTDIRECTORYSPEC_H
+#define MERE_XDG_AUTOSTARTDIRECTORYSPEC_H
 
 #include "global.h"
 #include "desktopentry.h"
-
-#include <vector>
-#include <QList>
 
 namespace Mere
 {
@@ -16,11 +13,7 @@ static const char* AUTOSTART_DIRECTORY = "autostart";
 
 class MERE_XDG_LIB_SPEC AutostartDirectorySpec
 {
-private:
-    AutostartDirectorySpec();
-    static std::string autostarDirectory(const std::string  &path);
-    static void expandEnvVars(QString &path);
-
+    AutostartDirectorySpec() = default;
 public:
     /**
      * @brief autostartDirectories
@@ -31,11 +24,13 @@ public:
      * @return
      */
     static std::vector<std::string> autostartDirectories();
-
     static std::vector<DesktopEntry> autostartApplications();
+
+private:
+    static std::string autostarDirectory(const std::string &path);
 };
 
 }
 }
 
-#endif // XDGAUTOSTARTDIRECTORYSPEC_H
+#endif // MERE_XDG_AUTOSTARTDIRECTORYSPEC_H

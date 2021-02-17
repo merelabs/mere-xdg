@@ -4,120 +4,87 @@
 #include "mere/utils/envutils.h"
 #include "mere/utils/stringutils.h"
 
+#include <iostream>
+#include <fstream>
 #include <QDir>
 
-Mere::XDG::IconThemeDirectorySpec::IconThemeDirectorySpec()
-{
-
-}
-
 //static
-QStringList Mere::XDG::IconThemeDirectorySpec::baseDirectories()
+std::vector<std::string> Mere::XDG::IconThemeDirectorySpec::baseDirectories()
 {
-    QStringList iconDirectories;
+    std::vector<std::string> iconDirectories;
 
-    QString userIconHome = IconThemeDirectorySpec::userIconDirectory();
-    expandEnvVars(userIconHome);
+    std::string userIconHome = IconThemeDirectorySpec::userIconDirectory();
+    Mere::Utils::EnvUtils::expandEnvVar(userIconHome);
+
     if (Mere::Utils::StringUtils::isNotBlank(userIconHome))
-        iconDirectories << userIconHome;
+        iconDirectories.push_back(userIconHome);
 
     // Not in specification
-    QString userDataDirectory = BaseDirectorySpec::userDataDirectory();
-    expandEnvVars(userDataDirectory);
-    if (Mere::Utils::StringUtils::isNotBlank(userDataDirectory))
-        iconDirectories << iconDirectory(userDataDirectory);
+    std::string userDataDirectory = BaseDirectorySpec::userDataDirectory();
+    Mere::Utils::EnvUtils::expandEnvVar(userDataDirectory);
 
-    const QStringList dataSearchDirectories = BaseDirectorySpec::dataSearchDirectories();
-    foreach (QString dataSearchDirectory, dataSearchDirectories)
+    if (Mere::Utils::StringUtils::isNotBlank(userDataDirectory))
+        iconDirectories.push_back(iconDirectory(userDataDirectory));
+
+    const std::vector<std::string> dataSearchDirectories = BaseDirectorySpec::dataSearchDirectories();
+    for(std::string dataSearchDirectory : dataSearchDirectories)
     {
-        expandEnvVars(dataSearchDirectory);
+        Mere::Utils::EnvUtils::expandEnvVar(dataSearchDirectory);
         if (Mere::Utils::StringUtils::isNotBlank(dataSearchDirectory))
-            iconDirectories << iconDirectory(dataSearchDirectory);
+            iconDirectories.push_back(iconDirectory(dataSearchDirectory));
     }
 
     // Not in specification
-    iconDirectories << "/usr/local/share/pixmaps";
-
-    iconDirectories << "/usr/share/pixmaps";
+    iconDirectories.push_back("/usr/local/share/pixmaps");
+    iconDirectories.push_back("/usr/share/pixmaps");
 
     return iconDirectories;
 }
 
 //static
-QStringList Mere::XDG::IconThemeDirectorySpec::themeDirectories(const QString &theme)
+std::vector<std::string> Mere::XDG::IconThemeDirectorySpec::themeDirectories(const std::string &theme)
 {
-    QStringList themeDirectories;
+    std::vector<std::string> themeDirectories;
 
-    QStringList baseDirectories = IconThemeDirectorySpec::baseDirectories();
-    for ( const QString &baseDirectory : baseDirectories  )
+    std::vector<std::string> baseDirectories = IconThemeDirectorySpec::baseDirectories();
+    for ( const std::string &baseDirectory : baseDirectories  )
     {
-        QString themeDirectory = baseDirectory;
-        themeDirectory.append(QDir::separator()).append(theme);
+        std::string themeDirectory = baseDirectory;
+        themeDirectory.append("/").append(theme);
 
-        QString indexThemeFilePath = themeDirectory;
-        indexThemeFilePath.append(QDir::separator()).append("index.theme");
+        std::string indexThemeFilePath = themeDirectory;
+        indexThemeFilePath.append("/").append("index.theme");
 
-        QFileInfo indexThemeFile(indexThemeFilePath);
-        if (indexThemeFile.exists())
-            themeDirectories << themeDirectory;
+        if(std::ifstream(indexThemeFilePath).good())
+            themeDirectories.push_back(themeDirectory);
     }
 
     return themeDirectories;
 }
 
 //static
-QString Mere::XDG::IconThemeDirectorySpec::iconDirectory(const QString &path)
+std::string Mere::XDG::IconThemeDirectorySpec::iconDirectory(const std::string &path)
 {
-    QString iconDirectory(path);
+    std::string iconPath(path);
 
-    if (iconDirectory.endsWith(QDir::separator()))
-        iconDirectory = iconDirectory.append(QString(XDG::ICON_DIRECTORY));
-    else
-        iconDirectory = iconDirectory.append(QString(QDir::separator()).append(QString(XDG::ICON_DIRECTORY)));
+    if (path[path.length() - 1] != '/')
+        iconPath = iconPath.append("/");
 
-    return iconDirectory;
+    return iconPath.append(XDG::ICON_DIRECTORY);
 }
 
 //static
-void Mere::XDG::IconThemeDirectorySpec::expandEnvVars(QString &path)
+std::string Mere::XDG::IconThemeDirectorySpec::userIconDirectory()
 {
-    if (path.contains("$HOME"))
-    {
-        const QString home(getenv("HOME"));
-        path = path.replace("$HOME", home);
-    }
-
-    if (path.contains("$USER"))
-    {
-        const QString user(getenv("USER"));
-        path = path.replace("$USER", user);
-    }
-}
-
-//static
-QString Mere::XDG::IconThemeDirectorySpec::userIconDirectory()
-{
-    QString iconHome = QString(getenv(XDG::ICON_HOME));
+    std::string iconHome = getenv(XDG::ICON_HOME);
 
     if(Mere::Utils::StringUtils::isBlank(iconHome))
-        iconHome = QString(XDG::BaseDirectory::ICON_HOME);
+        iconHome = XDG::BaseDirectory::ICON_HOME;
 
     Mere::Utils::EnvUtils::expandEnvVar(iconHome);
 
-    QDir iconHomeDir = QDir(iconHome);
-    if (!iconHomeDir.exists())
-        createPath(iconHomeDir.absolutePath());
+    if(!std::fstream(iconHome).good())
+        QDir().mkpath(iconHome.c_str());
 
     return iconHome;
-}
-
-//static
-bool Mere::XDG::IconThemeDirectorySpec::createPath(const QString &path)
-{
-    qInfo() << "Going to create folder " << path;
-    bool created = QDir().mkpath(path);
-    if (!created)
-        qWarning() << "Unabled to create " << path;
-
-    return created;
 }

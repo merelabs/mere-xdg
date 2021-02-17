@@ -12,9 +12,7 @@ static const char* APPLICATION_DIRECTORY = "applications";
 
 class MERE_XDG_LIB_SPEC DesktopEntryDirectorySpec
 {
-public:
-    DesktopEntryDirectorySpec();
-
+    DesktopEntryDirectorySpec() = default;
 public:
     /**
      * @brief applicationDirectories
@@ -23,11 +21,8 @@ public:
      *
      * @return
      */
-    static QStringList applicationDirectories();
-    static QString applicationDirectory(const QString &path);
-
-    // move it to a common place
-    static void expandEnvVars(QString &path);
+    static std::vector<std::string> applicationDirectories();
+    static std::string applicationDirectory(const std::string &path);
 };
 }
 }

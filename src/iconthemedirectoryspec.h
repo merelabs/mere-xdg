@@ -11,10 +11,10 @@ static const char* ICON_DIRECTORY = "icons";
 
 class MERE_XDG_LIB_SPEC IconThemeDirectorySpec
 {
+    IconThemeDirectorySpec() = default;
 public:
-    IconThemeDirectorySpec();
 
-    static QString userIconDirectory();
+    static std::string userIconDirectory();
 
     /**
      * @brief iconDirectories
@@ -23,17 +23,10 @@ public:
      *
      * @return
      */
-    static QStringList baseDirectories();
-    static QString iconDirectory(const QString &path);
+    static std::vector<std::string> baseDirectories();
+    static std::string iconDirectory(const std::string &path);
 
-    static QStringList themeDirectories(const QString &theme);
-
-    // move to a commoon place
-    static void expandEnvVars(QString &path);
-
-private:
-    // move to a commoon place
-    static bool createPath(const QString &path);
+    static std::vector<std::string> themeDirectories(const std::string &theme);
 };
 }
 }

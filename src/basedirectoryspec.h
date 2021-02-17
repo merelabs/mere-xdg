@@ -84,7 +84,7 @@ public:
      *
      * @return
      */
-    static QString userDataDirectory();
+    static std::string  userDataDirectory();
 
     /**
      * @brief userConfigDirectory
@@ -96,7 +96,7 @@ public:
      *
      * @return
      */
-    static QString userConfigDirectory();
+    static std::string userConfigDirectory();
 
     /**
      * @brief userCacheDirectory
@@ -108,7 +108,7 @@ public:
      *
      * @return
      */
-    static QString userCacheDirectory();
+    static std::string userCacheDirectory();
 
     /**
      * @brief dataSearchDirectories
@@ -123,7 +123,7 @@ public:
      *
      * @return
      */
-    static QStringList dataSearchDirectories();
+    static std::vector<std::string> dataSearchDirectories();
 
     /**
      * @brief configSearchDirectories
@@ -137,7 +137,7 @@ public:
      * If $XDG_CONFIG_DIRS is either not set or empty, a value equal to /etc/xdg should be used.
      * @return
      */
-    static QStringList configSearchDirectories();
+    static std::vector<std::string> configSearchDirectories();
 
 private:
     static unsigned int setupDesktopEnv();
@@ -161,7 +161,6 @@ private:
     static unsigned int setupRuntimeDirEnv();
 
     static unsigned int setupEnvVar(const char *env, const char *value, unsigned int err);
-    static bool createPath(const QString path);
 };
 
 }
