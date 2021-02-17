@@ -7,16 +7,13 @@
 //static
 std::vector<std::string> Mere::XDG::DesktopEntryDirectorySpec::applicationDirectories()
 {
-    qDebug() << "1....";
     std::vector<std::string> applicationDirectories;
 
     std::string userDatHome = Mere::XDG::BaseDirectorySpec::userDataDirectory();
-    qDebug() << "1....";
 
     Mere::Utils::EnvUtils::expandEnvVar(userDatHome);
     if (Mere::Utils::StringUtils::isNotBlank(userDatHome))
         applicationDirectories.push_back(applicationDirectory(userDatHome));
-    qDebug() << "1....";
 
     const std::vector<std::string> dataSearchDirectories = BaseDirectorySpec::dataSearchDirectories();
     for(std::string dataSearchDirectory : dataSearchDirectories)
@@ -25,9 +22,7 @@ std::vector<std::string> Mere::XDG::DesktopEntryDirectorySpec::applicationDirect
         if (Mere::Utils::StringUtils::isNotBlank(dataSearchDirectory))
             applicationDirectories.push_back(applicationDirectory(dataSearchDirectory));
     }
-    qDebug() << "1....";
 
-    qDebug() << "N....";
     return applicationDirectories;
 }
 
