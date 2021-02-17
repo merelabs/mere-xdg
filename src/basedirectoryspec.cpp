@@ -71,7 +71,6 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupDataDirsEnv()
 
     std::string dataDirs(getenv(XDG::DATA_DIRS));
 
-    // FIXME?? CHECK THIS
     if (!std::ifstream(dataDirs).good())
         QDir().mkpath(dataDirs.c_str());
 

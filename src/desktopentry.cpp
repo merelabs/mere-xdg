@@ -1,20 +1,5 @@
 #include "desktopentry.h"
 
-Mere::XDG::DesktopEntry::~DesktopEntry()
-{
-
-}
-
-Mere::XDG::DesktopEntry::DesktopEntry()
-{
-
-}
-
-Mere::XDG::DesktopEntry::DesktopEntry(const std::string &path)
-{
-    Q_UNUSED(path);
-}
-
 QVariant Mere::XDG::DesktopEntry::get(const Attribute &attribute)
 {
     auto find = m_attributes.find(attribute);

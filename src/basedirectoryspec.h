@@ -166,5 +166,4 @@ private:
 }
 }
 
-
 #endif // MERE_XDG_DIRECTORYSPEC_H

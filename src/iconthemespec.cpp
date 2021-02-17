@@ -9,16 +9,6 @@
 #include <QDirIterator>
 #include <QSettings>
 
-Mere::XDG::IconThemeSpec::~IconThemeSpec()
-{
-
-}
-
-Mere::XDG::IconThemeSpec::IconThemeSpec()
-{
-
-}
-
 //static
 std::string Mere::XDG::IconThemeSpec::path(const std::string &icon)
 {

@@ -22,9 +22,8 @@ typedef struct
 
 class MERE_XDG_LIB_SPEC IconThemeSpec
 {
+    IconThemeSpec() = default;
 public:
-    ~IconThemeSpec();
-    explicit IconThemeSpec();
     static std::string path(const std::string &icon);
     static std::string path(const std::string &icon, unsigned int size);
     static std::string path(const std::string &icon, unsigned int size, unsigned int scale);
