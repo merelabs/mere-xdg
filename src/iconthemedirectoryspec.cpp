@@ -20,13 +20,13 @@ std::vector<std::string> Mere::XDG::IconThemeDirectorySpec::baseDirectories()
         iconDirectories.push_back(userIconHome);
 
     // Not in specification
-    std::string userDataDirectory = BaseDirectorySpec::userDataDirectory();
+    std::string userDataDirectory = BaseDirectorySpec::dataHome();
     Mere::Utils::EnvUtils::expandEnvVar(userDataDirectory);
 
     if (Mere::Utils::StringUtils::isNotBlank(userDataDirectory))
         iconDirectories.push_back(iconDirectory(userDataDirectory));
 
-    const std::vector<std::string> dataSearchDirectories = BaseDirectorySpec::dataSearchDirectories();
+    const std::vector<std::string> dataSearchDirectories = BaseDirectorySpec::dataDirectories();
     for(std::string dataSearchDirectory : dataSearchDirectories)
     {
         Mere::Utils::EnvUtils::expandEnvVar(dataSearchDirectory);

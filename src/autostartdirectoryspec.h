@@ -16,18 +16,18 @@ class MERE_XDG_LIB_SPEC AutostartDirectorySpec
     AutostartDirectorySpec() = default;
 public:
     /**
-     * @brief autostartDirectories
+     * @brief directories
      *
-     * Directories when system will search for 'Desktop Entry' files, and will be
+     * Directories where system will search for 'Desktop Entry' files, and will be
      * automatically launched during startup of the user's desktop environment after the user has logged in.
      *
      * @return
      */
-    static std::vector<std::string> autostartDirectories();
-    static std::vector<DesktopEntry> autostartApplications();
+    static std::vector<std::string> directories();
+    static std::vector<DesktopEntry> applications();
 
 private:
-    static std::string autostarDirectory(const std::string &path);
+    static std::string directory(const std::string &path);
 };
 
 }

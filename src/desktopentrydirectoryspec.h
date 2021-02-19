@@ -21,8 +21,8 @@ public:
      *
      * @return
      */
-    static std::vector<std::string> applicationDirectories();
-    static std::string applicationDirectory(const std::string &path);
+    static std::vector<std::string> directories();
+    static std::string directory(const std::string &path);
 };
 }
 }

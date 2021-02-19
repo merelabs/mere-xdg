@@ -14,10 +14,7 @@ namespace XDG
 class MERE_XDG_LIB_SPEC DesktopEntry
 {
 public:
-    ~DesktopEntry();
-    DesktopEntry();
-
-    explicit DesktopEntry(const std::string &path);
+    DesktopEntry() = default;
 
     enum Attribute
     {

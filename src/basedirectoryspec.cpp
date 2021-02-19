@@ -19,8 +19,10 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupEnv()
 {
     int result = 0;
 
+    result += setupDesktopEnv();
     result += setupDataHomeEnv();
     result += setupConfigHomeEnv();
+    result += setupIconHomeEnv();
     result += setupDataDirsEnv();
     result += setupConfigDirsEnv();
     result += setupCacheHomeEnv();
@@ -34,7 +36,7 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupEnvVar(const char* env, const ch
     std::string str(value);
     Mere::Utils::EnvUtils::expandEnvVar(str);
 
-    int result = setenv(env, value, 1);
+    int result = setenv(env, str.c_str(), 1);
     if (result != 0) return err;
 
     if (!std::ifstream(str).good())
@@ -56,12 +58,17 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupDesktopEnv()
 
 unsigned int Mere::XDG::BaseDirectorySpec::setupDataHomeEnv()
 {
-    return BaseDirectorySpec::setupEnvVar(XDG::DATA_HOME, XDG::BaseDirectory::DATA_HOME, XDG::ErrorMask::DATA_HOME);
+    return setupEnvVar(XDG::DATA_HOME, XDG::BaseDirectory::DATA_HOME, XDG::ErrorMask::DATA_HOME);
 }
 
 unsigned int Mere::XDG::BaseDirectorySpec::setupConfigHomeEnv()
 {
-    return BaseDirectorySpec::setupEnvVar(XDG::CONFIG_HOME, XDG::BaseDirectory::CONFIG_HOME, XDG::ErrorMask::CONFIG_HOME);
+    return setupEnvVar(XDG::CONFIG_HOME, XDG::BaseDirectory::CONFIG_HOME, XDG::ErrorMask::CONFIG_HOME);
+}
+
+unsigned int Mere::XDG::BaseDirectorySpec::setupIconHomeEnv()
+{
+    return setupEnvVar(XDG::ICON_HOME, XDG::BaseDirectory::ICON_HOME, XDG::ErrorMask::ICON_HOME);
 }
 
 unsigned int Mere::XDG::BaseDirectorySpec::setupDataDirsEnv()
@@ -71,7 +78,6 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupDataDirsEnv()
 
     std::string dataDirs(getenv(XDG::DATA_DIRS));
 
-    // FIXME?? CHECK THIS
     if (!std::ifstream(dataDirs).good())
         QDir().mkpath(dataDirs.c_str());
 
@@ -98,7 +104,7 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupRuntimeDirEnv()
     return BaseDirectorySpec::setupEnvVar(XDG::RUNTIME_DIR, XDG::BaseDirectory::RUNTIME_DIR, XDG::ErrorMask::RUNTIME_DIR);
 }
 
-std::string Mere::XDG::BaseDirectorySpec::userDataDirectory()
+std::string Mere::XDG::BaseDirectorySpec::dataHome()
 {
     const char *home = getenv(XDG::DATA_HOME);
 
@@ -112,7 +118,7 @@ std::string Mere::XDG::BaseDirectorySpec::userDataDirectory()
     return dataHome;
 }
 
-std::string Mere::XDG::BaseDirectorySpec::userConfigDirectory()
+std::string Mere::XDG::BaseDirectorySpec::configHome()
 {
     const char *home = getenv(XDG::CONFIG_HOME);
 
@@ -126,7 +132,7 @@ std::string Mere::XDG::BaseDirectorySpec::userConfigDirectory()
     return configHome;
 }
 
-std::string Mere::XDG::BaseDirectorySpec::userCacheDirectory()
+std::string Mere::XDG::BaseDirectorySpec::cacheHome()
 {
     const char *home = getenv(XDG::CACHE_HOME);
 
@@ -140,7 +146,21 @@ std::string Mere::XDG::BaseDirectorySpec::userCacheDirectory()
     return cacheHome;
 }
 
-std::vector<std::string> Mere::XDG::BaseDirectorySpec::dataSearchDirectories()
+std::string Mere::XDG::BaseDirectorySpec::iconHome()
+{
+    const char *home = getenv(XDG::ICON_HOME);
+
+    std::string iconHome( home ? home : XDG::BaseDirectory::ICON_HOME);
+
+    Mere::Utils::EnvUtils::expandEnvVar(iconHome);
+
+    if (!std::ifstream(iconHome).good())
+        QDir().mkpath(iconHome.c_str());
+
+    return iconHome;
+}
+
+std::vector<std::string> Mere::XDG::BaseDirectorySpec::dataDirectories()
 {    
     std::vector<std::string> dirs;
 
@@ -162,7 +182,7 @@ std::vector<std::string> Mere::XDG::BaseDirectorySpec::dataSearchDirectories()
     return dirs;
 }
 
-std::vector<std::string> Mere::XDG::BaseDirectorySpec::configSearchDirectories()
+std::vector<std::string> Mere::XDG::BaseDirectorySpec::configDirectories()
 {
     std::vector<std::string> dirs;
 
