@@ -3,6 +3,7 @@
 #include "desktopentryspec.h"
 
 #include "mere/utils/envutils.h"
+#include "mere/utils/binutils.h"
 #include "mere/utils/stringutils.h"
 
 #include <QDir>
@@ -46,18 +47,53 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectorySpec::applicat
         {
             QFileInfo fileInfo = i.next();
 
-            if (fileInfo.isFile() && fileInfo.suffix() == "desktop")
+            if (!fileInfo.isFile())
+                continue;
+
+            if (fileInfo.suffix() != "desktop")
+                continue;
+
+            DesktopEntry desktopEntry = DesktopEntrySpec::parse(fileInfo);
+
+            // ignore hidden application
+            QVariant hidden = desktopEntry.get(DesktopEntry::Hidden);
+            if (!hidden.isNull() && hidden.isValid() && hidden.toBool())
+                continue;
+
+            QVariant onlyShowIn = desktopEntry.get(DesktopEntry::OnlyShowIn);
+            if (!hidden.isNull() && onlyShowIn.isValid())
             {
-                DesktopEntry desktopEntry = DesktopEntrySpec::parse(fileInfo);
-
-                // ignore hidden application
-                QVariant hidden = desktopEntry.get(DesktopEntry::Hidden);
-                if (hidden.isValid() && hidden.toBool())
+                QStringList list = onlyShowIn.toString().split(":");
+                if (!list.contains("mere"))
                     continue;
-
-                if (Mere::XDG::DesktopEntrySpec::valid(desktopEntry))
-                    desktopEntries.push_back(desktopEntry);
             }
+
+            QVariant notShowIn = desktopEntry.get(DesktopEntry::NotShowIn);
+            if (!hidden.isNull() && notShowIn.isValid())
+            {
+                QStringList list = notShowIn.toString().split(":");
+                if (list.contains("mere"))
+                    continue;
+            }
+
+            QVariant tryExec = desktopEntry.get(DesktopEntry::TryExec);
+            if (!hidden.isNull() && tryExec.isValid())
+            {
+                QFileInfo tryExecInfo(tryExec.toString());
+                if (!tryExecInfo.isAbsolute())
+                {
+                    QString path = Mere::Utils::BinUtils::find(tryExecInfo.fileName());
+                    if (Mere::Utils::StringUtils::isBlank(path))
+                        continue;
+                }
+                else if (!tryExecInfo.exists())
+                {
+                    continue;
+                }
+            }
+
+            if (Mere::XDG::DesktopEntrySpec::valid(desktopEntry))
+                desktopEntries.push_back(desktopEntry);
         }
     }
 
