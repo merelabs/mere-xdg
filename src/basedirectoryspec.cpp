@@ -19,6 +19,7 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupEnv()
 {
     int result = 0;
 
+    result += setupDesktopEnv();
     result += setupDataHomeEnv();
     result += setupConfigHomeEnv();
     result += setupDataDirsEnv();
@@ -34,7 +35,7 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupEnvVar(const char* env, const ch
     std::string str(value);
     Mere::Utils::EnvUtils::expandEnvVar(str);
 
-    int result = setenv(env, value, 1);
+    int result = setenv(env, str.c_str(), 1);
     if (result != 0) return err;
 
     if (!std::ifstream(str).good())
@@ -56,12 +57,12 @@ unsigned int Mere::XDG::BaseDirectorySpec::setupDesktopEnv()
 
 unsigned int Mere::XDG::BaseDirectorySpec::setupDataHomeEnv()
 {
-    return BaseDirectorySpec::setupEnvVar(XDG::DATA_HOME, XDG::BaseDirectory::DATA_HOME, XDG::ErrorMask::DATA_HOME);
+    return setupEnvVar(XDG::DATA_HOME, XDG::BaseDirectory::DATA_HOME, XDG::ErrorMask::DATA_HOME);
 }
 
 unsigned int Mere::XDG::BaseDirectorySpec::setupConfigHomeEnv()
 {
-    return BaseDirectorySpec::setupEnvVar(XDG::CONFIG_HOME, XDG::BaseDirectory::CONFIG_HOME, XDG::ErrorMask::CONFIG_HOME);
+    return setupEnvVar(XDG::CONFIG_HOME, XDG::BaseDirectory::CONFIG_HOME, XDG::ErrorMask::CONFIG_HOME);
 }
 
 unsigned int Mere::XDG::BaseDirectorySpec::setupDataDirsEnv()
