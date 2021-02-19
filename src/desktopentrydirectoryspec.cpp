@@ -5,29 +5,29 @@
 #include "mere/utils/stringutils.h"
 
 //static
-std::vector<std::string> Mere::XDG::DesktopEntryDirectorySpec::applicationDirectories()
+std::vector<std::string> Mere::XDG::DesktopEntryDirectorySpec::directories()
 {
     std::vector<std::string> applicationDirectories;
 
-    std::string userDatHome = Mere::XDG::BaseDirectorySpec::userDataDirectory();
+    std::string userDatHome = Mere::XDG::BaseDirectorySpec::dataHome();
 
     Mere::Utils::EnvUtils::expandEnvVar(userDatHome);
     if (Mere::Utils::StringUtils::isNotBlank(userDatHome))
-        applicationDirectories.push_back(applicationDirectory(userDatHome));
+        applicationDirectories.push_back(directory(userDatHome));
 
-    const std::vector<std::string> dataSearchDirectories = BaseDirectorySpec::dataSearchDirectories();
+    const std::vector<std::string> dataSearchDirectories = BaseDirectorySpec::dataDirectories();
     for(std::string dataSearchDirectory : dataSearchDirectories)
     {
         Mere::Utils::EnvUtils::expandEnvVar(dataSearchDirectory);
         if (Mere::Utils::StringUtils::isNotBlank(dataSearchDirectory))
-            applicationDirectories.push_back(applicationDirectory(dataSearchDirectory));
+            applicationDirectories.push_back(directory(dataSearchDirectory));
     }
 
     return applicationDirectories;
 }
 
 //static
-std::string Mere::XDG::DesktopEntryDirectorySpec::applicationDirectory(const std::string &path)
+std::string Mere::XDG::DesktopEntryDirectorySpec::directory(const std::string &path)
 {
     std::string applicationDirectory(path);
 

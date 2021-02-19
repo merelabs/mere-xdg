@@ -8,39 +8,39 @@
 #include <QDir>
 #include <QDirIterator>
 
-std::vector<std::string> Mere::XDG::AutostartDirectorySpec::autostartDirectories()
+std::vector<std::string> Mere::XDG::AutostartDirectorySpec::directories()
 {
     std::vector<std::string> autostartDirectories;
 
-    std::string userConfigHome = BaseDirectorySpec::userConfigDirectory();
+    std::string userConfigHome = BaseDirectorySpec::configHome();
     Mere::Utils::EnvUtils::expandEnvVar(userConfigHome);
 
     if (Mere::Utils::StringUtils::isNotBlank(userConfigHome))
-        autostartDirectories.push_back( autostarDirectory(userConfigHome) );
+        autostartDirectories.push_back( Mere::XDG::AutostartDirectorySpec::directory(userConfigHome) );
 
-    const std::vector<std::string> configSearchDirectories = BaseDirectorySpec::configSearchDirectories();
-    for (std::string configSearchDirectory : configSearchDirectories)
+    const std::vector<std::string> directories = BaseDirectorySpec::configDirectories();
+    for (std::string directory : directories)
     {
-        Mere::Utils::EnvUtils::expandEnvVar(configSearchDirectory);
+        Mere::Utils::EnvUtils::expandEnvVar(directory);
 
-        if (Mere::Utils::StringUtils::isNotBlank(configSearchDirectory))
-            autostartDirectories.push_back( autostarDirectory(configSearchDirectory) );
+        if (Mere::Utils::StringUtils::isNotBlank(directory))
+            autostartDirectories.push_back( Mere::XDG::AutostartDirectorySpec::directory(directory) );
     }
 
     return autostartDirectories;
 }
 
-std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectorySpec::autostartApplications()
+std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectorySpec::applications()
 {
     std::vector<DesktopEntry> desktopEntries ;
 
-    std::vector<std::string>  autostartDirectories = AutostartDirectorySpec::autostartDirectories();
+    std::vector<std::string>  directories = AutostartDirectorySpec::directories();
 
-    for(const std::string &autostartDirectory : autostartDirectories)
+    for(const std::string &directory : directories)
     {
-        QDir autostartDir(autostartDirectory.c_str());
+        QDir dir(directory.c_str());
 
-        QFileInfoList fileInfoList = autostartDir.entryInfoList(QDir::AllEntries);
+        QFileInfoList fileInfoList = dir.entryInfoList(QDir::AllEntries);
         QListIterator<QFileInfo> i(fileInfoList);
         while (i.hasNext())
         {
@@ -59,7 +59,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectorySpec::autostar
     return desktopEntries;
 }
 
-std::string Mere::XDG::AutostartDirectorySpec::autostarDirectory(const std::string &path)
+std::string Mere::XDG::AutostartDirectorySpec::directory(const std::string &path)
 {
     std::string autostartDirectory(path);
 

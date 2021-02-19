@@ -10,7 +10,6 @@ namespace Mere
 {
 namespace XDG
 {
-
     static const char* SESSION_DESKTOP = "XDG_SESSION_DESKTOP";
     static const char* CURRENT_DESKTOP = "XDG_CURRENT_DESKTOP";
 
@@ -26,8 +25,8 @@ namespace XDG
 
     namespace BaseDirectory
     {
-        static const char* SESSION_DESKTOP = "Mere";
-        static const char* CURRENT_DESKTOP = "Mere";
+        static const char* SESSION_DESKTOP = "mere";
+        static const char* CURRENT_DESKTOP = "mere";
 
         static const char* DATA_HOME   = "$HOME/.local/share";
         static const char* CONFIG_HOME = "$HOME/.config";
@@ -35,8 +34,11 @@ namespace XDG
         static const char* ICON_HOME   = "$HOME/.icons";
 
         static const char* DATA_DIRS   = "/usr/local/share/:/usr/share/";
-        static const char* CONFIG_DIRS = "/etc/xdg";
 
+        // we made a bit change here; added /usr/local/etc/xdg
+        static const char* CONFIG_DIRS = "/usr/local/etc/xdg/:/etc/xdg/";
+
+        // where did we find this one, in which spec?
         static const char* RUNTIME_DIR = "/tmp/mere-$USER";
     }
 
@@ -66,9 +68,13 @@ public:
      * Setup environments variables specified in XDG base directory specification.
      * - XDG_DATA_HOME
      * - XDG_CONFIG_HOME
+     * - XDG_CACHE_HOME
      * - XDG_DATA_DIRS
      * - XDG_CONFIG_DIRS
-     * - XDG_CONFIG_DIRS
+     *
+     * - XDG_ICON_HOME
+     * - XDG_SESSION_DESKTOP
+     * - XDG_CURRENT_DESKTOP
      * - XDG_RUNTIME_DIR
      * @return
      */
@@ -84,7 +90,7 @@ public:
      *
      * @return
      */
-    static std::string  userDataDirectory();
+    static std::string  dataHome();
 
     /**
      * @brief userConfigDirectory
@@ -96,7 +102,7 @@ public:
      *
      * @return
      */
-    static std::string userConfigDirectory();
+    static std::string configHome();
 
     /**
      * @brief userCacheDirectory
@@ -108,7 +114,11 @@ public:
      *
      * @return
      */
-    static std::string userCacheDirectory();
+    static std::string cacheHome();
+
+
+    // we did we get it?
+    static std::string iconHome();
 
     /**
      * @brief dataSearchDirectories
@@ -123,7 +133,7 @@ public:
      *
      * @return
      */
-    static std::vector<std::string> dataSearchDirectories();
+    static std::vector<std::string> dataDirectories();
 
     /**
      * @brief configSearchDirectories
@@ -137,7 +147,7 @@ public:
      * If $XDG_CONFIG_DIRS is either not set or empty, a value equal to /etc/xdg should be used.
      * @return
      */
-    static std::vector<std::string> configSearchDirectories();
+    static std::vector<std::string> configDirectories();
 
 private:
     static unsigned int setupDesktopEnv();
@@ -158,6 +168,7 @@ private:
     static unsigned int setupDataDirsEnv();
     static unsigned int setupConfigDirsEnv();
     static unsigned int setupCacheHomeEnv();
+    static unsigned int setupIconHomeEnv();
     static unsigned int setupRuntimeDirEnv();
 
     static unsigned int setupEnvVar(const char *env, const char *value, unsigned int err);
