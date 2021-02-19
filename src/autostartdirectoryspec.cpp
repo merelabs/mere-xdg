@@ -50,6 +50,11 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectorySpec::applicat
             {
                 DesktopEntry desktopEntry = DesktopEntrySpec::parse(fileInfo);
 
+                // ignore hidden application
+                QVariant hidden = desktopEntry.get(DesktopEntry::Hidden);
+                if (hidden.isValid() && hidden.toBool())
+                    continue;
+
                 if (Mere::XDG::DesktopEntrySpec::valid(desktopEntry))
                     desktopEntries.push_back(desktopEntry);
             }
