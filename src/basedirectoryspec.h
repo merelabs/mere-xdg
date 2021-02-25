@@ -28,10 +28,10 @@ namespace XDG
         static const char* SESSION_DESKTOP = "mere";
         static const char* CURRENT_DESKTOP = "mere";
 
-        static const char* DATA_HOME   = "$HOME/.local/share";
-        static const char* CONFIG_HOME = "$HOME/.config";
-        static const char* CACHE_HOME  = "$HOME/.cache";
-        static const char* ICON_HOME   = "$HOME/.icons";
+        static const char* DATA_HOME   = "$HOME/.local/share/";
+        static const char* CONFIG_HOME = "$HOME/.config/";
+        static const char* CACHE_HOME  = "$HOME/.cache/";
+        static const char* ICON_HOME   = "$HOME/.icons/";
 
         static const char* DATA_DIRS   = "/usr/local/share/:/usr/share/";
 
@@ -39,7 +39,7 @@ namespace XDG
         static const char* CONFIG_DIRS = "/usr/local/etc/xdg/:/etc/xdg/";
 
         // where did we find this one, in which spec?
-        static const char* RUNTIME_DIR = "/tmp/mere-$USER";
+        static const char* RUNTIME_DIR = "/tmp/mere-$USER/";
     }
 
     namespace ErrorMask
