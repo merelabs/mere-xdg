@@ -1,6 +1,41 @@
 #include "desktopentry.h"
 
-QVariant Mere::XDG::DesktopEntry::get(const Attribute &attribute)
+std::string Mere::XDG::DesktopEntry::id() const
+{
+    return get(Attribute::Id).toString().toStdString();
+}
+
+std::string Mere::XDG::DesktopEntry::type() const
+{
+    return get(Attribute::Type).toString().toStdString();
+}
+
+std::string Mere::XDG::DesktopEntry::name() const
+{
+    return get(Attribute::Name).toString().toStdString();
+}
+
+std::string Mere::XDG::DesktopEntry::genericName() const
+{
+    return get(Attribute::GenericName).toString().toStdString();
+}
+
+std::string Mere::XDG::DesktopEntry::comment() const
+{
+    return get(Attribute::Comment).toString().toStdString();
+}
+
+std::string Mere::XDG::DesktopEntry::icon() const
+{
+    return get(Attribute::Icon).toString().toStdString();
+}
+
+bool Mere::XDG::DesktopEntry::hidden() const
+{
+    return get(Attribute::Hidden).toBool();
+}
+
+QVariant Mere::XDG::DesktopEntry::get(const Attribute &attribute) const
 {
     auto find = m_attributes.find(attribute);
     if (find != m_attributes.end())
@@ -14,20 +49,24 @@ void Mere::XDG::DesktopEntry::set(const Attribute &attribute, const QVariant &va
     this->m_attributes.insert({attribute, value});
 }
 
-bool Mere::XDG::DesktopEntry::valid()
+bool Mere::XDG::DesktopEntry::valid() const
 {
+    // Id is required
+    QVariant id = get(Attribute::Id);
+    if (!id.isValid()) return false;
+
     // Type is required
-    QVariant type = get(DesktopEntry::Type);
+    QVariant type = get(Attribute::Type);
     if (!type.isValid()) return false;
 
     // Name is required
-    QVariant name = get(DesktopEntry::Name);
+    QVariant name = get(Attribute::Name);
     if (!name.isValid()) return false;
 
     // URL is required for Link type
     if (type == QVariant("Link"))
     {
-        QVariant url = get(DesktopEntry::URL);
+        QVariant url = get(Attribute::URL);
         if (!url.isValid()) return false;
     }
 

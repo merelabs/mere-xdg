@@ -11,9 +11,9 @@ namespace XDG
 
 static const char* AUTOSTART_DIRECTORY = "autostart";
 
-class MERE_XDG_LIB_SPEC AutostartDirectorySpec
+class MERE_XDG_LIB_SPEC AutostartDirectory
 {
-    AutostartDirectorySpec() = default;
+    AutostartDirectory() = default;
 public:
     /**
      * @brief directories

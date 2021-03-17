@@ -11,9 +11,9 @@ namespace Mere
 namespace XDG
 {
 
-class MERE_XDG_LIB_SPEC DesktopEntrySpec
+class MERE_XDG_LIB_SPEC DesktopEntryHelper
 {
-    DesktopEntrySpec() = default;
+    DesktopEntryHelper() = default;
 public:
     static DesktopEntry parse(const QString &path);
     static DesktopEntry parse(const std::string &path);

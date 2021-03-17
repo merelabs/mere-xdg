@@ -13,32 +13,46 @@ DEFINES += LIB_VERSION=\\\"$$VERSION\\\"
 DEFINES += MERE_XDG_LIB
 
 SOURCES += \
-    src/autostartdirectoryspec.cpp \
-    src/basedirectoryspec.cpp \
+    src/autostartdirectory.cpp \
+    src/autostartdirectoryhelper.cpp \
+    src/basedirectory.cpp \
+    src/config.cpp \
     src/desktopentry.cpp \
-    src/desktopentrydirectoryspec.cpp \
-    src/desktopentryspec.cpp \
+    src/desktopentrydirectory.cpp \
+    src/desktopentrydirectoryhelper.cpp \
+    src/desktopentryhelper.cpp \
+    src/iconlookuphelper.cpp \
     src/icontheme.cpp \
-    src/iconthemedirectoryspec.cpp \
-    src/iconthemespec.cpp
+    src/iconthemecontext.cpp \
+    src/iconthemedirectory.cpp \
+    src/iconthemehelper.cpp \
+    src/iconthemesubdirectory.cpp \
+    src/iconthemesubdirectoryhelper.cpp
 
 HEADERS += \
-    src/autostartdirectoryspec.h \
-    src/basedirectoryspec.h \
+    src/autostartdirectory.h \
+    src/autostartdirectoryhelper.h \
+    src/basedirectory.h \
+    src/config.h \
     src/desktopentry.h \
-    src/desktopentrydirectoryspec.h \
-    src/desktopentryspec.h \
+    src/desktopentrydirectory.h \
+    src/desktopentrydirectoryhelper.h \
+    src/desktopentryhelper.h \
     src/global.h \
     src/global.h \
+    src/iconlookuphelper.h \
     src/icontheme.h \
-    src/iconthemedirectoryspec.h \
-    src/iconthemespec.h
+    src/iconthemecontext.h \
+    src/iconthemedirectory.h \
+    src/iconthemehelper.h \
+    src/iconthemesubdirectory.h \
+    src/iconthemesubdirectoryhelper.h
 
 INCLUDEPATH += /usr/local/include
 
 LIBS += -L/usr/local/lib
 
-LIBS += -lmere-utils
+LIBS += -lmere-config-lite -lmere-utils
 
 #
 # Install

@@ -16,7 +16,17 @@ class MERE_XDG_LIB_SPEC DesktopEntry
 public:
     DesktopEntry() = default;
 
-    enum Attribute
+    std::string id() const;
+    std::string type() const;
+
+    std::string name() const;
+    std::string genericName() const;
+
+    std::string comment() const;
+    std::string icon() const;
+    bool hidden() const;
+
+    enum class Attribute
     {
         Id,
         Type,
@@ -45,15 +55,18 @@ public:
         PrefersNonDefaultGPU
     };
 
-    QVariant  get(const Attribute &attribute);
+    QVariant  get(const Attribute &attribute) const;
     void set(const Attribute &attribute, const QVariant &value);
 
-    bool valid();
+    bool valid() const;
 
 private:
     std::map<Attribute, QVariant> m_attributes;
 };
+
 }
 }
+
+Q_DECLARE_METATYPE(Mere::XDG::DesktopEntry);
 
 #endif // MERE_XDG_DESKTOPENTRY_H

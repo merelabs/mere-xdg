@@ -9,12 +9,13 @@ namespace XDG
 {
 static const char* ICON_DIRECTORY = "icons";
 
-class MERE_XDG_LIB_SPEC IconThemeDirectorySpec
+class MERE_XDG_LIB_SPEC IconThemeDirectory
 {
-    IconThemeDirectorySpec() = default;
+    IconThemeDirectory() = default;
 public:
+    static std::vector<std::string> directories(const std::string &theme);
 
-    static std::string userIconDirectory();
+    static std::string home();
 
     /**
      * @brief iconDirectories
@@ -23,10 +24,11 @@ public:
      *
      * @return
      */
-    static std::vector<std::string> baseDirectories();
+    static std::vector<std::string> base();
+    static std::vector<std::string> pixmaps();
+
     static std::string iconDirectory(const std::string &path);
 
-    static std::vector<std::string> themeDirectories(const std::string &theme);
 };
 }
 }

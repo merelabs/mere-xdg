@@ -1,7 +1,8 @@
-#ifndef MERE_XDG_DESKTOPENTRYDIRECTORYSPEC_H
-#define MERE_XDG_DESKTOPENTRYDIRECTORYSPEC_H
+#ifndef MERE_XDG_DESKTOPENTRYDIRECTORY_H
+#define MERE_XDG_DESKTOPENTRYDIRECTORY_H
 
 #include "global.h"
+#include "desktopentry.h"
 
 namespace Mere
 {
@@ -10,9 +11,9 @@ namespace XDG
 
 static const char* APPLICATION_DIRECTORY = "applications";
 
-class MERE_XDG_LIB_SPEC DesktopEntryDirectorySpec
+class MERE_XDG_LIB_SPEC DesktopEntryDirectory
 {
-    DesktopEntryDirectorySpec() = default;
+    DesktopEntryDirectory() = default;
 public:
     /**
      * @brief applicationDirectories
@@ -27,4 +28,4 @@ public:
 }
 }
 
-#endif // MERE_XDG_DESKTOPENTRYDIRECTORYSPEC_H
+#endif // MERE_XDG_DESKTOPENTRYDIRECTORY_H
