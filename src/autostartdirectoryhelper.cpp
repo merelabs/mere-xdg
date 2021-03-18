@@ -31,30 +31,29 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectoryHelper::applic
             DesktopEntry desktopEntry = DesktopEntryHelper::parse(fileInfo);
 
             // ignore hidden application
-            QVariant hidden = desktopEntry.get(DesktopEntry::Attribute::Hidden);
-            if (!hidden.isNull() && hidden.isValid() && hidden.toBool())
-                continue;
+            bool hidden = desktopEntry.hidden();
+            if (hidden) continue;
 
-            QVariant onlyShowIn = desktopEntry.get(DesktopEntry::Attribute::OnlyShowIn);
-            if (!hidden.isNull() && onlyShowIn.isValid())
+            std::string onlyShowIn = desktopEntry.get(DesktopEntry::Attribute::OnlyShowIn);
+            if (!onlyShowIn.empty())
             {
-                QStringList list = onlyShowIn.toString().split(":");
+                QStringList list = QString(onlyShowIn.c_str()).split(":");
                 if (!list.contains("MERE"))
                     continue;
             }
 
-            QVariant notShowIn = desktopEntry.get(DesktopEntry::Attribute::NotShowIn);
-            if (!hidden.isNull() && notShowIn.isValid())
+            std::string notShowIn = desktopEntry.get(DesktopEntry::Attribute::NotShowIn);
+            if (!notShowIn.empty())
             {
-                QStringList list = notShowIn.toString().split(":");
+                QStringList list = QString(notShowIn.c_str()).split(":");
                 if (list.contains("MERE"))
                     continue;
             }
 
-            QVariant tryExec = desktopEntry.get(DesktopEntry::Attribute::TryExec);
-            if (!hidden.isNull() && tryExec.isValid())
+            std::string tryExec = desktopEntry.get(DesktopEntry::Attribute::TryExec);
+            if (!tryExec.empty())
             {
-                QFileInfo tryExecInfo(tryExec.toString());
+                QFileInfo tryExecInfo(tryExec.c_str());
                 if (!tryExecInfo.isAbsolute())
                 {
                     QString path = Mere::Utils::BinUtils::find(tryExecInfo.fileName());

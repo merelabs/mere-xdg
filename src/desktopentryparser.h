@@ -22,9 +22,12 @@ public:
     DesktopEntry entry() const;
 
 private:
+    std::string id() const;
     bool comment(const std::string &line) const;
     std::string key(const std::string &line) const;
     std::string value(const std::string &line) const;
+
+    std::set<std::string> categories(const std::string &value) const;
 
 signals:
 private:

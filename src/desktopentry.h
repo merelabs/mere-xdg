@@ -59,17 +59,17 @@ public:
         PrefersNonDefaultGPU
     };
 
-    QVariant  get(const Attribute &attribute) const;
-    void set(const Attribute &attribute, const QVariant &value);
+    std::string get(const Attribute &attribute) const;
+    void set(const Attribute &attribute, const std::string &value);
 
-    QVariant  get(const std::string &key) const;
-    void set(const std::string &key, const QVariant &value);
+    std::string  get(const std::string &key) const;
+    void set(const std::string &key, const std::string &value);
 
     bool valid() const;
 
 private:
-    std::map<Attribute, QVariant> m_attributes;
-    std::map<std::string, QVariant> m_others;
+    std::map<Attribute, std::string> m_attributes;
+    std::map<std::string, std::string> m_others;
 
     std::set<std::string> m_categories;
 };
