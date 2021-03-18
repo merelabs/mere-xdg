@@ -1,5 +1,5 @@
-#ifndef ICONFINDER_H
-#define ICONFINDER_H
+#ifndef MERE_XDG_ICONFINDER_H
+#define MERE_XDG_ICONFINDER_H
 
 #include "global.h"
 #include "icontheme.h"
@@ -24,10 +24,9 @@ private:
     static bool DirectoryMatchesSize(const IconThemeSubDirectory &def, unsigned int size, unsigned int  scale);
     static int DirectorySizeDistance(const IconThemeSubDirectory &def, unsigned int size, unsigned int scale);
 
-
     static QStringList filters(const std::string &icon);
 };
 
 }
 }
-#endif // ICONFINDER_H
+#endif // MERE_XDG_ICONFINDER_H

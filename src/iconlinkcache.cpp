@@ -1,5 +1,6 @@
 #include "iconlinkcache.h"
 
+#include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <unistd.h>
@@ -52,10 +53,7 @@ std::string Mere::XDG::IconLinkCache::get(const std::string &key)
 {
     auto find = g_cache.find(key);
     if (find != g_cache.end())
-    {
-        qDebug() << "==========IN MEMORY XXXXXX LINK FILE:" << find->second.c_str();
         return find->second;
-    }
 
     std::string path(g_path);
     std::fstream file(path.append(key));
@@ -63,8 +61,6 @@ std::string Mere::XDG::IconLinkCache::get(const std::string &key)
     {
         char link[4096]; /* maxsize of path - 4096 ? */
         int bytes = readlink(path.c_str(), link, sizeof(link));
-
-        qDebug() << "==========IN DISK XXXXXX LINK FILE:" << link;
 
         if (bytes)
         {
@@ -75,14 +71,15 @@ std::string Mere::XDG::IconLinkCache::get(const std::string &key)
         }
     }
 
-    qDebug() << "==========NO CACHE";
-
     return "";
 }
 
 void Mere::XDG::IconLinkCache::set(const std::string &key, const std::string &link)
 {
     if (key.empty()) return;
+
+    auto pos = key.find("/");
+    if (pos != std::string::npos) return;
 
     if (link.empty())
     {
@@ -103,6 +100,6 @@ void Mere::XDG::IconLinkCache::set(const std::string &key, const std::string &li
     g_cache.insert({key, link});
 
     std::string path(g_path);
-    int err = symlink(link.c_str(), path.append(key).c_str());
-    qDebug() << path.c_str() << "=>" << link.c_str();
+    if( symlink(link.c_str(), path.append(key).c_str()))
+        std::cout << "could not create symbolic link for - " << key << std::endl;
 }

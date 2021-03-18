@@ -100,12 +100,12 @@ bool Mere::XDG::DesktopEntryParser::parse()
             size_t start = 0, pos = value.find(";");
             while (pos != std::string::npos)
             {
-                category = value.substr(start, pos);
+                category = value.substr(start, pos - start);
                 categories.insert(category);
-
-                start += pos + 1;
+                start = pos + 1;
                 pos = value.find(";", start);
             }
+
             m_entry.categories(categories);
         }
         else if (key == "Implements")

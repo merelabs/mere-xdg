@@ -10,13 +10,13 @@
 //static
 std::string Mere::XDG::IconLookupHelper::path(const std::string &icon)
 {
-    qDebug() << "===============";
+    //qDebug() << "===============";
     Config *config = Config::instance();
     config->theme("Adwaita");
     config->size(48);
     config->context("");
 
-    qDebug() << "Lookin for icon: " << icon.c_str();
+    //qDebug() << "Lookin for icon: " << icon.c_str();
 
     auto pos = icon.find("/");
     if(pos == 0) return icon;
@@ -38,25 +38,24 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
 {
     Config *config = Config::instance();
 
-    qDebug() << "CONFIG::================================";
-    qDebug() << "Theme  : " << config->theme().c_str();
-    qDebug() << "Size   : " << config->size();
-    qDebug() << "Context: " << config->context().c_str();
-    qDebug() << "CONFIG::================================";
+//    qDebug() << "CONFIG::================================";
+//    qDebug() << "Theme  : " << config->theme().c_str();
+//    qDebug() << "Size   : " << config->size();
+//    qDebug() << "Context: " << config->context().c_str();
+//    qDebug() << "CONFIG::================================";
 
     std::string path;
 
     quint64 start = QDateTime::currentMSecsSinceEpoch();
 
     std::vector<Mere::XDG::IconTheme> themes = IconThemeHelper::themes();
-    qDebug() << "THEME PARSE time: " << (QDateTime::currentMSecsSinceEpoch() - start) << "ms";
 
     for(const auto &theme : themes)
     {
         if(theme.hidden()) continue;
         if (!config->theme().empty() && theme.name().compare(config->theme())) continue;
 
-        qDebug() << "Theme : " << theme.name().c_str();
+        //qDebug() << "Theme : " << theme.name().c_str();
 
         path = LookupIcon(icon, theme);
         break;
@@ -112,7 +111,7 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
 
     QStringList filters = IconLookupHelper::filters(icon);
 
-    qDebug() << "Looking icon into path: " << theme.path().c_str();
+    //qDebug() << "Looking icon into path: " << theme.path().c_str();
     int minsize = INT_MAX;
     for(const auto &directory : directories)
     {

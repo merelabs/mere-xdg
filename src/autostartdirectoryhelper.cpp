@@ -39,7 +39,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectoryHelper::applic
             if (!hidden.isNull() && onlyShowIn.isValid())
             {
                 QStringList list = onlyShowIn.toString().split(":");
-                if (!list.contains("mere"))
+                if (!list.contains("MERE"))
                     continue;
             }
 
@@ -47,7 +47,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectoryHelper::applic
             if (!hidden.isNull() && notShowIn.isValid())
             {
                 QStringList list = notShowIn.toString().split(":");
-                if (list.contains("mere"))
+                if (list.contains("MERE"))
                     continue;
             }
 
