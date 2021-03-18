@@ -35,6 +35,17 @@ bool Mere::XDG::DesktopEntry::hidden() const
     return get(Attribute::Hidden).toBool();
 }
 
+std::set<std::string> Mere::XDG::DesktopEntry::categories() const
+{
+    return m_categories;
+}
+
+void Mere::XDG::DesktopEntry::categories(const std::set<std::string> &categories)
+{
+    m_categories.clear();
+    m_categories = categories;
+}
+
 QVariant Mere::XDG::DesktopEntry::get(const Attribute &attribute) const
 {
     auto find = m_attributes.find(attribute);
@@ -47,6 +58,20 @@ QVariant Mere::XDG::DesktopEntry::get(const Attribute &attribute) const
 void Mere::XDG::DesktopEntry::set(const Attribute &attribute, const QVariant &value)
 {
     this->m_attributes.insert({attribute, value});
+}
+
+QVariant Mere::XDG::DesktopEntry::get(const std::string &attribute) const
+{
+    auto find = m_others.find(attribute);
+    if (find != m_others.end())
+        return find->second;
+
+    return QVariant();
+}
+
+void Mere::XDG::DesktopEntry::set(const std::string &attribute, const QVariant &value)
+{
+    this->m_others.insert({attribute, value});
 }
 
 bool Mere::XDG::DesktopEntry::valid() const

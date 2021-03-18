@@ -10,6 +10,7 @@
 //static
 std::string Mere::XDG::IconLookupHelper::path(const std::string &icon)
 {
+    qDebug() << "===============";
     Config *config = Config::instance();
     config->theme("Adwaita");
     config->size(48);
@@ -45,7 +46,10 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
 
     std::string path;
 
+    quint64 start = QDateTime::currentMSecsSinceEpoch();
+
     std::vector<Mere::XDG::IconTheme> themes = IconThemeHelper::themes();
+    qDebug() << "THEME PARSE time: " << (QDateTime::currentMSecsSinceEpoch() - start) << "ms";
 
     for(const auto &theme : themes)
     {

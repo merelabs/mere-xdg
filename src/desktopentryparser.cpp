@@ -91,7 +91,23 @@ bool Mere::XDG::DesktopEntryParser::parse()
         else if (key == "MimeType")
             m_entry.set(DesktopEntry::Attribute::MimeType, value.c_str());
         else if (key == "Categories")
+        {
             m_entry.set(DesktopEntry::Attribute::Categories, value.c_str());
+
+            std::set<std::string> categories;
+
+            std::string category;
+            size_t start = 0, pos = value.find(";");
+            while (pos != std::string::npos)
+            {
+                category = value.substr(start, pos);
+                categories.insert(category);
+
+                start += pos + 1;
+                pos = value.find(";", start);
+            }
+            m_entry.categories(categories);
+        }
         else if (key == "Implements")
             m_entry.set(DesktopEntry::Attribute::Implements, value.c_str());
         else if (key == "Keywords")

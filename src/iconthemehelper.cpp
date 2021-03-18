@@ -3,6 +3,7 @@
 #include "iconthemedirectory.h"
 #include "iconthemesubdirectoryhelper.h"
 #include "iconlookuphelper.h"
+#include "iconthemecache.h"
 
 #include "desktopentry.h"
 
@@ -51,20 +52,27 @@ std::vector<Mere::XDG::IconTheme> Mere::XDG::IconThemeHelper::themes(std::map<Ic
             QFileInfo themeInfo(info.absoluteFilePath().append("/index.theme"));
             if (!themeInfo.exists()) continue;
 
-            IconTheme theme = IconThemeHelper::parse(themeInfo);
-            if (!theme.valid()) continue;
+            IconTheme theme;
+            bool cached = IconThemeCache::findTheme(themeInfo.absoluteFilePath().toStdString(), &theme);
+            if (!cached)
+            {
+                theme = IconThemeHelper::parse(themeInfo);
+                if (!theme.valid()) continue;
 
-            // filter on name
-            QVariant name = config[IconTheme::Attribute::Name];
-            if (name.isValid() && theme.name().compare(name.toString().toStdString()))
-                continue;
+                // filter on name
+                QVariant name = config[IconTheme::Attribute::Name];
+                if (name.isValid() && theme.name().compare(name.toString().toStdString()))
+                    continue;
 
-            // filter on hidden
-            QVariant hidden = config[IconTheme::Attribute::Hidden];
-            if (hidden.isValid() && theme.hidden() != hidden.toBool())
-                continue;
+                // filter on hidden
+                QVariant hidden = config[IconTheme::Attribute::Hidden];
+                if (hidden.isValid() && theme.hidden() != hidden.toBool())
+                    continue;
 
-            theme.path(info.absoluteFilePath().toStdString());
+                theme.path(info.absoluteFilePath().toStdString());
+
+                IconThemeCache::insertTheme(themeInfo.absoluteFilePath().toStdString(), theme);
+            }
             themes.push_back(theme);
         }
     }
@@ -82,9 +90,10 @@ std::string Mere::XDG::IconThemeHelper::icon(const DesktopEntry &entry)
     if(path.empty())
     {
         // FIXME: if no icon found????
-        path = IconLookupHelper::path("applications-accessories");
+        path = IconLookupHelper::path("applications-development");
     }
 
+    qDebug() << "ICON::" << entry.icon().c_str() << path.c_str();
     return path;
 }
 

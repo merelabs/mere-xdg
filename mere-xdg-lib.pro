@@ -21,8 +21,12 @@ SOURCES += \
     src/desktopentrydirectory.cpp \
     src/desktopentrydirectoryhelper.cpp \
     src/desktopentryhelper.cpp \
+    src/desktopentryparser.cpp \
+    src/iconlinkcache.cpp \
     src/iconlookuphelper.cpp \
+    src/iconpathfinder.cpp \
     src/icontheme.cpp \
+    src/iconthemecache.cpp \
     src/iconthemecontext.cpp \
     src/iconthemedirectory.cpp \
     src/iconthemehelper.cpp \
@@ -38,10 +42,14 @@ HEADERS += \
     src/desktopentrydirectory.h \
     src/desktopentrydirectoryhelper.h \
     src/desktopentryhelper.h \
+    src/desktopentryparser.h \
     src/global.h \
     src/global.h \
+    src/iconlinkcache.h \
     src/iconlookuphelper.h \
+    src/iconpathfinder.h \
     src/icontheme.h \
+    src/iconthemecache.h \
     src/iconthemecontext.h \
     src/iconthemedirectory.h \
     src/iconthemehelper.h \

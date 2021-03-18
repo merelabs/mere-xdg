@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include <map>
+#include <set>
 
 #include <QVariant>
 
@@ -25,6 +26,9 @@ public:
     std::string comment() const;
     std::string icon() const;
     bool hidden() const;
+
+    std::set<std::string> categories() const;
+    void categories(const std::set<std::string> &categories);
 
     enum class Attribute
     {
@@ -58,10 +62,16 @@ public:
     QVariant  get(const Attribute &attribute) const;
     void set(const Attribute &attribute, const QVariant &value);
 
+    QVariant  get(const std::string &key) const;
+    void set(const std::string &key, const QVariant &value);
+
     bool valid() const;
 
 private:
     std::map<Attribute, QVariant> m_attributes;
+    std::map<std::string, QVariant> m_others;
+
+    std::set<std::string> m_categories;
 };
 
 }
