@@ -32,7 +32,32 @@ std::string Mere::XDG::DesktopEntry::icon() const
 
 bool Mere::XDG::DesktopEntry::hidden() const
 {
-    return get(Attribute::Hidden).compare("false");
+    int set;
+    std::string hidden = get(Attribute::Hidden, &set);
+
+    if (!set) return false;
+
+    return hidden.compare("true") == 0;
+}
+
+bool Mere::XDG::DesktopEntry::terminal() const
+{
+    int set;
+    std::string terminal = get(Attribute::Terminal, &set);
+
+    if (!set) return false;
+
+    return terminal.compare("true") == 0;
+}
+
+bool Mere::XDG::DesktopEntry::nodisplay() const
+{
+    int set;
+    std::string nodisplay = get(Attribute::NoDisplay, &set);
+
+    if (!set) return false;
+
+    return nodisplay.compare("true") == 0;
 }
 
 std::set<std::string> Mere::XDG::DesktopEntry::categories() const
@@ -46,11 +71,16 @@ void Mere::XDG::DesktopEntry::categories(const std::set<std::string> &categories
     m_categories = categories;
 }
 
-std::string Mere::XDG::DesktopEntry::get(const Attribute &attribute) const
+std::string Mere::XDG::DesktopEntry::get(const Attribute &attribute, int *set) const
 {
     auto find = m_attributes.find(attribute);
     if (find != m_attributes.end())
+    {
+        if (set) *set = 1;
         return find->second;
+    }
+
+    if (set) *set = 0;
 
     return "";
 }
@@ -60,11 +90,16 @@ void Mere::XDG::DesktopEntry::set(const Attribute &attribute, const std::string 
     this->m_attributes.insert({attribute, value});
 }
 
-std::string Mere::XDG::DesktopEntry::get(const std::string &attribute) const
+std::string Mere::XDG::DesktopEntry::get(const std::string &attribute, int *set) const
 {
     auto find = m_others.find(attribute);
     if (find != m_others.end())
+    {
+        if (set) *set = 1;
         return find->second;
+    }
+
+    if (set) *set = 0;
 
     return "";
 }

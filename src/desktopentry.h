@@ -26,6 +26,8 @@ public:
     std::string comment() const;
     std::string icon() const;
     bool hidden() const;
+    bool terminal() const;
+    bool nodisplay() const;
 
     std::set<std::string> categories() const;
     void categories(const std::set<std::string> &categories);
@@ -59,10 +61,10 @@ public:
         PrefersNonDefaultGPU
     };
 
-    std::string get(const Attribute &attribute) const;
+    std::string get(const Attribute &attribute, int *set = nullptr) const;
     void set(const Attribute &attribute, const std::string &value);
 
-    std::string  get(const std::string &key) const;
+    std::string  get(const std::string &key, int *set = nullptr) const;
     void set(const std::string &key, const std::string &value);
 
     bool valid() const;

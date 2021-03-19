@@ -70,7 +70,7 @@ bool Mere::XDG::DesktopEntryParser::parse()
             m_entry.set(DesktopEntry::Attribute::Comment, value);
         else if (key == "Icon")
             m_entry.set(DesktopEntry::Attribute::Icon, value);
-        else if (key == "Hidden")
+        else if (key == "Hidden")            
             m_entry.set(DesktopEntry::Attribute::Hidden, value);
         else if (key == "OnlyShowIn")
             m_entry.set(DesktopEntry::Attribute::OnlyShowIn, value);
