@@ -1,6 +1,7 @@
 #include "desktopentryparser.h"
 #include "desktopentrydirectory.h"
 
+#include <set>
 #include <fstream>
 #include <iostream>
 
@@ -50,6 +51,14 @@ bool Mere::XDG::DesktopEntryParser::parse()
         }
 
         if (!procceed) continue;
+
+        auto pos = line.find("[Desktop Action");
+        if (pos != std::string::npos)
+        {
+            std::set<DesktopEntryAction> actions = Mere::XDG::DesktopEntryParser::actions(file, line);
+            m_entry.actions(actions);
+            continue;
+        }
 
         std::string key   = this->key(line);
         std::string value = this->value(line);
@@ -111,8 +120,8 @@ bool Mere::XDG::DesktopEntryParser::parse()
             m_entry.set(key, value.c_str());
     }
 
-    if (procceed)
-        m_entry.set(DesktopEntry::Attribute::Id, id().c_str());
+
+    m_entry.set(DesktopEntry::Attribute::Id, id());
 
     return procceed;
 }
@@ -122,15 +131,15 @@ std::string Mere::XDG::DesktopEntryParser::id() const
     std::string id;
     for(const std::string &directory : Mere::XDG::DesktopEntryDirectory::directories())
     {
+        if (directory.empty()) continue;
+
         auto pos = m_path.find(directory);
-        if (pos != std::string::npos)
-        {
-            id = m_path.substr(directory.length() + 1);
-            pos = id.find("/");
-            while(pos != std::string::npos)
-                id.replace(pos, 1, "-");
-            break;
-        }
+        if (pos == std::string::npos) continue;
+
+        id = m_path.substr(directory.length() + 1);
+        while((pos = id.find("/"))!= std::string::npos)
+            id.replace(pos, 1, "-");
+        break;
     }
 
     return id;
@@ -174,5 +183,39 @@ std::set<std::string> Mere::XDG::DesktopEntryParser::categories(const std::strin
     }
 
     return categories;
+}
+
+std::set<Mere::XDG::DesktopEntryAction> Mere::XDG::DesktopEntryParser::actions(std::ifstream &file, std::string &line) const
+{
+    std::set<Mere::XDG::DesktopEntryAction> actions;
+
+    std::string id = line.substr(16);
+
+    DesktopEntryAction action(id);
+
+    while (std::getline(file, line))
+    {
+        auto pos = line.find("[Desktop Action");
+        if (pos != std::string::npos)
+        {
+            std::set<Mere::XDG::DesktopEntryAction> _actions = Mere::XDG::DesktopEntryParser::actions(file, line);
+            actions.insert(_actions.begin(), _actions.end());
+        }
+
+        std::string key   = this->key(line);
+        std::string value = this->value(line);
+
+        if (key == "Name")
+            action.set(DesktopEntryAction::Attribute::Name, value);
+        else if (key == "Icon")
+            action.set(DesktopEntryAction::Attribute::Icon, value);
+        else if (key == "Exec")
+            action.set(DesktopEntryAction::Attribute::Exec, value);
+    }
+
+    if (action.valid())
+        actions.insert(action);
+
+    return actions;
 }
 

@@ -18,6 +18,8 @@ SOURCES += \
     src/basedirectory.cpp \
     src/config.cpp \
     src/desktopentry.cpp \
+    src/desktopentryaction.cpp \
+    src/desktopentrycategory.cpp \
     src/desktopentrydirectory.cpp \
     src/desktopentrydirectoryhelper.cpp \
     src/desktopentryhelper.cpp \
@@ -39,6 +41,8 @@ HEADERS += \
     src/basedirectory.h \
     src/config.h \
     src/desktopentry.h \
+    src/desktopentryaction.h \
+    src/desktopentrycategory.h \
     src/desktopentrydirectory.h \
     src/desktopentrydirectoryhelper.h \
     src/desktopentryhelper.h \

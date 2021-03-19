@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "desktopentry.h"
+#include "desktopentryaction.h"
 
 #include <QObject>
 
@@ -28,6 +29,9 @@ private:
     std::string value(const std::string &line) const;
 
     std::set<std::string> categories(const std::string &value) const;
+
+    std::set<DesktopEntryAction> actions(std::ifstream &file, std::string &line) const;
+
 
 signals:
 private:

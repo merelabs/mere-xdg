@@ -9,6 +9,9 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryHelper::app
 {
     std::vector<DesktopEntry> entries;
 
+    QStringList filters;
+    filters << "*.desktop";
+
     std::vector<std::string>  directories = DesktopEntryDirectory::directories();
 
     for(const std::string &directory : directories)
@@ -16,18 +19,9 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryHelper::app
         qDebug() << "Looking for apps into : " << directory.c_str();
         QDir dir(directory.c_str());
 
-        QFileInfoList fileInfoList = dir.entryInfoList(QDir::AllEntries);
-        QListIterator<QFileInfo> i(fileInfoList);
-        while (i.hasNext())
+        QFileInfoList files = dir.entryInfoList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+        for(const QFileInfo &fileInfo : files)
         {
-            QFileInfo fileInfo = i.next();
-
-            if (!fileInfo.isFile())
-                continue;
-
-            if (fileInfo.suffix() != "desktop")
-                continue;
-
             DesktopEntry desktopEntry = DesktopEntryHelper::parse(fileInfo);
 
 //            // ignore hidden application
@@ -67,10 +61,10 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryHelper::app
 //                }
 //            }
 
-            if (Mere::XDG::DesktopEntryHelper::valid(desktopEntry))
-                entries.push_back(desktopEntry);
+            if (desktopEntry.valid()) entries.push_back(desktopEntry);
         }
     }
 
+    qDebug() << "KENO SESH HOCHHCE NA" << entries.size();
     return entries;
 }

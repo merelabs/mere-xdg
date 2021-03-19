@@ -60,6 +60,27 @@ bool Mere::XDG::DesktopEntry::nodisplay() const
     return nodisplay.compare("true") == 0;
 }
 
+std::string Mere::XDG::DesktopEntry::exec() const
+{
+    return get(Attribute::Exec);
+}
+
+std::set<Mere::XDG::DesktopEntryAction> Mere::XDG::DesktopEntry::actions() const
+{
+    return m_actions;
+}
+
+void Mere::XDG::DesktopEntry::action(const DesktopEntryAction &action)
+{
+    m_actions.insert(action);
+}
+
+void Mere::XDG::DesktopEntry::actions(const std::set<DesktopEntryAction> &actions)
+{
+    m_actions.clear();
+    m_actions = actions;
+}
+
 std::set<std::string> Mere::XDG::DesktopEntry::categories() const
 {
     return m_categories;

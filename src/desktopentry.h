@@ -2,6 +2,8 @@
 #define MERE_XDG_DESKTOPENTRY_H
 
 #include "global.h"
+#include "desktopentryaction.h"
+
 #include <map>
 #include <set>
 
@@ -25,9 +27,16 @@ public:
 
     std::string comment() const;
     std::string icon() const;
+
     bool hidden() const;
     bool terminal() const;
     bool nodisplay() const;
+
+    std::string exec() const;
+
+    std::set<DesktopEntryAction> actions() const;
+    void action(const DesktopEntryAction &action);
+    void actions(const std::set<DesktopEntryAction> &actions);
 
     std::set<std::string> categories() const;
     void categories(const std::set<std::string> &categories);
@@ -74,6 +83,7 @@ private:
     std::map<std::string, std::string> m_others;
 
     std::set<std::string> m_categories;
+    std::set<DesktopEntryAction> m_actions;
 };
 
 }
