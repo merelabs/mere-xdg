@@ -4,67 +4,61 @@
 
 #include <QDir>
 
-//static
-std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryHelper::applicatins(const std::string &path)
+std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryHelper::applicatins(const std::string &path, int offset, int number)
 {
-    std::vector<DesktopEntry> entries;
-
     QStringList filters;
     filters << "*.desktop";
 
-    std::vector<std::string>  directories = DesktopEntryDirectory::directories();
+    bool offsetHonored = false;
 
+    int processed = 0;
+    QFileInfoList files;
+
+    std::vector<std::string>  directories = DesktopEntryDirectory::directories();
     for(const std::string &directory : directories)
     {
+        if (!path.empty() && directory.compare(path)) continue;
+
         qDebug() << "Looking for apps into : " << directory.c_str();
         QDir dir(directory.c_str());
 
-        QFileInfoList files = dir.entryInfoList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
-        for(const QFileInfo &fileInfo : files)
+        QFileInfoList _files = dir.entryInfoList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+        if (!_files.size()) continue;
+
+        processed += _files.size();
+
+        if (offset && !offsetHonored)
         {
-            DesktopEntry desktopEntry = DesktopEntryHelper::parse(fileInfo);
+            if (processed < offset) continue;
 
-//            // ignore hidden application
-//            QVariant hidden = desktopEntry.get(DesktopEntry::Attribute::Hidden);
-//            if (!hidden.isNull() && hidden.isValid() && hidden.toBool())
-//                continue;
+            int remove = _files.size() - (processed - offset);
 
-//            QVariant onlyShowIn = desktopEntry.get(DesktopEntry::Attribute::OnlyShowIn);
-//            if (!hidden.isNull() && onlyShowIn.isValid())
-//            {
-//                QStringList list = onlyShowIn.toString().split(":");
-//                if (!list.contains("mere"))
-//                    continue;
-//            }
+            _files.erase(_files.begin(), _files.begin() + remove);
 
-//            QVariant notShowIn = desktopEntry.get(DesktopEntry::Attribute::NotShowIn);
-//            if (!hidden.isNull() && notShowIn.isValid())
-//            {
-//                QStringList list = notShowIn.toString().split(":");
-//                if (list.contains("mere"))
-//                    continue;
-//            }
-
-//            QVariant tryExec = desktopEntry.get(DesktopEntry::Attribute::TryExec);
-//            if (!hidden.isNull() && tryExec.isValid())
-//            {
-//                QFileInfo tryExecInfo(tryExec.toString());
-//                if (!tryExecInfo.isAbsolute())
-//                {
-//                    QString path = Mere::Utils::BinUtils::find(tryExecInfo.fileName());
-//                    if (Mere::Utils::StringUtils::isBlank(path))
-//                        continue;
-//                }
-//                else if (!tryExecInfo.exists())
-//                {
-//                    continue;
-//                }
-//            }
-
-            if (desktopEntry.valid()) entries.push_back(desktopEntry);
+            processed -= remove;
+            offsetHonored = true;
         }
+
+        if (number)
+        {
+            if(processed - number > 0)
+            {
+                _files.erase(_files.begin() + (_files.size() - (processed - number)), _files.end());
+                files.append(_files);
+                break;
+            }
+        }
+
+        files.append(_files);
     }
 
-    qDebug() << "KENO SESH HOCHHCE NA" << entries.size();
+    std::vector<DesktopEntry> entries;
+    for(const QFileInfo &file : files)
+    {
+        DesktopEntry desktopEntry = DesktopEntryHelper::parse(file);
+        if (!desktopEntry.valid()) continue;
+        entries.push_back(desktopEntry);
+    }
+
     return entries;
 }
