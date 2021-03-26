@@ -35,7 +35,7 @@ std::string Mere::XDG::DesktopEntryDirectory::directory(const std::string &path)
 {
     std::string applicationDirectory(path);
 
-    if (applicationDirectory[applicationDirectory.length() - 1] != '/')
+    if (applicationDirectory.back() != '/')
         applicationDirectory.append("/");
 
     return applicationDirectory.append(Mere::XDG::APPLICATION_DIRECTORY);
