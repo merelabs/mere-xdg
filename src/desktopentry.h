@@ -33,6 +33,7 @@ public:
     bool nodisplay() const;
 
     std::string exec() const;
+    std::string path() const;
 
     std::set<DesktopEntryAction> actions() const;
     void action(const DesktopEntryAction &action);
@@ -40,6 +41,15 @@ public:
 
     std::set<std::string> categories() const;
     void categories(const std::set<std::string> &categories);
+
+    enum class Type
+    {
+        Unknown     = 0,
+        Application = 1,
+        Link        = 2,
+        Directory   = 3
+    };
+    Type typeId() const;
 
     enum class Attribute
     {

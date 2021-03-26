@@ -9,7 +9,7 @@ namespace Mere
 namespace XDG
 {
 
-static const char* APPLICATION_DIRECTORY = "applications";
+static const char* APPLICATION_DIRECTORY = "applications/";
 
 class MERE_XDG_LIB_SPEC DesktopEntryDirectory
 {
@@ -18,7 +18,8 @@ public:
     /**
      * @brief applicationDirectories
      *
-     * Directories where system will search for 'Desktop Entry' files.
+     * all the directories where system will search for 'Desktop Entry' files.
+     * note: all the directory path ends with '/'
      *
      * @return
      */

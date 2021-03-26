@@ -4,61 +4,84 @@
 
 #include <QDir>
 
-std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryHelper::applicatins(const std::string &path, int offset, int number)
+std::map<std::string, std::vector<std::string>> Mere::XDG::DesktopEntryDirectoryHelper::g_paths = {};
+std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryHelper::applicatins(const std::string &path, uint offset, uint number)
 {
-    QStringList filters;
-    filters << "*.desktop";
+    std::vector<DesktopEntry> entries;
 
-    bool offsetHonored = false;
+    std::vector<std::string> files = Mere::XDG::DesktopEntryDirectoryHelper::files(path);
+    //qDebug() << "TOTAL FILES:" << files.size();
+    if (!files.size()) return entries;
 
-    int processed = 0;
-    QFileInfoList files;
+    if (offset)
+    {
+        if (offset >= files.size())
+            files.clear();
+        else
+            files.erase(files.begin(), files.begin() + offset);
+    }
+    if (!files.size()) return entries;
+
+    if (number && files.size() > number)
+        files.erase(files.begin() + number, files.end());
+
+    if (!files.size()) return entries;
+
+    for(const std::string &file : files)
+    {
+        QFileInfo info(file.c_str());
+
+        DesktopEntry desktopEntry = DesktopEntryHelper::parse(info);
+        if (!desktopEntry.valid())
+        {
+            // dont we need to grab more files to fill this gap?
+            continue;
+        }
+        entries.push_back(desktopEntry);
+    }
+
+    return entries;
+}
+
+//static
+std::vector<std::string> Mere::XDG::DesktopEntryDirectoryHelper::files(const std::string &path)
+{
+    std::vector<std::string> files;
+
+    QStringList filters{"*.desktop"};
 
     std::vector<std::string>  directories = DesktopEntryDirectory::directories();
     for(const std::string &directory : directories)
     {
         if (!path.empty() && directory.compare(path)) continue;
 
+        auto it = g_paths.find(path);
+        if (it != g_paths.end())
+        {
+            std::vector<std::string> paths = it->second;
+            files.insert(files.end(), paths.begin(), paths.end());
+            continue;
+        }
+
         qDebug() << "Looking for apps into : " << directory.c_str();
         QDir dir(directory.c_str());
 
-        QFileInfoList _files = dir.entryInfoList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
-        if (!_files.size()) continue;
+        dir.setSorting(QDir::IgnoreCase);
 
-        processed += _files.size();
+        QStringList list = dir.entryList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+        if (!list.size()) continue;
 
-        if (offset && !offsetHonored)
+        std::vector<std::string> paths;
+        for(const QString &entry : list)
         {
-            if (processed < offset) continue;
-
-            int remove = _files.size() - (processed - offset);
-
-            _files.erase(_files.begin(), _files.begin() + remove);
-
-            processed -= remove;
-            offsetHonored = true;
+            QString path(directory.c_str());
+            path.append("/").append(entry);
+            paths.push_back(path.toStdString());
         }
 
-        if (number)
-        {
-            if(processed - number > 0)
-            {
-                _files.erase(_files.begin() + (_files.size() - (processed - number)), _files.end());
-                files.append(_files);
-                break;
-            }
-        }
-
-        files.append(_files);
+        files.insert(files.end(), paths.begin(), paths.end());
+        g_paths.insert({path, paths});
     }
 
-    std::vector<DesktopEntry> entries;
-    for(const QFileInfo &file : files)
-    {
-        DesktopEntry desktopEntry = DesktopEntryHelper::parse(file);
-        if (!desktopEntry.valid()) continue;
-        entries.push_back(desktopEntry);
-    }
-
-    return entries;
+    return files;
 }

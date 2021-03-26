@@ -1,5 +1,5 @@
-#ifndef DESKTOPENTRYPARSER_H
-#define DESKTOPENTRYPARSER_H
+#ifndef MERE_XDG_DESKTOPENTRYPARSER_H
+#define MERE_XDG_DESKTOPENTRYPARSER_H
 
 #include "global.h"
 #include "desktopentry.h"
@@ -29,9 +29,7 @@ private:
     std::string value(const std::string &line) const;
 
     std::set<std::string> categories(const std::string &value) const;
-
     std::set<DesktopEntryAction> actions(std::ifstream &file, std::string &line) const;
-
 
 signals:
 private:
@@ -42,4 +40,4 @@ private:
 }
 }
 
-#endif // DESKTOPENTRYPARSER_H
+#endif // MERE_XDG_DESKTOPENTRYPARSER_H

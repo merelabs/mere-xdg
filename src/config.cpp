@@ -8,52 +8,52 @@ Mere::XDG::Config::Config(const std::string &path, QObject *parent) :
 
 std::string Mere::XDG::Config::theme() const
 {
-    QVariant value = this->get("mere.xdg.icon.theme");
-    if (!value.isValid()) return "hicolor";
+    std::string value = this->get("mere.xdg.icon.theme");
+    if (value.empty()) return "hicolor";
 
-    return value.toString().toStdString();
+    return value;
 }
 
 void Mere::XDG::Config::theme(const std::string &theme)
 {
-    this->set("mere.xdg.icon.theme", theme.c_str());
+    this->set("mere.xdg.icon.theme", theme);
 }
 
 uint Mere::XDG::Config::size() const
 {
-    QVariant value = this->get("mere.xdg.icon.size");
-    if (!value.isValid()) return 0;
+    std::string value = this->get("mere.xdg.icon.size");
+    if (value.empty()) return 0;
 
-    return value.toUInt();
+    return std::stoi(value);
 }
 
 void Mere::XDG::Config::size(const uint &size)
 {
-    this->set("mere.xdg.icon.size", size);
+    this->set("mere.xdg.icon.size", std::to_string(size));
 }
 
 uint Mere::XDG::Config::scale() const
 {
-    QVariant value = this->get("mere.xdg.icon.scale");
-    if (!value.isValid()) return 0;
+    std::string value = this->get("mere.xdg.icon.scale");
+    if (value.empty()) return 0;
 
-    return value.toUInt();
+    return std::stoi(value);
 }
 
 void Mere::XDG::Config::scale(const uint &scale)
 {
-    this->set("mere.xdg.icon.scale", scale);
+    this->set("mere.xdg.icon.scale", std::to_string(scale));
 }
 
 std::string Mere::XDG::Config::context() const
 {
-    QVariant value = this->get("mere.xdg.icon.context");
-    if (!value.isValid()) return "apps";
+    std::string value = this->get("mere.xdg.icon.context");
+    if (value.empty()) return "apps";
 
-    return value.toString().toStdString();
+    return value;
 }
 
 void Mere::XDG::Config::context(const std::string &context)
 {
-    this->set("mere.xdg.icon.context", context.c_str());
+    this->set("mere.xdg.icon.context", context);
 }

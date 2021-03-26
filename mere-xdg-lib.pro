@@ -22,6 +22,7 @@ SOURCES += \
     src/desktopentrycategory.cpp \
     src/desktopentrydirectory.cpp \
     src/desktopentrydirectoryhelper.cpp \
+    src/desktopentrydirectorytraverser.cpp \
     src/desktopentryhelper.cpp \
     src/desktopentryparser.cpp \
     src/iconlinkcache.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     src/desktopentrycategory.h \
     src/desktopentrydirectory.h \
     src/desktopentrydirectoryhelper.h \
+    src/desktopentrydirectorytraverser.h \
     src/desktopentryhelper.h \
     src/desktopentryparser.h \
     src/global.h \

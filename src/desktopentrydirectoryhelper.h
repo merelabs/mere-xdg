@@ -13,8 +13,12 @@ class MERE_XDG_LIB_SPEC DesktopEntryDirectoryHelper
 {
     DesktopEntryDirectoryHelper() = default;
 public:
-    static std::vector<DesktopEntry> applicatins(const std::string &path = "", int offset = 0, int number = 0);
+    static std::vector<DesktopEntry> applicatins(const std::string &path = "", uint offset = 0, uint number = 0);
 
+private:
+    static std::vector<std::string> files(const std::string &path = "");
+
+    static std::map<std::string, std::vector<std::string>> g_paths;
 };
 
 }

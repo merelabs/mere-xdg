@@ -10,6 +10,20 @@ std::string Mere::XDG::DesktopEntry::type() const
     return get(Attribute::Type);
 }
 
+Mere::XDG::DesktopEntry::Type Mere::XDG::DesktopEntry::typeId() const
+{
+    if (type() == "Application")
+        return Mere::XDG::DesktopEntry::Type::Application;
+
+    if (type() == "Link")
+        return Mere::XDG::DesktopEntry::Type::Link;
+
+    if (type() == "Directory")
+        return Mere::XDG::DesktopEntry::Type::Directory;
+
+    return Mere::XDG::DesktopEntry::Type::Unknown;
+}
+
 std::string Mere::XDG::DesktopEntry::name() const
 {
     return get(Attribute::Name);
@@ -63,6 +77,11 @@ bool Mere::XDG::DesktopEntry::nodisplay() const
 std::string Mere::XDG::DesktopEntry::exec() const
 {
     return get(Attribute::Exec);
+}
+
+std::string Mere::XDG::DesktopEntry::path() const
+{
+    return get(Attribute::Path);
 }
 
 std::set<Mere::XDG::DesktopEntryAction> Mere::XDG::DesktopEntry::actions() const

@@ -175,6 +175,7 @@ std::vector<std::string> Mere::XDG::BaseDirectory::dataDirectories()
         if (!std::ifstream(dir).good())
             QDir().mkpath(dir.c_str());
 
+        if(dir.back() != '/') dir.append("/");
         dirs.push_back(dir);
     }
 
