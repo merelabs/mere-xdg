@@ -35,7 +35,7 @@ std::string Mere::XDG::AutostartDirectory::directory(const std::string &path)
 {
     std::string autostartDirectory(path);
 
-    if (autostartDirectory[autostartDirectory.length() - 1] != '/')
+    if (autostartDirectory.back() != '/')
         autostartDirectory.append("/");
 
     return autostartDirectory.append(XDG::AUTOSTART_DIRECTORY);

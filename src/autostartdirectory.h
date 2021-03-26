@@ -9,7 +9,7 @@ namespace Mere
 namespace XDG
 {
 
-static const char* AUTOSTART_DIRECTORY = "autostart";
+static const char* AUTOSTART_DIRECTORY = "autostart/";
 
 class MERE_XDG_LIB_SPEC AutostartDirectory
 {
