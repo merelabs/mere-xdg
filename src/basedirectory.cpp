@@ -114,6 +114,8 @@ std::string Mere::XDG::BaseDirectory::dataHome()
     if (!std::ifstream(dataHome).good())
         QDir().mkpath(dataHome.c_str());
 
+    if(dataHome.back() != '/') dataHome.append("/");
+
     return dataHome;
 }
 
@@ -127,6 +129,8 @@ std::string Mere::XDG::BaseDirectory::configHome()
 
     if (!std::ifstream(configHome).good())
         QDir().mkpath(configHome.c_str());
+
+    if(configHome.back() != '/') configHome.append("/");
 
     return configHome;
 }
@@ -142,6 +146,8 @@ std::string Mere::XDG::BaseDirectory::cacheHome()
     if (!std::ifstream(cacheHome).good())
         QDir().mkpath(cacheHome.c_str());
 
+    if(cacheHome.back() != '/') cacheHome.append("/");
+
     return cacheHome;
 }
 
@@ -155,6 +161,8 @@ std::string Mere::XDG::BaseDirectory::iconHome()
 
     if (!std::ifstream(iconHome).good())
         QDir().mkpath(iconHome.c_str());
+
+    if(iconHome.back() != '/') iconHome.append("/");
 
     return iconHome;
 }
@@ -197,6 +205,8 @@ std::vector<std::string> Mere::XDG::BaseDirectory::configDirectories()
         Mere::Utils::EnvUtils::expandEnvVar(dir);
         if (!std::ifstream(dir).good())
             QDir().mkpath(dir.c_str());
+
+        if(dir.back() != '/') dir.append("/");
 
         dirs.push_back(dir);
     }
