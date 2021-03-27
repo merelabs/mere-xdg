@@ -5,6 +5,16 @@ std::string Mere::XDG::DesktopEntry::id() const
     return get(Attribute::Id);
 }
 
+std::string Mere::XDG::DesktopEntry::base() const
+{
+    return get(Attribute::Base);
+}
+
+std::string Mere::XDG::DesktopEntry::file() const
+{
+    return get(Attribute::File);
+}
+
 std::string Mere::XDG::DesktopEntry::type() const
 {
     return get(Attribute::Type);

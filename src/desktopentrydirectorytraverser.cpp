@@ -12,7 +12,7 @@ Mere::XDG::DesktopEntryDirectoryTraverser::DesktopEntryDirectoryTraverser(QObjec
 
 }
 
-std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse()
+std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse() const
 {
     std::vector<Mere::XDG::DesktopEntry> entries;
 
@@ -28,7 +28,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     return entries;
 }
 
-std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse(DesktopEntry::Type type)
+std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse(DesktopEntry::Type type) const
 {
     std::vector<Mere::XDG::DesktopEntry> entries;
 
@@ -44,7 +44,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     return entries;
 }
 
-std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse(const std::string &path)
+std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse(const std::string &path) const
 {
     std::vector<Mere::XDG::DesktopEntry> entries;
 
@@ -70,7 +70,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     return entries;
 }
 
-std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse(const std::string &path, DesktopEntry::Type type)
+std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse(const std::string &path, DesktopEntry::Type type) const
 {
     std::vector<Mere::XDG::DesktopEntry> entries;
 
@@ -92,7 +92,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
         entries.push_back(std::move(entry));
     }
 
-    emit traversed(path);
+    //emit traversed(path);
 
     return entries;
 }

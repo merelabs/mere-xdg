@@ -27,6 +27,8 @@ public:
     DesktopEntry& operator=(DesktopEntry &&that) = default;
 
     std::string id() const;
+    std::string base() const;
+    std::string file() const;
     std::string type() const;
 
     std::string name() const;
@@ -84,7 +86,9 @@ public:
         StartupNotify,
         StartupWMClass,
         URL,
-        PrefersNonDefaultGPU
+        PrefersNonDefaultGPU,
+        Base,   /* custom to store base path */
+        File    /* custom to store full path */
     };
 
     std::string get(const Attribute &attribute, int *set = nullptr) const;

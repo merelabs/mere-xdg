@@ -24,6 +24,8 @@ public:
 
 private:
     std::string id() const;
+    std::string base() const;
+
     bool comment(const std::string &line) const;
     std::string key(const std::string &line) const;
     std::string value(const std::string &line) const;

@@ -15,6 +15,7 @@ DEFINES += MERE_XDG_LIB
 SOURCES += \
     src/autostartdirectory.cpp \
     src/autostartdirectoryhelper.cpp \
+    src/autostartdirectorytraverser.cpp \
     src/basedirectory.cpp \
     src/config.cpp \
     src/desktopentry.cpp \
@@ -38,6 +39,7 @@ SOURCES += \
 HEADERS += \
     src/autostartdirectory.h \
     src/autostartdirectoryhelper.h \
+    src/autostartdirectorytraverser.h \
     src/basedirectory.h \
     src/config.h \
     src/desktopentry.h \

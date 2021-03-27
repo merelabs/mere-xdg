@@ -1,13 +1,8 @@
 #include "autostartdirectory.h"
 #include "basedirectory.h"
-#include "desktopentryhelper.h"
 
 #include "mere/utils/envutils.h"
-#include "mere/utils/binutils.h"
 #include "mere/utils/stringutils.h"
-
-#include <QDir>
-#include <QDirIterator>
 
 std::vector<std::string> Mere::XDG::AutostartDirectory::directories()
 {

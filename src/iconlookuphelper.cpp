@@ -4,31 +4,28 @@
 
 #include "config.h"
 
+#include <iostream>
+#include <chrono>
+
 #include <QDir>
-#include <QDateTime>
 
 //static
 std::string Mere::XDG::IconLookupHelper::path(const std::string &icon)
-{
-    //qDebug() << "===============";
-    Config *config = Config::instance();
-    config->theme("Adwaita");
-    config->size(48);
-    config->context("");
-
-    //qDebug() << "Lookin for icon: " << icon.c_str();
-
+{    
     auto pos = icon.find("/");
     if(pos == 0) return icon;
 
     pos = icon.find("./");
     if(pos == 0) return icon;
 
-    quint64 start = QDateTime::currentMSecsSinceEpoch();
+    auto start = std::chrono::high_resolution_clock::now();
+
 
     std::string path = LookupIcon(icon);
 
-    qDebug() << "Lookup time: " << (QDateTime::currentMSecsSinceEpoch() - start) << "ms";
+    auto end = std::chrono::high_resolution_clock::now();
+    const std::chrono::duration<double> duration(end - start);
+    std::cout << "Lookup time: " << duration.count() << "s" << std::endl;
 
     return path;
 }
@@ -38,6 +35,10 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
 {
     Config *config = Config::instance();
 
+    config->theme("Adwaita");
+    config->size(48);
+    config->context("");
+
 //    qDebug() << "CONFIG::================================";
 //    qDebug() << "Theme  : " << config->theme().c_str();
 //    qDebug() << "Size   : " << config->size();
@@ -46,29 +47,25 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
 
     std::string path;
 
-    quint64 start = QDateTime::currentMSecsSinceEpoch();
-
     std::vector<Mere::XDG::IconTheme> themes = IconThemeHelper::themes();
 
+    // user theme
     for(const auto &theme : themes)
     {
         if(theme.hidden()) continue;
         if (!config->theme().empty() && theme.name().compare(config->theme())) continue;
 
-        //qDebug() << "Theme : " << theme.name().c_str();
-
         path = LookupIcon(icon, theme);
+
         break;
     }
 
-    // fallback
+    // fallback theme
     if (path.empty())
     {
         for(const auto &theme : themes)
         {
             if(!theme.hidden()) continue;
-
-            qDebug() << "Fallback Theme : " << theme.name().c_str();
 
             path = LookupIcon(icon, theme);
             break;

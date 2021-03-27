@@ -100,6 +100,6 @@ void Mere::XDG::IconLinkCache::set(const std::string &key, const std::string &li
     g_cache.insert({key, link});
 
     std::string path(g_path);
-    if( symlink(link.c_str(), path.append(key).c_str()))
-        std::cout << "could not create symbolic link for - " << key << std::endl;
+    symlink(link.c_str(), path.append(key).c_str());
+    qDebug() << link.c_str() << path.c_str();
 }

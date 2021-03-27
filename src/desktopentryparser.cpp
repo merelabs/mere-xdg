@@ -122,6 +122,8 @@ bool Mere::XDG::DesktopEntryParser::parse()
 
 
     m_entry.set(DesktopEntry::Attribute::Id, id());
+    m_entry.set(DesktopEntry::Attribute::Base, base());
+    m_entry.set(DesktopEntry::Attribute::File, m_path);
 
     return procceed;
 }
@@ -142,6 +144,17 @@ std::string Mere::XDG::DesktopEntryParser::id() const
     }
 
     return id;
+}
+
+std::string Mere::XDG::DesktopEntryParser::base() const
+{
+    std::string base;
+
+    auto pos = m_path.find_last_of("/");
+    if (pos != std::string::npos)
+        base = m_path.substr(0, pos);
+
+    return base;
 }
 
 bool Mere::XDG::DesktopEntryParser::comment(const std::string &line) const
