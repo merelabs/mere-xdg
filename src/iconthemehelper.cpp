@@ -73,11 +73,11 @@ std::vector<Mere::XDG::IconTheme> Mere::XDG::IconThemeHelper::themes(std::map<Ic
 
                 IconThemeCache::insertTheme(themeInfo.absoluteFilePath().toStdString(), theme);
             }
-            themes.push_back(theme);
+            themes.push_back(std::move(theme));
         }
     }
 
-    qDebug() << "Number of themes: " << themes.size();
+    //qDebug() << "Number of themes: " << themes.size();
     return themes;
 }
 
@@ -165,7 +165,7 @@ Mere::XDG::IconTheme Mere::XDG::IconThemeHelper::parse(const QFileInfo &fileInfo
     for(const std::string &directory : entry.directories())
     {
         IconThemeSubDirectory sub = IconThemeSubDirectoryHelper::parse(fileInfo, directory);
-        if (sub.valid()) entry.subdirectory(sub);
+        if (sub.valid()) entry.subdirectory(std::move(sub));
     }
 
     return entry;

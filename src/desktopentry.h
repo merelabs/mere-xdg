@@ -17,7 +17,14 @@ namespace XDG
 class MERE_XDG_LIB_SPEC DesktopEntry
 {
 public:
+    ~DesktopEntry() = default;
     DesktopEntry() = default;
+
+    DesktopEntry(const DesktopEntry &that) = default;
+    DesktopEntry& operator=(const DesktopEntry &that) = default;
+
+    DesktopEntry(DesktopEntry &&that) = default ;
+    DesktopEntry& operator=(DesktopEntry &&that) = default;
 
     std::string id() const;
     std::string type() const;
@@ -89,11 +96,11 @@ public:
     bool valid() const;
 
 private:
-    std::map<Attribute, std::string> m_attributes;
-    std::map<std::string, std::string> m_others;
+    std::map<Attribute, std::string> m_attributes{};
+    std::map<std::string, std::string> m_others{};
 
-    std::set<std::string> m_categories;
-    std::set<DesktopEntryAction> m_actions;
+    std::set<std::string> m_categories{};
+    std::set<DesktopEntryAction> m_actions{};
 };
 
 }

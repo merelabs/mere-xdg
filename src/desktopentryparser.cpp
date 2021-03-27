@@ -61,9 +61,9 @@ bool Mere::XDG::DesktopEntryParser::parse()
         }
 
         std::string key   = this->key(line);
-        std::string value = this->value(line);
-
         if (key.empty()) continue;
+
+        std::string value = this->value(line);
 
         if (key == "Type")
             m_entry.set(DesktopEntry::Attribute::Type, value);
@@ -135,9 +135,8 @@ std::string Mere::XDG::DesktopEntryParser::id() const
 
         auto pos = m_path.find(directory);
         if (pos == std::string::npos) continue;
-
-        id = m_path.substr(directory.length() + 1);
-        while((pos = id.find("/"))!= std::string::npos)
+        id = m_path.substr(directory.length());
+        while((pos = id.find("/")) != std::string::npos)
             id.replace(pos, 1, "-");
         break;
     }

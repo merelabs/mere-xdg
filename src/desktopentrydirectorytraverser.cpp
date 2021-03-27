@@ -21,7 +21,8 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     {
         std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory);
         if (_entries.empty()) continue;
-        entries.insert(entries.end(), _entries.begin(), _entries.end());
+
+        entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
     }
 
     return entries;
@@ -36,7 +37,8 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     {
         std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory, type);
         if (_entries.empty()) continue;
-        entries.insert(entries.end(), _entries.begin(), _entries.end());
+
+        entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
     }
 
     return entries;
@@ -60,9 +62,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
         DesktopEntry entry = parser.entry();
         if(!entry.valid()) continue;
 
-        entries.push_back(entry);
-
-        emit processed(entry);
+        entries.push_back(std::move(entry));
     }
 
     emit traversed(path);
@@ -89,9 +89,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
         if(!entry.valid()) continue;
         if (entry.typeId() != type) continue;
 
-        entries.push_back(entry);
-
-        emit processed(entry);
+        entries.push_back(std::move(entry));
     }
 
     emit traversed(path);
@@ -107,7 +105,8 @@ std::map<std::string, std::vector<std::string>> Mere::XDG::DesktopEntryDirectory
     {
         std::vector<std::string> _files = this->files(directory);
         if (_files.empty()) continue;
-        files.insert({directory, _files});
+
+        files.insert({directory, std::move(_files)});
     }
 
     return files;

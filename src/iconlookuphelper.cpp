@@ -111,7 +111,7 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
 
     QStringList filters = IconLookupHelper::filters(icon);
 
-    //qDebug() << "Looking icon into path: " << theme.path().c_str();
+    //qDebug() << "Looking icon into path: " << theme.path().c_str() << directories.size();
     int minsize = INT_MAX;
     for(const auto &directory : directories)
     {

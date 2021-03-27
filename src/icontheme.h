@@ -12,7 +12,14 @@ namespace XDG
 class MERE_XDG_LIB_SPEC IconTheme
 {
 public:
+    ~IconTheme() = default;
     IconTheme() = default;
+
+    IconTheme(const IconTheme &that) = default;
+    IconTheme& operator=(const IconTheme &that) = default;
+
+    IconTheme(IconTheme &&that) = default ;
+    IconTheme& operator=(IconTheme &&that) = default;
 
     std::string id() const;
     std::string name() const;
