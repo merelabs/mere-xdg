@@ -2,14 +2,14 @@
 #define ICONTHEMESUBDIRECTORY_H
 
 #include "global.h"
-#include "base.h"
+#include "baseentry.h"
 
 namespace Mere
 {
 namespace XDG
 {
 
-class MERE_XDG_LIB_SPEC IconThemeSubDirectory : public Base
+class MERE_XDG_LIB_SPEC IconThemeSubDirectory : public BaseEntry
 {
 public:
     ~IconThemeSubDirectory() = default;

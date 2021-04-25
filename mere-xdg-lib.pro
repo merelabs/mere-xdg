@@ -16,8 +16,8 @@ SOURCES += \
     src/autostartdirectory.cpp \
     src/autostartdirectoryhelper.cpp \
     src/autostartdirectorytraverser.cpp \
-    src/base.cpp \
     src/basedirectory.cpp \
+    src/baseentry.cpp \
     src/config.cpp \
     src/desktopentry.cpp \
     src/desktopentryaction.cpp \
@@ -43,8 +43,8 @@ HEADERS += \
     src/autostartdirectory.h \
     src/autostartdirectoryhelper.h \
     src/autostartdirectorytraverser.h \
-    src/base.h \
     src/basedirectory.h \
+    src/baseentry.h \
     src/config.h \
     src/desktopentry.h \
     src/desktopentryaction.h \

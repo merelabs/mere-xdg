@@ -2,7 +2,7 @@
 #define MERE_XDG_ICONTHEME_H
 
 #include "global.h"
-#include "base.h"
+#include "baseentry.h"
 #include "iconthemesubdirectory.h"
 
 namespace Mere
@@ -10,7 +10,7 @@ namespace Mere
 namespace XDG
 {
 
-class MERE_XDG_LIB_SPEC IconTheme : public Base
+class MERE_XDG_LIB_SPEC IconTheme : public BaseEntry
 {
 public:
     ~IconTheme() = default;

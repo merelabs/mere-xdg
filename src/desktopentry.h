@@ -2,7 +2,7 @@
 #define MERE_XDG_DESKTOPENTRY_H
 
 #include "global.h"
-#include "base.h"
+#include "baseentry.h"
 #include "desktopentryaction.h"
 
 #include <map>
@@ -13,7 +13,7 @@ namespace Mere
 namespace XDG
 {
 
-class MERE_XDG_LIB_SPEC DesktopEntry : public Base
+class MERE_XDG_LIB_SPEC DesktopEntry : public BaseEntry
 {
 public:
     ~DesktopEntry() = default;

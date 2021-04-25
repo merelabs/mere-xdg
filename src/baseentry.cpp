@@ -1,26 +1,26 @@
-#include "base.h"
+#include "baseentry.h"
 
-Mere::XDG::Base::~Base()
+Mere::XDG::BaseEntry::~BaseEntry()
 {
 
 }
 
-Mere::XDG::Base::Base()
+Mere::XDG::BaseEntry::BaseEntry()
 {
 
 }
 
-std::string Mere::XDG::Base::file() const
+std::string Mere::XDG::BaseEntry::file() const
 {
     return m_file;
 }
 
-void Mere::XDG::Base::file(const std::string &file)
+void Mere::XDG::BaseEntry::file(const std::string &file)
 {
     m_file = file;
 }
 
-std::string Mere::XDG::Base::get(const int &attribute, int *set) const
+std::string Mere::XDG::BaseEntry::get(const int &attribute, int *set) const
 {
     auto find = m_attributes.find(attribute);
     if (find != m_attributes.end())
@@ -34,12 +34,12 @@ std::string Mere::XDG::Base::get(const int &attribute, int *set) const
     return "";
 }
 
-void Mere::XDG::Base::set(const int &attribute, const std::string &value)
+void Mere::XDG::BaseEntry::set(const int &attribute, const std::string &value)
 {
     this->m_attributes.insert({attribute, value});
 }
 
-std::string Mere::XDG::Base::get(const std::string &attribute, int *set) const
+std::string Mere::XDG::BaseEntry::get(const std::string &attribute, int *set) const
 {
     auto find = m_others.find(attribute);
     if (find != m_others.end())
@@ -53,7 +53,7 @@ std::string Mere::XDG::Base::get(const std::string &attribute, int *set) const
     return "";
 }
 
-void Mere::XDG::Base::set(const std::string &attribute, const std::string &value)
+void Mere::XDG::BaseEntry::set(const std::string &attribute, const std::string &value)
 {
     this->m_others.insert({attribute, value});
 }

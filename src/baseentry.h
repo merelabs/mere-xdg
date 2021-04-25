@@ -9,11 +9,11 @@ namespace Mere
 namespace XDG
 {
 
-class Base
+class BaseEntry
 {
 public:
-    virtual ~Base();
-    Base();
+    virtual ~BaseEntry();
+    BaseEntry();
 
     std::string file() const;
     void file(const std::string &file);
