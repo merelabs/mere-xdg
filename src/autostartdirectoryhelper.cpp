@@ -56,7 +56,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectoryHelper::applic
                 QFileInfo tryExecInfo(tryExec.c_str());
                 if (!tryExecInfo.isAbsolute())
                 {
-                    QString path = Mere::Utils::BinUtils::find(tryExecInfo.fileName());
+                    std::string path = Mere::Utils::BinUtils::find(tryExecInfo.fileName().toStdString());
                     if (Mere::Utils::StringUtils::isBlank(path))
                         continue;
                 }

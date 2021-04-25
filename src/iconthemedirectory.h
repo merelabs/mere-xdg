@@ -7,12 +7,13 @@ namespace Mere
 {
 namespace XDG
 {
-static const char* ICON_DIRECTORY = "icons";
+static const char* ICON_DIRECTORY = "icons/";
 
 class MERE_XDG_LIB_SPEC IconThemeDirectory
 {
     IconThemeDirectory() = default;
 public:
+    static std::vector<std::string> directories();
     static std::vector<std::string> directories(const std::string &theme);
 
     static std::string home();

@@ -1,6 +1,7 @@
 #ifndef DESKTOPENTRYDIRECTORYTRAVERSER_H
 #define DESKTOPENTRYDIRECTORYTRAVERSER_H
 
+#include "global.h"
 #include "desktopentry.h"
 
 #include <QObject>
@@ -10,16 +11,16 @@ namespace Mere
 namespace XDG
 {
 
-class DesktopEntryDirectoryTraverser : public QObject
+class MERE_XDG_LIB_SPEC DesktopEntryDirectoryTraverser : public QObject
 {
     Q_OBJECT
 public:
     explicit DesktopEntryDirectoryTraverser(QObject *parent = nullptr);
     std::vector<Mere::XDG::DesktopEntry> traverse() const;
-    std::vector<Mere::XDG::DesktopEntry> traverse(DesktopEntry::Type type) const;
+    std::vector<Mere::XDG::DesktopEntry> traverse(DesktopEntry::TypeId type) const;
 
     std::vector<Mere::XDG::DesktopEntry> traverse(const std::string &path) const;
-    std::vector<Mere::XDG::DesktopEntry> traverse(const std::string &path, DesktopEntry::Type type) const;
+    std::vector<Mere::XDG::DesktopEntry> traverse(const std::string &path, DesktopEntry::TypeId type) const;
 
 private:
     std::map<std::string, std::vector<std::string> > files() const;

@@ -101,5 +101,4 @@ void Mere::XDG::IconLinkCache::set(const std::string &key, const std::string &li
 
     std::string path(g_path);
     symlink(link.c_str(), path.append(key).c_str());
-    qDebug() << link.c_str() << path.c_str();
 }

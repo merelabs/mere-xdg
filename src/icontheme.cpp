@@ -1,35 +1,32 @@
 #include "icontheme.h"
-#include <QVariant>
+
+#include <sstream>
+#include <iostream>
 
 std::string Mere::XDG::IconTheme::id() const
 {
-    return get(Attribute::Id).toString().toStdString();
+    return get(Attribute::Id);
 }
 
 std::string Mere::XDG::IconTheme::name() const
 {
-    return get(Attribute::Name).toString().toStdString();
+    return get(Attribute::Name);
 }
 
 std::string Mere::XDG::IconTheme::comment() const
 {
-    return get(Attribute::Comment).toString().toStdString();
+    return get(Attribute::Comment);
 }
 
 std::vector<std::string> Mere::XDG::IconTheme::directories() const
 {
     std::vector<std::string> directories;
 
-    QStringList list;
+    std::string value = get(Attribute::Directories);
 
-    QVariant value = get(Attribute::Directories);
-    if(value.type() == QVariant::StringList)
-        list = value.toStringList();
-    else if(value.type() == QVariant::String)
-        list = value.toString().split(", ");
-
-    for(const auto &directory : list)
-        directories.push_back(directory.toStdString());
+    std::istringstream iss(value);
+    for(std::string line; std::getline(iss, line, ',');)
+        directories.push_back(line);
 
     return directories;
 }
@@ -44,48 +41,39 @@ void Mere::XDG::IconTheme::subdirectory(const IconThemeSubDirectory &sub)
     m_subdirectories.push_back(sub);
 }
 
-std::string Mere::XDG::IconTheme::path() const
+std::string Mere::XDG::IconTheme::home() const
 {
-    return m_path;
+    return m_home;
 }
 
-void Mere::XDG::IconTheme::path(const std::string &path)
+void Mere::XDG::IconTheme::home(const std::string &home)
 {
-    m_path = path;
+    m_home = home;
 }
 
 bool Mere::XDG::IconTheme::hidden() const
 {
-    return get(Attribute::Hidden).toBool();
-}
+    int set;
+    std::string hidden = get(Attribute::Hidden, &set);
 
-QVariant Mere::XDG::IconTheme::get(const Attribute &attribute) const
-{
-    auto find = m_attributes.find(attribute);
-    if (find != m_attributes.end())
-        return find->second;
+    if (!set) return false;
 
-    return QVariant();
-}
-
-void Mere::XDG::IconTheme::set(const Attribute &attribute, const QVariant &value)
-{
-    this->m_attributes.insert({attribute, value});
+    return hidden.compare("true") == 0;
 }
 
 bool Mere::XDG::IconTheme::valid() const
 {
     // Id is required
-    QVariant id = get(Attribute::Id);
-    if (!id.isValid()) return false;
+    std::string id = get(Attribute::Id);
+    if (id.empty()) return false;
 
     // Name is required
-    QVariant name = get(Attribute::Name);
-    if (!name.isValid()) return false;
+    std::string name = get(Attribute::Name);
+    if (name.empty()) return false;
 
     // Comment is required
-    QVariant comment = get(Attribute::Comment);
-    if (!comment.isValid()) return false;
+    std::string comment = get(Attribute::Comment);
+    if (comment.empty()) return false;
 
     return true;
 }

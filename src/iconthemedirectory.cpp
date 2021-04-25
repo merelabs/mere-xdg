@@ -1,12 +1,19 @@
 #include "iconthemedirectory.h"
 #include "basedirectory.h"
+#include "environment.h"
 
 #include "mere/utils/envutils.h"
+#include "mere/utils/pathutils.h"
 #include "mere/utils/stringutils.h"
 
 #include <iostream>
 #include <fstream>
-#include <QDir>
+
+//static
+std::vector<std::string> Mere::XDG::IconThemeDirectory::directories()
+{
+    return IconThemeDirectory::base();
+}
 
 //static
 std::vector<std::string> Mere::XDG::IconThemeDirectory::directories(const std::string &theme)
@@ -30,7 +37,6 @@ std::vector<std::string> Mere::XDG::IconThemeDirectory::directories(const std::s
     return directories;
 }
 
-
 //static
 std::string Mere::XDG::IconThemeDirectory::home()
 {
@@ -38,9 +44,7 @@ std::string Mere::XDG::IconThemeDirectory::home()
 
     std::string iconHome(home ? home : Env::Value::ICON_HOME);
     Mere::Utils::EnvUtils::expandEnvVar(iconHome);
-
-    if(!std::fstream(iconHome).good())
-        QDir().mkpath(iconHome.c_str());
+    Mere::Utils::PathUtils::create_if_none(iconHome);
 
     return iconHome;
 }
@@ -84,7 +88,7 @@ std::string Mere::XDG::IconThemeDirectory::iconDirectory(const std::string &path
 {
     std::string iconPath(path);
 
-    if (path[path.length() - 1] != '/')
+    if (path.back() != '/')
         iconPath = iconPath.append("/");
 
     return iconPath.append(XDG::ICON_DIRECTORY);

@@ -2,19 +2,18 @@
 #define MERE_XDG_DESKTOPENTRY_H
 
 #include "global.h"
+#include "base.h"
 #include "desktopentryaction.h"
 
 #include <map>
 #include <set>
-
-#include <QVariant>
 
 namespace Mere
 {
 namespace XDG
 {
 
-class MERE_XDG_LIB_SPEC DesktopEntry
+class MERE_XDG_LIB_SPEC DesktopEntry : public Base
 {
 public:
     ~DesktopEntry() = default;
@@ -28,7 +27,7 @@ public:
 
     std::string id() const;
     std::string base() const;
-    std::string file() const;
+
     std::string type() const;
 
     std::string name() const;
@@ -51,16 +50,16 @@ public:
     std::set<std::string> categories() const;
     void categories(const std::set<std::string> &categories);
 
-    enum class Type
+    enum class TypeId
     {
         Unknown     = 0,
         Application = 1,
         Link        = 2,
         Directory   = 3
     };
-    Type typeId() const;
+    TypeId typeId() const;
 
-    enum class Attribute
+    enum Attribute
     {
         Id,
         Type,
@@ -87,21 +86,13 @@ public:
         StartupWMClass,
         URL,
         PrefersNonDefaultGPU,
-        Base,   /* custom to store base path */
-        File    /* custom to store full path */
+        Others
     };
 
-    std::string get(const Attribute &attribute, int *set = nullptr) const;
-    void set(const Attribute &attribute, const std::string &value);
-
-    std::string  get(const std::string &key, int *set = nullptr) const;
-    void set(const std::string &key, const std::string &value);
 
     bool valid() const;
 
 private:
-    std::map<Attribute, std::string> m_attributes{};
-    std::map<std::string, std::string> m_others{};
 
     std::set<std::string> m_categories{};
     std::set<DesktopEntryAction> m_actions{};

@@ -15,10 +15,11 @@ class AutostartDirectoryTraverser : public QObject
 public:
     explicit AutostartDirectoryTraverser(QObject *parent = nullptr);
     std::vector<Mere::XDG::DesktopEntry> traverse() const;
+    std::vector<Mere::XDG::DesktopEntry> traverse(DesktopEntry::TypeId type) const;
+
     std::vector<Mere::XDG::DesktopEntry> traverse(const std::string &path) const;
+    std::vector<Mere::XDG::DesktopEntry> traverse(const std::string &path, DesktopEntry::TypeId type) const;
 
-
-signals:
 private:
     std::vector<Mere::XDG::DesktopEntry> m_entries;
 

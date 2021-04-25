@@ -24,7 +24,8 @@ private:
     static bool DirectoryMatchesSize(const IconThemeSubDirectory &def, unsigned int size, unsigned int  scale);
     static int DirectorySizeDistance(const IconThemeSubDirectory &def, unsigned int size, unsigned int scale);
 
-    static QStringList filters(const std::string &icon);
+    static std::vector<std::string> filters(const std::string &icon);
+    static std::string name(const std::string &icon);
 };
 
 }

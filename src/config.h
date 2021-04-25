@@ -11,9 +11,7 @@ namespace XDG
 
 class MERE_XDG_LIB_SPEC Config : public Mere::Config::KVConfig
 {
-    explicit Config(const std::string &path, QObject *parent = nullptr);
-
-    Q_OBJECT
+    explicit Config(const std::string &path);
 public:
     std::string theme() const;
     void theme(const std::string &theme);

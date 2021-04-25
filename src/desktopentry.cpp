@@ -7,12 +7,16 @@ std::string Mere::XDG::DesktopEntry::id() const
 
 std::string Mere::XDG::DesktopEntry::base() const
 {
-    return get(Attribute::Base);
-}
+    std::string file = this->file();
 
-std::string Mere::XDG::DesktopEntry::file() const
-{
-    return get(Attribute::File);
+    if (!file.empty())
+    {
+        auto pos = file.find_last_of("/");
+        if (pos != std::string::npos)
+            return file.substr(0, pos);
+    }
+
+    return "";
 }
 
 std::string Mere::XDG::DesktopEntry::type() const
@@ -20,18 +24,18 @@ std::string Mere::XDG::DesktopEntry::type() const
     return get(Attribute::Type);
 }
 
-Mere::XDG::DesktopEntry::Type Mere::XDG::DesktopEntry::typeId() const
+Mere::XDG::DesktopEntry::TypeId Mere::XDG::DesktopEntry::typeId() const
 {
     if (type() == "Application")
-        return Mere::XDG::DesktopEntry::Type::Application;
+        return Mere::XDG::DesktopEntry::TypeId::Application;
 
     if (type() == "Link")
-        return Mere::XDG::DesktopEntry::Type::Link;
+        return Mere::XDG::DesktopEntry::TypeId::Link;
 
     if (type() == "Directory")
-        return Mere::XDG::DesktopEntry::Type::Directory;
+        return Mere::XDG::DesktopEntry::TypeId::Directory;
 
-    return Mere::XDG::DesktopEntry::Type::Unknown;
+    return Mere::XDG::DesktopEntry::TypeId::Unknown;
 }
 
 std::string Mere::XDG::DesktopEntry::name() const
@@ -121,44 +125,6 @@ void Mere::XDG::DesktopEntry::categories(const std::set<std::string> &categories
     m_categories = categories;
 }
 
-std::string Mere::XDG::DesktopEntry::get(const Attribute &attribute, int *set) const
-{
-    auto find = m_attributes.find(attribute);
-    if (find != m_attributes.end())
-    {
-        if (set) *set = 1;
-        return find->second;
-    }
-
-    if (set) *set = 0;
-
-    return "";
-}
-
-void Mere::XDG::DesktopEntry::set(const Attribute &attribute, const std::string &value)
-{
-    this->m_attributes.insert({attribute, value});
-}
-
-std::string Mere::XDG::DesktopEntry::get(const std::string &attribute, int *set) const
-{
-    auto find = m_others.find(attribute);
-    if (find != m_others.end())
-    {
-        if (set) *set = 1;
-        return find->second;
-    }
-
-    if (set) *set = 0;
-
-    return "";
-}
-
-void Mere::XDG::DesktopEntry::set(const std::string &attribute, const std::string &value)
-{
-    this->m_others.insert({attribute, value});
-}
-
 bool Mere::XDG::DesktopEntry::valid() const
 {
     // Id is required
@@ -179,6 +145,10 @@ bool Mere::XDG::DesktopEntry::valid() const
         std::string url = get(Attribute::URL);
         if (url.empty()) return false;
     }
+
+    // Exec is required
+    std::string exec = get(Attribute::Exec);
+    if (exec.empty()) return false;
 
     return true;
 }

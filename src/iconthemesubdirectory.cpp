@@ -4,77 +4,90 @@
 
 std::string Mere::XDG::IconThemeSubDirectory::id() const
 {
-    return get(Attribute::Id).toString().toStdString();
+    return get(Attribute::Id);
 }
 
-std::string Mere::XDG::IconThemeSubDirectory::path() const
+std::string Mere::XDG::IconThemeSubDirectory::home() const
 {
-    return m_path;
+    return m_home;
 }
 
-void Mere::XDG::IconThemeSubDirectory::path(const std::string &path)
+void Mere::XDG::IconThemeSubDirectory::home(const std::string &home)
 {
-    m_path = path;
+    m_home = home;
 }
 
 uint Mere::XDG::IconThemeSubDirectory::size() const
 {
-    return get(Attribute::Size).toUInt();
+    int set;
+    std::string size = get(Attribute::Size, &set);
+
+    if (!set || size.empty()) return 0;
+
+    return std::stoi(size);
 }
 
 uint Mere::XDG::IconThemeSubDirectory::minsize() const
 {
-    return get(Attribute::MinSize).toUInt();
+    int set;
+    std::string minsize = get(Attribute::MinSize, &set);
+
+    if (!set || minsize.empty()) return 0;
+
+    return std::stoi(minsize);
 }
 
 uint Mere::XDG::IconThemeSubDirectory::maxsize() const
 {
-    return get(Attribute::MaxSize).toUInt();
+    int set;
+    std::string maxsize = get(Attribute::MaxSize, &set);
+
+    if (!set || maxsize.empty()) return 0;
+
+    return std::stoi(maxsize);
+
 }
 
 uint Mere::XDG::IconThemeSubDirectory::scale() const
 {
-    return get(Attribute::Scale).toUInt();
+    int set;
+    std::string scale = get(Attribute::Scale, &set);
+
+    if (!set || scale.empty()) return 0;
+
+    return std::stoi(scale);
 }
 
 uint Mere::XDG::IconThemeSubDirectory::threshold() const
 {
-    return get(Attribute::Threshold).toUInt();
+    int set;
+    std::string threshold = get(Attribute::Threshold, &set);
+
+    if (!set || threshold.empty()) return 0;
+
+    return std::stoi(threshold);
+
 }
 
 std::string Mere::XDG::IconThemeSubDirectory::type() const
 {
-    return get(Attribute::Type).toString().toStdString();
+    return get(Attribute::Type);
 }
 
 std::string Mere::XDG::IconThemeSubDirectory::context() const
 {
-    return get(Attribute::Context).toString().toStdString();
-}
-
-QVariant Mere::XDG::IconThemeSubDirectory::get(const Attribute &attribute) const
-{
-    auto find = m_attributes.find(attribute);
-    if (find != m_attributes.end())
-        return find->second;
-
-    return QVariant();
-}
-
-void Mere::XDG::IconThemeSubDirectory::set(const Attribute &attribute, const QVariant &value)
-{
-    this->m_attributes.insert({attribute, value});
+    return get(Attribute::Context);
 }
 
 bool Mere::XDG::IconThemeSubDirectory::valid() const
 {
     // Id is required
-    QVariant id = get(Attribute::Id);
-    if (!id.isValid()) return false;
+    std::string id = get(Attribute::Id);
+    if (id.empty()) return false;
 
     // Name is required
-    QVariant size = get(Attribute::Size);
-    if (!size.isValid()) return false;
+    std::string size = get(Attribute::Size);
+    if (!size.empty()) return false;
 
     return true;
 }

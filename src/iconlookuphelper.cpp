@@ -1,6 +1,7 @@
 #include "iconlookuphelper.h"
-#include "iconthemehelper.h"
 #include "iconthemedirectory.h"
+#include "icondirectorytraverser.h"
+#include "iconthemedirectorytraverser.h"
 
 #include "config.h"
 
@@ -20,7 +21,6 @@ std::string Mere::XDG::IconLookupHelper::path(const std::string &icon)
 
     auto start = std::chrono::high_resolution_clock::now();
 
-
     std::string path = LookupIcon(icon);
 
     auto end = std::chrono::high_resolution_clock::now();
@@ -33,6 +33,9 @@ std::string Mere::XDG::IconLookupHelper::path(const std::string &icon)
 //static
 std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
 {
+    IconThemeDirectoryTraverser traverser;
+    std::vector<Mere::XDG::IconTheme> themes = traverser.traverse();
+
     Config *config = Config::instance();
 
     config->theme("Adwaita");
@@ -47,7 +50,9 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
 
     std::string path;
 
-    std::vector<Mere::XDG::IconTheme> themes = IconThemeHelper::themes();
+//    std::vector<Mere::XDG::IconTheme> themes = IconThemeHelper::themes();
+
+
 
     // user theme
     for(const auto &theme : themes)
@@ -103,25 +108,33 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
         directories.erase(it, directories.end());
     }
 
+
+    std::string iconName(name(icon));
+
     std::string iconPath;
 
 
-    QStringList filters = IconLookupHelper::filters(icon);
+//    std::vector<std::string> filters = IconLookupHelper::filters(icon);
 
     //qDebug() << "Looking icon into path: " << theme.path().c_str() << directories.size();
     int minsize = INT_MAX;
+
+    IconDirectoryTraverser traverser;
     for(const auto &directory : directories)
     {
-        std::string p(directory.path());
-        QDir dir(directory.path().c_str());
-        if (!dir.exists()) continue;
+        std::string p(directory.home());
+        p.append(directory.id()).append("/");
 
-        QStringList list = dir.entryList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
-        if (list.size() == 0) continue;
+//        qDebug() << ">>>>>>>>>" << p.c_str() << ":::" << icon.c_str();
+
+        std::vector<std::string> icons = traverser.traverse(p, iconName);
+        if (!icons.size()) continue;
+
+    qDebug() << "NUMBER OF ICONS>>>>>>>>>" << icons.size();
 
         if (config->size() == 0 || DirectoryMatchesSize(directory, config->size(), config->scale()))
         {
-            iconPath = dir.absolutePath().append("/").append(list.at(0)).toStdString();
+            iconPath = icons.at(0);
             break;
         }
         else
@@ -129,7 +142,7 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
             int distance = DirectorySizeDistance(directory, config->size(), config->scale());
             if( distance < minsize)
             {
-                iconPath = dir.absolutePath().append("/").append(list.at(0)).toStdString();
+                iconPath = icons.at(0);
                 minsize = distance;
             }
         }
@@ -139,21 +152,27 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
 }
 
 //static
-QStringList Mere::XDG::IconLookupHelper::filters(const std::string &icon)
+std::vector<std::string> Mere::XDG::IconLookupHelper::filters(const std::string &icon)
 {
-    const QStringList extensions = {".png", ".svg", ".xpm"};
+    const std::vector<std::string> extensions = {".png", ".svg", ".xpm"};
 
     std::string file(icon);
     if (file.length() > 4)
     {
         std::string ext = icon.substr(icon.length() - 4);
-        if (extensions.contains(ext.c_str()))
+
+        // why? - last dot does not mean to start of the ext
+        for(const std::string &extension : extensions)
+        {
+            if (extension.compare(ext)) continue;
             file.erase(icon.length() - 4);
+            break;
+        }
     }
 
-    QStringList filters;
-    for (const QString &extension : extensions)
-        filters << QString::fromStdString(file) + extension;
+    std::vector<std::string> filters;
+    for (const std::string &extension : extensions)
+        filters.push_back(std::string(file).append(extension));
 
     return filters;
 }
@@ -161,18 +180,23 @@ QStringList Mere::XDG::IconLookupHelper::filters(const std::string &icon)
 //static
 bool Mere::XDG::IconLookupHelper::DirectoryMatchesSize(const IconThemeSubDirectory &def, unsigned int size, unsigned int  scale)
 {
+    qDebug() << "1.........." << scale;
     if (def.scale() != scale)
          return false;
 
+    qDebug() << "2..........";
     if (def.type().compare("Fixed") == 0)
         return def.size() == size;
 
+    qDebug() << "3..........";
     if (def.type().compare("Scaled") == 0)
         return def.minsize() <= size && size <= def.maxsize();
 
+    qDebug() << "4..........";
     if (def.type().compare("Threshold") == 0)
         return (def.size() - def.threshold()) <= size && size <= (def.size() + def.threshold());
 
+    qDebug() << "5..........";
     return false;
 }
 
@@ -211,19 +235,41 @@ std::string Mere::XDG::IconLookupHelper::LookupFallbackIcon(const std::string &i
 {
     std::string path;
 
-    QStringList filters = IconLookupHelper::filters(icon);
+    std::vector<std::string> filters = IconLookupHelper::filters(icon);
     for (const std::string &directory : IconThemeDirectory::base())
     {
-        QDir dir(directory.c_str());
-        if (!dir.exists()) continue;
+//        QDir dir(directory.c_str());
+//        if (!dir.exists()) continue;
 
-        QStringList list = dir.entryList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
-        if (list.size() == 0) continue;
+//        QStringList list = dir.entryList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
+//        if (list.size() == 0) continue;
 
         // FIXME priority .png, .svg, .xpm
-        path = dir.absolutePath().append("/").append(list.at(0)).toStdString();
+//        path = dir.absolutePath().append("/").append(list.at(0)).toStdString();
         break;
     }
 
     return path;
+}
+
+//static
+std::string Mere::XDG::IconLookupHelper::name(const std::string &icon)
+{
+    const std::vector<std::string> extensions = {".png", ".svg", ".xpm"};
+
+    std::string name(icon);
+    if (name.length() > 4)
+    {
+        std::string ext = icon.substr(icon.length() - 4);
+
+        // why? - last dot does not mean to start of the ext
+        for(const std::string &extension : extensions)
+        {
+            if (extension.compare(ext)) continue;
+            name.erase(icon.length() - 4);
+            break;
+        }
+    }
+
+    return name;
 }

@@ -1,7 +1,7 @@
 #include "config.h"
 
-Mere::XDG::Config::Config(const std::string &path, QObject *parent) :
-    Mere::Config::KVConfig(path, parent)
+Mere::XDG::Config::Config(const std::string &path) :
+    Mere::Config::KVConfig(path)
 {
     load();
 }

@@ -15,11 +15,11 @@ std::string Mere::XDG::IconPathFinder::find(const std::string &icon)
 {
     std::string path;
 
-    if (m_cache)
-    {
-        path = m_cache->get(icon);
-        if (!path.empty()) return path;
-    }
+//    if (m_cache)
+//    {
+//        path = m_cache->get(icon);
+//        if (!path.empty()) return path;
+//    }
 
     path = IconLookupHelper::path(icon);
     if(path.empty())
@@ -28,8 +28,9 @@ std::string Mere::XDG::IconPathFinder::find(const std::string &icon)
         path = IconLookupHelper::path("applications-development");
     }
 
-    if (m_cache && !path.empty())
-        m_cache->set(icon, path);
+    qDebug() << "ICON PATH:" << icon.c_str() << " => " << path.c_str();
+//    if (m_cache && !path.empty())
+//        m_cache->set(icon, path);
 
     return path;
 }

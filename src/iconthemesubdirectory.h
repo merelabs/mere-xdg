@@ -1,22 +1,30 @@
 #ifndef ICONTHEMESUBDIRECTORY_H
 #define ICONTHEMESUBDIRECTORY_H
 
-#include <QObject>
+#include "global.h"
+#include "base.h"
 
 namespace Mere
 {
 namespace XDG
 {
 
-class IconThemeSubDirectory
+class MERE_XDG_LIB_SPEC IconThemeSubDirectory : public Base
 {
 public:
+    ~IconThemeSubDirectory() = default;
     IconThemeSubDirectory() = default;
+
+    IconThemeSubDirectory(const IconThemeSubDirectory &that) = default;
+    IconThemeSubDirectory& operator=(const IconThemeSubDirectory &that) = default;
+
+    IconThemeSubDirectory(IconThemeSubDirectory &&that) = default ;
+    IconThemeSubDirectory& operator=(IconThemeSubDirectory &&that) = default;
 
     std::string id() const;
 
-    std::string path() const;
-    void path(const std::string &path);
+    std::string home() const;
+    void home(const std::string &home);
 
     uint size() const;
     uint minsize() const;
@@ -28,7 +36,7 @@ public:
     std::string type() const;
     std::string context() const;
 
-    enum class Attribute
+    enum Attribute
     {
         Id,
         Size,
@@ -38,19 +46,15 @@ public:
         MaxSize,
         MinSize,
         Hidden,
-        Threshold
+        Threshold,
+        Others /* rest */
     };
-
-    QVariant get(const Attribute &attribute) const;
-    void set(const Attribute &attribute, const QVariant &value);
 
     bool valid() const;
 
 private:
-    std::string m_path;
-
+    std::string m_home;
     std::map<Attribute, QVariant> m_attributes;
-
 };
 
 }

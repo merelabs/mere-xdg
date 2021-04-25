@@ -3,67 +3,10 @@
 
 #include "global.h"
 
-class QString;
-class QStringList;
-
 namespace Mere
 {
 namespace XDG
 {
-    namespace Env
-    {
-        namespace Name
-        {
-            static const char* SESSION_DESKTOP = "XDG_SESSION_DESKTOP";
-            static const char* CURRENT_DESKTOP = "XDG_CURRENT_DESKTOP";
-
-            static const char* DATA_HOME   = "XDG_DATA_HOME";
-            static const char* CONFIG_HOME = "XDG_CONFIG_HOME";
-            static const char* CACHE_HOME  = "XDG_CACHE_HOME";
-            static const char* ICON_HOME   = "XDG_ICON_HOME";
-
-            static const char* DATA_DIRS   = "XDG_DATA_DIRS";
-            static const char* CONFIG_DIRS = "XDG_CONFIG_DIRS";
-
-            static const char* RUNTIME_DIR = "XDG_RUNTIME_DIR";
-        }
-        namespace Value
-        {
-            static const char* SESSION_DESKTOP = "MERE";
-            static const char* CURRENT_DESKTOP = "MERE";
-
-            static const char* DATA_HOME   = "$HOME/.local/share/";
-            static const char* CONFIG_HOME = "$HOME/.config/";
-            static const char* CACHE_HOME  = "$HOME/.cache/";
-            static const char* ICON_HOME   = "$HOME/.icons/";
-
-            static const char* DATA_DIRS   = "/usr/local/share/:/usr/share/";
-
-            // we made a bit change here; added /usr/local/etc/xdg
-            static const char* CONFIG_DIRS = "/usr/local/etc/xdg/:/etc/xdg/";
-
-            // where did we find this one, in which spec?
-            static const char* RUNTIME_DIR = "/tmp/mere-$USER/";
-
-        }
-    }
-
-//    namespace Base
-//    {
-//    }
-
-    namespace ErrorMask
-    {
-        static const unsigned int SESSION_DESKTOP = 1 << 1;
-        static const unsigned int CURRENT_DESKTOP = 1 << 2;
-        static const unsigned int DATA_HOME       = 1 << 3;
-        static const unsigned int CONFIG_HOME     = 1 << 4;
-        static const unsigned int CACHE_HOME      = 1 << 5;
-        static const unsigned int ICON_HOME       = 1 << 6;
-        static const unsigned int DATA_DIRS       = 1 << 7;
-        static const unsigned int CONFIG_DIRS     = 1 << 8;
-        static const unsigned int RUNTIME_DIR     = 1 << 9;
-    }
 
 class MERE_XDG_LIB_SPEC BaseDirectory
 {

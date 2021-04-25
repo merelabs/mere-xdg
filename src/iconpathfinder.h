@@ -1,5 +1,5 @@
-#ifndef PATHFINDER_H
-#define PATHFINDER_H
+#ifndef MERE_XDG_PATHFINDER_H
+#define MERE_XDG_PATHFINDER_H
 
 #include "global.h"
 
@@ -29,4 +29,4 @@ private:
 }
 }
 
-#endif // PATHFINDER_H
+#endif // MERE_XDG_PATHFINDER_H

@@ -21,14 +21,7 @@ Mere::XDG::DesktopEntry Mere::XDG::DesktopEntryHelper::parse(const std::string &
 Mere::XDG::DesktopEntry Mere::XDG::DesktopEntryHelper::parse(const QFileInfo &fileInfo)
 {
     DesktopEntryParser parser(fileInfo.absoluteFilePath().toStdString());
-    bool ok = parser.parse();
-    if (!ok)
-    {
-        std::cout << "can't parse .desktop file. please check the path." << std::endl;
-        return DesktopEntry();
-    }
-
-    return parser.entry();
+    return parser.parse();
 }
 
 //static

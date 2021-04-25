@@ -2,6 +2,7 @@
 #define MERE_XDG_ICONTHEME_H
 
 #include "global.h"
+#include "base.h"
 #include "iconthemesubdirectory.h"
 
 namespace Mere
@@ -9,7 +10,7 @@ namespace Mere
 namespace XDG
 {
 
-class MERE_XDG_LIB_SPEC IconTheme
+class MERE_XDG_LIB_SPEC IconTheme : public Base
 {
 public:
     ~IconTheme() = default;
@@ -28,10 +29,10 @@ public:
 
     bool hidden() const;
 
-    std::string path() const;
-    void path(const std::string &path);
+    std::string home() const;
+    void home(const std::string &home);
 
-    enum Flag
+    enum class Flag
     {
         None    = 0,
         Hidden  = 1,
@@ -39,7 +40,7 @@ public:
         All     = 4
     };
 
-    enum class Attribute
+    enum Attribute
     {
         Id,
         Name,
@@ -48,11 +49,10 @@ public:
         Directories,
         ScaledDirectories,
         Hidden,
-        Example
+        Example,
+        Others /* not listed */
     };
 
-    QVariant  get(const Attribute &attribute) const;
-    void set(const Attribute &attribute, const QVariant &value);
 
     bool valid() const;
     std::vector<IconThemeSubDirectory> subdirectories() const;
@@ -76,10 +76,8 @@ public:
     };
 
 private:
-    std::string m_path;
+    std::string m_home;
     std::vector<IconThemeSubDirectory> m_subdirectories;
-
-    std::map<Attribute, QVariant> m_attributes;
 };
 
 }

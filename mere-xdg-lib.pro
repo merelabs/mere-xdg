@@ -16,6 +16,7 @@ SOURCES += \
     src/autostartdirectory.cpp \
     src/autostartdirectoryhelper.cpp \
     src/autostartdirectorytraverser.cpp \
+    src/base.cpp \
     src/basedirectory.cpp \
     src/config.cpp \
     src/desktopentry.cpp \
@@ -25,6 +26,8 @@ SOURCES += \
     src/desktopentrydirectorytraverser.cpp \
     src/desktopentryhelper.cpp \
     src/desktopentryparser.cpp \
+    src/environment.cpp \
+    src/icondirectorytraverser.cpp \
     src/iconlinkcache.cpp \
     src/iconlookuphelper.cpp \
     src/iconpathfinder.cpp \
@@ -32,14 +35,15 @@ SOURCES += \
     src/iconthemecache.cpp \
     src/iconthemecontext.cpp \
     src/iconthemedirectory.cpp \
-    src/iconthemehelper.cpp \
-    src/iconthemesubdirectory.cpp \
-    src/iconthemesubdirectoryhelper.cpp
+    src/iconthemedirectorytraverser.cpp \
+    src/iconthemeparser.cpp \
+    src/iconthemesubdirectory.cpp
 
 HEADERS += \
     src/autostartdirectory.h \
     src/autostartdirectoryhelper.h \
     src/autostartdirectorytraverser.h \
+    src/base.h \
     src/basedirectory.h \
     src/config.h \
     src/desktopentry.h \
@@ -49,8 +53,10 @@ HEADERS += \
     src/desktopentrydirectorytraverser.h \
     src/desktopentryhelper.h \
     src/desktopentryparser.h \
+    src/environment.h \
     src/global.h \
     src/global.h \
+    src/icondirectorytraverser.h \
     src/iconlinkcache.h \
     src/iconlookuphelper.h \
     src/iconpathfinder.h \
@@ -58,9 +64,12 @@ HEADERS += \
     src/iconthemecache.h \
     src/iconthemecontext.h \
     src/iconthemedirectory.h \
-    src/iconthemehelper.h \
-    src/iconthemesubdirectory.h \
-    src/iconthemesubdirectoryhelper.h
+    src/iconthemedirectorytraverser.h \
+    src/iconthemeparser.h \
+    src/iconthemesubdirectory.h
+
+DISTFILES += \
+    etc/xdg.conf
 
 INCLUDEPATH += /usr/local/include
 

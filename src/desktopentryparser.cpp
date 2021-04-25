@@ -1,6 +1,9 @@
 #include "desktopentryparser.h"
 #include "desktopentrydirectory.h"
 
+#include "mere/config/parser/gkparser.h"
+#include "mere/utils/stringutils.h"
+
 #include <set>
 #include <fstream>
 #include <iostream>
@@ -10,140 +13,67 @@ Mere::XDG::DesktopEntryParser::~DesktopEntryParser()
 
 }
 
-Mere::XDG::DesktopEntryParser::DesktopEntryParser(const std::string &path, QObject *parent)
-    : QObject(parent),
-      m_path(path)
+Mere::XDG::DesktopEntryParser::DesktopEntryParser(const std::string &path)
+    : m_path(path)
 {
 
 }
 
-Mere::XDG::DesktopEntry Mere::XDG::DesktopEntryParser::entry() const
+Mere::XDG::DesktopEntry Mere::XDG::DesktopEntryParser::parse()
 {
-    return m_entry;
-}
+    DesktopEntry entry;
 
-bool Mere::XDG::DesktopEntryParser::parse()
-{
-    if (m_path.empty()) return false;
+    Mere::Config::Spec::BaseEx config(m_path);
 
-    // check for the file extension
-    std::string ext(".desktop");
-    auto pos = m_path.find(ext);
-    if (pos != m_path.length() - ext.length())
-        return false;
+    config.group()->pattern("^\\\[Desktop (Entry|Action).*\\\]$");
+    config.property()->pattern("^[^=]+=.*$");
 
-    std::ifstream file(m_path);
-
-    // check for the file existance
-    if (!file.good()) return false;
-
-    bool procceed = false;
-    std::string line;
-    while (std::getline(file, line))
+    Mere::Config::Parser::GKParser parser(config);
+    for(const auto &group : parser.parse())
     {
-        if (line.empty()) continue;
-        if (this->comment(line)) continue;
+        std::vector<Mere::Config::Property *> properties = group->properties();
 
-        if (!line.compare("[Desktop Entry]"))
+        if (properties.size() == 0) continue;
+
+        if (group->name().compare("Desktop Entry") == 0)
         {
-            procceed = true;
-            continue;
+            for(const auto &property : properties)
+            {
+                DesktopEntry::Attribute attr = attribute(property->name());
+                if (attr != DesktopEntry::Attribute::Others)
+                {
+                    entry.set(attr, property->value());
+                    if (attr == DesktopEntry::Attribute::Categories)
+                        entry.categories(categories(property->value()));
+                }
+                else
+                {
+                    entry.set(property->name(), property->value());
+                }
+            }
+            entry.file(m_path);
+            entry.set(DesktopEntry::Attribute::Id, id());
         }
-
-        if (!procceed) continue;
-
-        auto pos = line.find("[Desktop Action");
-        if (pos != std::string::npos)
+        else if(group->name().find("Desktop Action") == 0)
         {
-            std::set<DesktopEntryAction> actions = Mere::XDG::DesktopEntryParser::actions(file, line);
-            m_entry.actions(actions);
-            continue;
+            DesktopEntryAction action;
+            for(const auto &property : properties)
+            {
+                std::string key   = property->name();
+                std::string value = property->value();
+                if (key == "Name")
+                    action.set(DesktopEntryAction::Attribute::Name, value);
+                else if (key == "Icon")
+                    action.set(DesktopEntryAction::Attribute::Icon, value);
+                else if (key == "Exec")
+                    action.set(DesktopEntryAction::Attribute::Exec, value);
+
+            }
+            entry.action(action);
         }
-
-        std::string key   = this->key(line);
-        if (key.empty()) continue;
-
-        std::string value = this->value(line);
-
-        if (key == "Type")
-            m_entry.set(DesktopEntry::Attribute::Type, value);
-        else if (key == "Version")
-            m_entry.set(DesktopEntry::Attribute::Version, value);
-        else if (key == "Name")
-            m_entry.set(DesktopEntry::Attribute::Name, value);
-        else if (key == "GenericName")
-            m_entry.set(DesktopEntry::Attribute::GenericName, value);
-        else if (key == "NoDisplay")
-            m_entry.set(DesktopEntry::Attribute::NoDisplay, value);
-        else if (key == "Comment")
-            m_entry.set(DesktopEntry::Attribute::Comment, value);
-        else if (key == "Icon")
-            m_entry.set(DesktopEntry::Attribute::Icon, value);
-        else if (key == "Hidden")            
-            m_entry.set(DesktopEntry::Attribute::Hidden, value);
-        else if (key == "OnlyShowIn")
-            m_entry.set(DesktopEntry::Attribute::OnlyShowIn, value);
-        else if (key == "NotShowIn")
-            m_entry.set(DesktopEntry::Attribute::NotShowIn, value);
-        else if (key == "DBusActivatable")
-            m_entry.set(DesktopEntry::Attribute::DBusActivatable, value);
-        else if (key == "TryExec")
-            m_entry.set(DesktopEntry::Attribute::TryExec, value);
-        else if (key == "Exec")
-            m_entry.set(DesktopEntry::Attribute::Exec, value);
-        else if (key == "Path")
-            m_entry.set(DesktopEntry::Attribute::Path, value);
-        else if (key == "Terminal")
-            m_entry.set(DesktopEntry::Attribute::Terminal, value);
-        else if (key == "Actions")
-            m_entry.set(DesktopEntry::Attribute::Actions, value);
-        else if (key == "MimeType")
-            m_entry.set(DesktopEntry::Attribute::MimeType, value);
-        else if (key == "Categories")
-        {
-            m_entry.set(DesktopEntry::Attribute::Categories, value);
-            m_entry.categories(categories(value));
-        }
-        else if (key == "Implements")
-            m_entry.set(DesktopEntry::Attribute::Implements, value);
-        else if (key == "Keywords")
-            m_entry.set(DesktopEntry::Attribute::Keywords, value);
-        else if (key == "StartupNotify")
-            m_entry.set(DesktopEntry::Attribute::StartupNotify, value);
-        else if (key == "StartupWMClass")
-            m_entry.set(DesktopEntry::Attribute::StartupWMClass, value);
-        else if (key == "URL")
-            m_entry.set(DesktopEntry::Attribute::URL, value);
-        else if (key == "PrefersNonDefaultGPU")
-            m_entry.set(DesktopEntry::Attribute::PrefersNonDefaultGPU, value);
-        else
-            m_entry.set(key, value.c_str());
     }
 
-
-    m_entry.set(DesktopEntry::Attribute::Id, id());
-    m_entry.set(DesktopEntry::Attribute::Base, base());
-    m_entry.set(DesktopEntry::Attribute::File, m_path);
-
-    return procceed;
-}
-
-std::string Mere::XDG::DesktopEntryParser::id() const
-{
-    std::string id;
-    for(const std::string &directory : Mere::XDG::DesktopEntryDirectory::directories())
-    {
-        if (directory.empty()) continue;
-
-        auto pos = m_path.find(directory);
-        if (pos == std::string::npos) continue;
-        id = m_path.substr(directory.length());
-        while((pos = id.find("/")) != std::string::npos)
-            id.replace(pos, 1, "-");
-        break;
-    }
-
-    return id;
+    return entry;
 }
 
 std::string Mere::XDG::DesktopEntryParser::base() const
@@ -155,29 +85,6 @@ std::string Mere::XDG::DesktopEntryParser::base() const
         base = m_path.substr(0, pos);
 
     return base;
-}
-
-bool Mere::XDG::DesktopEntryParser::comment(const std::string &line) const
-{
-    auto pos = line.find("#");
-
-    return pos == 0;
-}
-
-std::string Mere::XDG::DesktopEntryParser::key(const std::string &line) const
-{
-    auto pos = line.find("=");
-    if (pos == 0 || pos == std::string::npos) return "";
-
-    return line.substr(0, pos);
-}
-
-std::string Mere::XDG::DesktopEntryParser::value(const std::string &line) const
-{
-    auto pos = line.find("=");
-    if (pos == 0 || pos == std::string::npos) return "";
-
-    return line.substr(pos + 1);
 }
 
 std::set<std::string> Mere::XDG::DesktopEntryParser::categories(const std::string &value) const
@@ -197,37 +104,114 @@ std::set<std::string> Mere::XDG::DesktopEntryParser::categories(const std::strin
     return categories;
 }
 
-std::set<Mere::XDG::DesktopEntryAction> Mere::XDG::DesktopEntryParser::actions(std::ifstream &file, std::string &line) const
+//std::set<Mere::XDG::DesktopEntryAction> Mere::XDG::DesktopEntryParser::actions(std::ifstream &file, std::string &line) const
+//{
+//    std::set<Mere::XDG::DesktopEntryAction> actions;
+
+//    std::string id = line.substr(16);
+
+//    DesktopEntryAction action(id);
+
+//    while (std::getline(file, line))
+//    {
+//        auto pos = line.find("[Desktop Action");
+//        if (pos != std::string::npos)
+//        {
+//            std::set<Mere::XDG::DesktopEntryAction> _actions = Mere::XDG::DesktopEntryParser::actions(file, line);
+//            actions.insert(_actions.begin(), _actions.end());
+//        }
+
+//        std::string key   = this->key(line);
+//        std::string value = this->value(line);
+
+//        if (key == "Name")
+//            action.set(DesktopEntryAction::Attribute::Name, value);
+//        else if (key == "Icon")
+//            action.set(DesktopEntryAction::Attribute::Icon, value);
+//        else if (key == "Exec")
+//            action.set(DesktopEntryAction::Attribute::Exec, value);
+//    }
+
+//    if (action.valid())
+//        actions.insert(action);
+
+//    return actions;
+//}
+
+Mere::XDG::DesktopEntry::Attribute Mere::XDG::DesktopEntryParser::attribute(const std::string &key) const
 {
-    std::set<Mere::XDG::DesktopEntryAction> actions;
+    DesktopEntry::Attribute attribute;
 
-    std::string id = line.substr(16);
+    if (key == "Type")
+        attribute = DesktopEntry::Attribute::Type;
+    else if (key == "Version")
+        attribute = DesktopEntry::Attribute::Version;
+    else if (key == "Name")
+        attribute = DesktopEntry::Attribute::Name;
+    else if (key == "GenericName")
+        attribute = DesktopEntry::Attribute::GenericName;
+    else if (key == "NoDisplay")
+        attribute = DesktopEntry::Attribute::NoDisplay;
+    else if (key == "Comment")
+        attribute = DesktopEntry::Attribute::Comment;
+    else if (key == "Icon")
+        attribute = DesktopEntry::Attribute::Icon;
+    else if (key == "Hidden")
+        attribute = DesktopEntry::Attribute::Hidden;
+    else if (key == "OnlyShowIn")
+        attribute = DesktopEntry::Attribute::OnlyShowIn;
+    else if (key == "NotShowIn")
+        attribute = DesktopEntry::Attribute::NotShowIn;
+    else if (key == "DBusActivatable")
+        attribute = DesktopEntry::Attribute::DBusActivatable;
+    else if (key == "TryExec")
+        attribute = DesktopEntry::Attribute::TryExec;
+    else if (key == "Exec")
+        attribute = DesktopEntry::Attribute::Exec;
+    else if (key == "Path")
+        attribute = DesktopEntry::Attribute::Path;
+    else if (key == "Terminal")
+        attribute = DesktopEntry::Attribute::Terminal;
+    else if (key == "Actions")
+        attribute = DesktopEntry::Attribute::Actions;
+    else if (key == "MimeType")
+        attribute = DesktopEntry::Attribute::MimeType;
+    else if (key == "Categories")
+        attribute = DesktopEntry::Attribute::Categories;
+    else if (key == "Implements")
+        attribute = DesktopEntry::Attribute::Implements;
+    else if (key == "Keywords")
+        attribute = DesktopEntry::Attribute::Keywords;
+    else if (key == "StartupNotify")
+        attribute = DesktopEntry::Attribute::StartupNotify;
+    else if (key == "StartupWMClass")
+        attribute = DesktopEntry::Attribute::StartupWMClass;
+    else if (key == "URL")
+        attribute = DesktopEntry::Attribute::URL;
+    else if (key == "PrefersNonDefaultGPU")
+        attribute = DesktopEntry::Attribute::PrefersNonDefaultGPU;
+    else
+        attribute = DesktopEntry::Attribute::Others;
 
-    DesktopEntryAction action(id);
+    return attribute;
+}
 
-    while (std::getline(file, line))
+std::string Mere::XDG::DesktopEntryParser::id() const
+{
+    std::string id;
+
+    for(const std::string &directory : Mere::XDG::DesktopEntryDirectory::directories())
     {
-        auto pos = line.find("[Desktop Action");
-        if (pos != std::string::npos)
-        {
-            std::set<Mere::XDG::DesktopEntryAction> _actions = Mere::XDG::DesktopEntryParser::actions(file, line);
-            actions.insert(_actions.begin(), _actions.end());
-        }
+        if (directory.empty()) continue;
 
-        std::string key   = this->key(line);
-        std::string value = this->value(line);
-
-        if (key == "Name")
-            action.set(DesktopEntryAction::Attribute::Name, value);
-        else if (key == "Icon")
-            action.set(DesktopEntryAction::Attribute::Icon, value);
-        else if (key == "Exec")
-            action.set(DesktopEntryAction::Attribute::Exec, value);
+        auto pos = m_path.find(directory);
+        if (pos == std::string::npos) continue;
+        id = m_path.substr(directory.length());
+        while((pos = id.find("/")) != std::string::npos)
+            id.replace(pos, 1, "-");
+        break;
     }
 
-    if (action.valid())
-        actions.insert(action);
-
-    return actions;
+    return id;
 }
 
