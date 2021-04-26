@@ -1,6 +1,5 @@
 #include "desktopentrydirectory.h"
 #include "basedirectory.h"
-#include "desktopentryhelper.h"
 
 #include "mere/utils/envutils.h"
 #include "mere/utils/binutils.h"
