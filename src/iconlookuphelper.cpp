@@ -23,9 +23,10 @@ std::string Mere::XDG::IconLookupHelper::path(const std::string &icon)
 
     std::string path = LookupIcon(icon);
 
-    auto end = std::chrono::high_resolution_clock::now();
-    const std::chrono::duration<double> duration(end - start);
-    std::cout << "Lookup time: " << duration.count() << "s" << std::endl;
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+
+    std::cout << "Lookup time: " << duration.count() << std::endl;
 
     return path;
 }
@@ -42,21 +43,18 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
     config->size(48);
     config->context("");
 
-//    qDebug() << "CONFIG::================================";
-//    qDebug() << "Theme  : " << config->theme().c_str();
-//    qDebug() << "Size   : " << config->size();
-//    qDebug() << "Context: " << config->context().c_str();
-//    qDebug() << "CONFIG::================================";
+    qDebug() << "CONFIG::================================";
+    qDebug() << "Theme  : " << config->theme().c_str();
+    qDebug() << "Size   : " << config->size();
+    qDebug() << "Context: " << config->context().c_str();
+    qDebug() << "CONFIG::================================";
 
     std::string path;
-
-//    std::vector<Mere::XDG::IconTheme> themes = IconThemeHelper::themes();
-
-
 
     // user theme
     for(const auto &theme : themes)
     {
+        qDebug() << "THEME::" << theme.name().c_str();
         if(theme.hidden()) continue;
         if (!config->theme().empty() && theme.name().compare(config->theme())) continue;
 
@@ -93,6 +91,7 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
     if (icon.empty() || !theme.valid()) return "";
 
     std::vector<IconThemeSubDirectory> directories = theme.subdirectories();
+    qDebug() << "<<<<<<SIZELL::" << directories.size();
     if (!directories.size()) return "";
 
     Config *config = Config::instance();
@@ -114,9 +113,6 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
     std::string iconPath;
 
 
-//    std::vector<std::string> filters = IconLookupHelper::filters(icon);
-
-    //qDebug() << "Looking icon into path: " << theme.path().c_str() << directories.size();
     int minsize = INT_MAX;
 
     IconDirectoryTraverser traverser;
@@ -125,7 +121,7 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
         std::string p(directory.home());
         p.append(directory.id()).append("/");
 
-//        qDebug() << ">>>>>>>>>" << p.c_str() << ":::" << icon.c_str();
+        qDebug() << "XXX>>>>>>>>>" << p.c_str() << ":::" << icon.c_str();
 
         std::vector<std::string> icons = traverser.traverse(p, iconName);
         if (!icons.size()) continue;

@@ -4,20 +4,14 @@
 #include "mere/config/parser/gkparser.h"
 #include "mere/utils/stringutils.h"
 
-#include <fstream>
-#include <iostream>
-
 Mere::XDG::IconThemeParser::~IconThemeParser()
 {
-
 }
 
 Mere::XDG::IconThemeParser::IconThemeParser(const std::string &path)
     : m_path(path)
 {
-
 }
-
 
 Mere::XDG::IconTheme Mere::XDG::IconThemeParser::parse()
 {
@@ -25,6 +19,7 @@ Mere::XDG::IconTheme Mere::XDG::IconThemeParser::parse()
 
     Mere::Config::Spec::BaseEx config(m_path);
     config.group()->pattern("^\\\[.+\\\]$");
+    config.group()->delimiter("");
 
     Mere::Config::Parser::GKParser parser(config);
 
