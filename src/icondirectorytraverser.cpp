@@ -2,9 +2,7 @@
 
 #include <sys/types.h>
 #include <dirent.h>
-//#include <string.h>
 
-#include <QDebug>
 Mere::XDG::IconDirectoryTraverser::IconDirectoryTraverser(QObject *parent) : QObject(parent)
 {
 
@@ -21,12 +19,8 @@ std::vector<std::string> Mere::XDG::IconDirectoryTraverser::traverse(const std::
     {
         std::string p(base);
         p.append(file);
-
-        qDebug() << "YES GOT IT::" << p.c_str();
         icons.push_back(std::move(p));
     }
-
-//    emit traversed(path);
 
     return icons;
 }
@@ -54,8 +48,6 @@ std::vector<std::string> Mere::XDG::IconDirectoryTraverser::files(const std::str
         }
         closedir(dir);
     }
-
-//    if ()
 
     return files;
 }

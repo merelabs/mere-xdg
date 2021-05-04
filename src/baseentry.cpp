@@ -1,15 +1,5 @@
 #include "baseentry.h"
 
-Mere::XDG::BaseEntry::~BaseEntry()
-{
-
-}
-
-Mere::XDG::BaseEntry::BaseEntry()
-{
-
-}
-
 std::string Mere::XDG::BaseEntry::file() const
 {
     return m_file;

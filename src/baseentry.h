@@ -12,8 +12,8 @@ namespace XDG
 class BaseEntry
 {
 public:
-    virtual ~BaseEntry();
-    BaseEntry();
+    virtual ~BaseEntry() = default;
+    BaseEntry() = default;
 
     std::string file() const;
     void file(const std::string &file);

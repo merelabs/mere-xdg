@@ -3,15 +3,11 @@
 
 #include "mere/utils/envutils.h"
 #include "mere/utils/pathutils.h"
-#include "mere/utils/stringutils.h"
 
 #include <sstream>
-#include <fstream>
-#include <iostream>
 
 Mere::XDG::BaseDirectory::BaseDirectory()
 {
-
 }
 
 unsigned int Mere::XDG::BaseDirectory::setupEnv()

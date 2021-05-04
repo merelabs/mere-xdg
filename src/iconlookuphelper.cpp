@@ -43,18 +43,17 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
     config->size(48);
     config->context("");
 
-    qDebug() << "CONFIG::================================";
-    qDebug() << "Theme  : " << config->theme().c_str();
-    qDebug() << "Size   : " << config->size();
-    qDebug() << "Context: " << config->context().c_str();
-    qDebug() << "CONFIG::================================";
+//    qDebug() << "CONFIG::================================";
+//    qDebug() << "Theme  : " << config->theme().c_str();
+//    qDebug() << "Size   : " << config->size();
+//    qDebug() << "Context: " << config->context().c_str();
+//    qDebug() << "CONFIG::================================";
 
     std::string path;
 
     // user theme
     for(const auto &theme : themes)
     {
-        qDebug() << "THEME::" << theme.name().c_str();
         if(theme.hidden()) continue;
         if (!config->theme().empty() && theme.name().compare(config->theme())) continue;
 
@@ -91,7 +90,6 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
     if (icon.empty() || !theme.valid()) return "";
 
     std::vector<IconThemeSubDirectory> directories = theme.subdirectories();
-    qDebug() << "<<<<<<SIZELL::" << directories.size();
     if (!directories.size()) return "";
 
     Config *config = Config::instance();
@@ -121,12 +119,8 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, con
         std::string p(directory.home());
         p.append(directory.id()).append("/");
 
-        qDebug() << "XXX>>>>>>>>>" << p.c_str() << ":::" << icon.c_str();
-
         std::vector<std::string> icons = traverser.traverse(p, iconName);
         if (!icons.size()) continue;
-
-    qDebug() << "NUMBER OF ICONS>>>>>>>>>" << icons.size();
 
         if (config->size() == 0 || DirectoryMatchesSize(directory, config->size(), config->scale()))
         {
@@ -176,23 +170,18 @@ std::vector<std::string> Mere::XDG::IconLookupHelper::filters(const std::string 
 //static
 bool Mere::XDG::IconLookupHelper::DirectoryMatchesSize(const IconThemeSubDirectory &def, unsigned int size, unsigned int  scale)
 {
-    qDebug() << "1.........." << scale;
     if (def.scale() != scale)
          return false;
 
-    qDebug() << "2..........";
     if (def.type().compare("Fixed") == 0)
         return def.size() == size;
 
-    qDebug() << "3..........";
     if (def.type().compare("Scaled") == 0)
         return def.minsize() <= size && size <= def.maxsize();
 
-    qDebug() << "4..........";
     if (def.type().compare("Threshold") == 0)
         return (def.size() - def.threshold()) <= size && size <= (def.size() + def.threshold());
 
-    qDebug() << "5..........";
     return false;
 }
 

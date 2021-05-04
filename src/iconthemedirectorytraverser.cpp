@@ -7,7 +7,6 @@
 
 Mere::XDG::IconThemeDirectoryTraverser::IconThemeDirectoryTraverser(QObject *parent) : QObject(parent)
 {
-
 }
 
 std::vector<Mere::XDG::IconTheme> Mere::XDG::IconThemeDirectoryTraverser::traverse() const
