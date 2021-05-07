@@ -19,6 +19,7 @@ Mere::XDG::IconSoftLinkCache::IconSoftLinkCache()
 }
 
 Mere::XDG::IconSoftLinkCache::IconSoftLinkCache(const std::string &path)
+    : m_cache(nullptr)
 {
     setPath(path);
 }
@@ -35,30 +36,39 @@ void Mere::XDG::IconSoftLinkCache::setPath(const std::string &path)
     Mere::Utils::PathUtils::create_if_none(m_path, 0777);
 }
 
-std::string Mere::XDG::IconSoftLinkCache::get(const std::string &key)
+std::string Mere::XDG::IconSoftLinkCache::get(const std::string &key, bool *flag)
 {
     if (m_cache)
     {
-        bool flag;
-        std::string path = m_cache->get(key, &flag);
-        if (flag) return path;
+        bool _flag;
+        std::string path = m_cache->get(key, &_flag);
+        if (_flag)
+        {
+            if (flag) *flag = true;
+            return path;
+        }
     }
 
     std::string path(m_path);
     path.append(key);
     if(!Mere::Utils::FileUtils::isExist(path))
+    {
+        if (flag) *flag = false;
         return "";
+    }
 
     char link[4096]; /* maxsize of path - 4096 ? */
     int bytes = readlink(path.c_str(), link, sizeof(link));
-    if (!bytes) return "";
+    if (!bytes)
+    {
+        if (flag) *flag = false;
+        return "";
+    }
+    link[bytes] = '\0';
 
     std::string value(link);
 
-    if (m_cache)
-    {
-        m_cache->set(key, value);
-    }
+    if (m_cache) m_cache->set(key, value);
 
     return value;
 }
@@ -81,7 +91,7 @@ void Mere::XDG::IconSoftLinkCache::set(const std::string &key, const std::string
     }
 
     // set it
-    m_cache->set(key, link);
+    if(m_cache) m_cache->set(key, link);
 
     std::string path(m_path);
     symlink(link.c_str(), path.append(key).c_str());
@@ -89,6 +99,5 @@ void Mere::XDG::IconSoftLinkCache::set(const std::string &key, const std::string
 
 void Mere::XDG::IconSoftLinkCache::setCache(IconMemoryCache *cache)
 {
-    if (m_cache) delete m_cache;
     m_cache = cache;
 }

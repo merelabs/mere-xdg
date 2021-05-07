@@ -21,7 +21,7 @@ public:
 
     void setPath(const std::string &path);
 
-    std::string get(const std::string &key);
+    std::string get(const std::string &key, bool *flag = nullptr);
     void set(const std::string &key, const std::string &link);
 
     void setCache(IconMemoryCache *cache);

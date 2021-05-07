@@ -2,14 +2,13 @@
 #define MERE_XDG_ICONPATHFINDER_H
 
 #include "global.h"
-
-#include "iconsoftlinkcache.h"
 #include <QObject>
 
 namespace Mere
 {
 namespace XDG
 {
+class IconSoftLinkCache;
 
 class MERE_XDG_LIB_SPEC IconPathFinder : public QObject
 {
