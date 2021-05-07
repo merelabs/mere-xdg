@@ -1,5 +1,5 @@
-#ifndef MERE_XDG_PATHFINDER_H
-#define MERE_XDG_PATHFINDER_H
+#ifndef MERE_XDG_ICONPATHFINDER_H
+#define MERE_XDG_ICONPATHFINDER_H
 
 #include "global.h"
 
@@ -15,12 +15,11 @@ class MERE_XDG_LIB_SPEC IconPathFinder : public QObject
 {
     Q_OBJECT
 public:
+    ~IconPathFinder();
     explicit IconPathFinder(QObject *parent = nullptr);
     void setCache(IconLinkCache *cache);
 
     std::string find(const std::string &icon);
-
-signals:
 
 private:
     IconLinkCache *m_cache;
@@ -29,4 +28,4 @@ private:
 }
 }
 
-#endif // MERE_XDG_PATHFINDER_H
+#endif // MERE_XDG_ICONPATHFINDER_H

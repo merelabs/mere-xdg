@@ -1,13 +1,20 @@
 #include "iconpathfinder.h"
-#include "mere/xdg/iconlookuphelper.h"
+#include "iconlookuphelper.h"
 
-Mere::XDG::IconPathFinder::IconPathFinder(QObject *parent) : QObject(parent)
+Mere::XDG::IconPathFinder::~IconPathFinder()
+{
+}
+
+Mere::XDG::IconPathFinder::IconPathFinder(QObject *parent)
+    : QObject(parent),
+      m_cache(nullptr)
 {
 
 }
 
 void Mere::XDG::IconPathFinder::setCache(IconLinkCache *cache)
 {
+    if (m_cache) delete m_cache;
     m_cache = cache;
 }
 
@@ -15,11 +22,11 @@ std::string Mere::XDG::IconPathFinder::find(const std::string &icon)
 {
     std::string path;
 
-//    if (m_cache)
-//    {
-//        path = m_cache->get(icon);
-//        if (!path.empty()) return path;
-//    }
+    if (m_cache)
+    {
+        path = m_cache->get(icon);
+        if (!path.empty()) return path;
+    }
 
     path = IconLookupHelper::path(icon);
     if(path.empty())
@@ -28,9 +35,8 @@ std::string Mere::XDG::IconPathFinder::find(const std::string &icon)
         path = IconLookupHelper::path("applications-development");
     }
 
-    qDebug() << "ICON PATH:" << icon.c_str() << " => " << path.c_str();
-//    if (m_cache && !path.empty())
-//        m_cache->set(icon, path);
+    if (m_cache && !path.empty())
+        m_cache->set(icon, path);
 
     return path;
 }

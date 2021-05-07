@@ -28,6 +28,7 @@ SOURCES += \
     src/icondirectorytraverser.cpp \
     src/iconlinkcache.cpp \
     src/iconlookuphelper.cpp \
+    src/iconmemorycache.cpp \
     src/iconpathfinder.cpp \
     src/icontheme.cpp \
     src/iconthemecache.cpp \
@@ -55,6 +56,7 @@ HEADERS += \
     src/icondirectorytraverser.h \
     src/iconlinkcache.h \
     src/iconlookuphelper.h \
+    src/iconmemorycache.h \
     src/iconpathfinder.h \
     src/icontheme.h \
     src/iconthemecache.h \

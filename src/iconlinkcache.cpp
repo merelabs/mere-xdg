@@ -1,33 +1,36 @@
 #include "iconlinkcache.h"
+#include "mere/utils/pathutils.h"
+#include "mere/utils/fileutils.h"
 
 #include <iostream>
 #include <fstream>
 #include <stdio.h>
 #include <unistd.h>
 
-#include <QDebug>
-
-unsigned int Mere::XDG::IconLinkCache::g_mage     = 0;
-unsigned int Mere::XDG::IconLinkCache::g_dage     = 0;
-unsigned int Mere::XDG::IconLinkCache::g_capacity = 0;
-std::string  Mere::XDG::IconLinkCache::g_path     = "~/.cache";
-std::map<std::string, unsigned int> Mere::XDG::IconLinkCache::g_age = {};
-std::map<std::string, std::string> Mere::XDG::IconLinkCache::g_cache = {};
-
-
-Mere::XDG::IconLinkCache::IconLinkCache(QObject *parent)
-    : QObject(parent)
+Mere::XDG::IconLinkCache::~IconLinkCache()
 {
-
 }
 
-void Mere::XDG::IconLinkCache::setCache(const std::string &path)
+Mere::XDG::IconLinkCache::IconLinkCache()
+    : IconLinkCache("/tmp/mere/xdg/icon/")
 {
-    g_path = path;
-    if (g_path.empty()) return;
+}
 
-    if(g_path.back() != '/')
-        g_path.append("/");
+Mere::XDG::IconLinkCache::IconLinkCache(const std::string &path)
+{
+    setPath(path);
+}
+
+void Mere::XDG::IconLinkCache::setPath(const std::string &path)
+{
+    if (path.empty()) return;
+
+    m_path = path;
+
+    if(m_path.back() != '/')
+        m_path.append("/");
+
+    Mere::Utils::PathUtils::create_if_none(m_path);
 }
 
 void Mere::XDG::IconLinkCache::setAge(unsigned int age, const Type &type)
@@ -35,47 +38,44 @@ void Mere::XDG::IconLinkCache::setAge(unsigned int age, const Type &type)
     switch (type)
     {
         case Type::Disk:
-            g_dage = age;
+            m_dage = age;
             break;
 
         case Type::Memory:
-            g_mage = age;
+            m_mage = age;
             break;
     }
 }
 
 void Mere::XDG::IconLinkCache::setCapacity(unsigned int capacity)
 {
-    g_capacity = capacity;
+    m_capacity = capacity;
 }
 
 std::string Mere::XDG::IconLinkCache::get(const std::string &key)
 {
-    auto find = g_cache.find(key);
-    if (find != g_cache.end())
+    auto find = m_cache.find(key);
+    if (find != m_cache.end())
         return find->second;
 
-    std::string path(g_path);
-    std::fstream file(path.append(key));
-    if (file.good())
-    {
-        char link[4096]; /* maxsize of path - 4096 ? */
-        int bytes = readlink(path.c_str(), link, sizeof(link));
+    std::string path(m_path);
+    path.append(key);
+    if(!Mere::Utils::FileUtils::isExist(path))
+        return "";
 
-        if (bytes)
-        {
-            std::string value(link);
-            g_cache.insert({key, value});
+    char link[4096]; /* maxsize of path - 4096 ? */
+    int bytes = readlink(path.c_str(), link, sizeof(link));
+    if (!bytes) return "";
 
-            return value;
-        }
-    }
+    std::string value(link);
+    m_cache.insert({key, value});
 
-    return "";
+    return value;
 }
 
 void Mere::XDG::IconLinkCache::set(const std::string &key, const std::string &link)
 {
+    qDebug() << "1...." << key.c_str() << link.c_str();
     if (key.empty()) return;
 
     auto pos = key.find("/");
@@ -83,9 +83,9 @@ void Mere::XDG::IconLinkCache::set(const std::string &key, const std::string &li
 
     if (link.empty())
     {
-        g_cache.erase(key);
+        m_cache.erase(key);
 
-        std::string path(g_path);
+        std::string path(m_path);
 
         std::fstream file(path.append(key));
         if (file.good())
@@ -97,8 +97,8 @@ void Mere::XDG::IconLinkCache::set(const std::string &key, const std::string &li
     }
 
     // set it
-    g_cache.insert({key, link});
+    m_cache.insert({key, link});
 
-    std::string path(g_path);
+    std::string path(m_path);
     symlink(link.c_str(), path.append(key).c_str());
 }

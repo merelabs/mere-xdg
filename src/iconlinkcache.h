@@ -1,20 +1,21 @@
-#ifndef DISKCACHE_H
-#define DISKCACHE_H
+#ifndef MERE_XDG_ICONDISKCACHE_H
+#define MERE_XDG_ICONDISKCACHE_H
+
+#include "global.h"
 
 #include <map>
-
-#include <QObject>
 
 namespace Mere
 {
 namespace XDG
 {
 
-class IconLinkCache : public QObject
+class MERE_XDG_LIB_SPEC IconLinkCache
 {
-    Q_OBJECT
 public:
-    explicit IconLinkCache(QObject *parent = nullptr);
+    ~IconLinkCache();
+    IconLinkCache();
+    explicit IconLinkCache(const std::string &path);
 
     enum class Type
     {
@@ -25,25 +26,23 @@ public:
     void setAge(unsigned int age, const Type &type);
     void setCapacity(unsigned int capacity);
 
-    void setCache(const std::string &path);
+    void setPath(const std::string &path);
 
     std::string get(const std::string &key);
     void set(const std::string &key, const std::string &link);
 
-signals:
-
 private:
-    static unsigned int g_mage;
-    static unsigned int g_dage;
-    static unsigned int g_capacity;
+    std::string m_path;
 
-    static std::string g_path;
+    unsigned int m_mage;
+    unsigned int m_dage;
+    unsigned int m_capacity;
 
-    static std::map<std::string, unsigned int> g_age;
-    static std::map<std::string, std::string> g_cache;
+    std::map<std::string, unsigned int> m_age;
+    std::map<std::string, std::string> m_cache;
 };
 
 }
 }
 
-#endif // DISKCACHE_H
+#endif // MERE_XDG_ICONDISKCACHE_H
