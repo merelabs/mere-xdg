@@ -26,10 +26,10 @@ SOURCES += \
     src/desktopentryparser.cpp \
     src/environment.cpp \
     src/icondirectorytraverser.cpp \
-    src/iconlinkcache.cpp \
     src/iconlookuphelper.cpp \
     src/iconmemorycache.cpp \
     src/iconpathfinder.cpp \
+    src/iconsoftlinkcache.cpp \
     src/icontheme.cpp \
     src/iconthemecache.cpp \
     src/iconthemecontext.cpp \
@@ -54,10 +54,10 @@ HEADERS += \
     src/global.h \
     src/global.h \
     src/icondirectorytraverser.h \
-    src/iconlinkcache.h \
     src/iconlookuphelper.h \
     src/iconmemorycache.h \
     src/iconpathfinder.h \
+    src/iconsoftlinkcache.h \
     src/icontheme.h \
     src/iconthemecache.h \
     src/iconthemecontext.h \

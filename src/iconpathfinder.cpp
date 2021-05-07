@@ -12,7 +12,7 @@ Mere::XDG::IconPathFinder::IconPathFinder(QObject *parent)
 
 }
 
-void Mere::XDG::IconPathFinder::setCache(IconLinkCache *cache)
+void Mere::XDG::IconPathFinder::setCache(IconSoftLinkCache *cache)
 {
     if (m_cache) delete m_cache;
     m_cache = cache;

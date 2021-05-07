@@ -3,7 +3,7 @@
 
 #include "global.h"
 
-#include "iconlinkcache.h"
+#include "iconsoftlinkcache.h"
 #include <QObject>
 
 namespace Mere
@@ -17,12 +17,12 @@ class MERE_XDG_LIB_SPEC IconPathFinder : public QObject
 public:
     ~IconPathFinder();
     explicit IconPathFinder(QObject *parent = nullptr);
-    void setCache(IconLinkCache *cache);
+    void setCache(IconSoftLinkCache *cache);
 
     std::string find(const std::string &icon);
 
 private:
-    IconLinkCache *m_cache;
+    IconSoftLinkCache *m_cache;
 };
 
 }
