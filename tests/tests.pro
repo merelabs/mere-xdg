@@ -10,12 +10,16 @@ TEMPLATE = app
 
 SOURCES += \
     src/main.cpp \
+#    ../src/iconmemorycache.h \
     src/testiconmemorycache.cpp
 
 HEADERS += \
+#    ../src/iconmemorycache.h \
     src/testiconmemorycache.h
 
-include(../mere-xdg-src.pri)
+#include(../mere-xdg-src.pri)
 
 INCLUDEPATH += /usr/local/include
 
+LIBS += -L/usr/local/lib
+LIBS += -lmere-xdg

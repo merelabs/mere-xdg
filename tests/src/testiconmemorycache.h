@@ -10,9 +10,12 @@ public:
     TestIconMemoryCache(){};
     ~TestIconMemoryCache(){};
 
+
 private slots:
     void initTestCase();
     void cleanupTestCase();
+    void testset();
+    void testevict();
 };
 
 #endif // TESTPARSER_H
