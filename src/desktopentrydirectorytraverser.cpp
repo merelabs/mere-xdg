@@ -4,6 +4,7 @@
 
 #include <sys/types.h>
 #include <dirent.h>
+#include <future>
 
 Mere::XDG::DesktopEntryDirectoryTraverser::DesktopEntryDirectoryTraverser(QObject *parent)
     : QObject(parent)
@@ -38,6 +39,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
         entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
     }
 
+    qDebug() << "NUMBER OF ENTRIES:" << entries.size();
     return entries;
 }
 
@@ -68,14 +70,27 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
 {
     std::vector<Mere::XDG::DesktopEntry> entries;
 
-    std::string base(path);
+    std::map<std::string, std::future<DesktopEntry>> tasks;
 
     std::vector<std::string> files = this->files(path);
     for(const std::string &file : files)
     {
-        std::string p(base);
-        DesktopEntryParser parser(p.append(file));
-        DesktopEntry entry = parser.parse();
+         auto future = std::async(std::launch::async, [&](const std::string &path, const std::string &file) -> DesktopEntry {
+             std::string p(path);
+             DesktopEntryParser parser(p.append(file));
+             DesktopEntry entry = parser.parse();
+             return entry;
+         }, path, file);
+
+         tasks.insert(std::make_pair(file, std::move(future)));
+    }
+
+    // can we process it in two phase?
+    // checking done condition?
+    // task.finish?
+    for(auto &task : tasks)
+    {
+        DesktopEntry entry = task.second.get();
         if(!entry.valid()) continue;
         if (entry.typeId() != type) continue;
 
