@@ -52,6 +52,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     std::vector<std::string> files = this->files(path);
     for(const std::string &file : files)
     {
+        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << file.c_str();
         std::string p(base);
 
         DesktopEntryParser parser(p.append(file));
@@ -68,8 +69,6 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
 
 std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::traverse(const std::string &path, DesktopEntry::TypeId type) const
 {
-    std::vector<Mere::XDG::DesktopEntry> entries;
-
     std::map<std::string, std::future<DesktopEntry>> tasks;
 
     std::vector<std::string> files = this->files(path);
@@ -78,8 +77,7 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
          auto future = std::async(std::launch::async, [&](const std::string &path, const std::string &file) -> DesktopEntry {
              std::string p(path);
              DesktopEntryParser parser(p.append(file));
-             DesktopEntry entry = parser.parse();
-             return entry;
+             return parser.parse();
          }, path, file);
 
          tasks.insert(std::make_pair(file, std::move(future)));
@@ -88,14 +86,16 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     // can we process it in two phase?
     // checking done condition?
     // task.finish?
+
+    std::vector<Mere::XDG::DesktopEntry> entries;
     for(auto &task : tasks)
     {
         DesktopEntry entry = task.second.get();
         if(!entry.valid()) continue;
         if (entry.typeId() != type) continue;
-
         entries.push_back(std::move(entry));
     }
+
 
     //emit traversed(path);
 

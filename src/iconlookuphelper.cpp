@@ -2,8 +2,9 @@
 #include "iconthemedirectory.h"
 #include "icondirectorytraverser.h"
 #include "iconthemedirectorytraverser.h"
-
 #include "config.h"
+
+#include "mere/utils/fileutils.h"
 
 #include <iostream>
 #include <chrono>
@@ -58,7 +59,6 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
         if (!config->theme().empty() && theme.name().compare(config->theme())) continue;
 
         path = LookupIcon(icon, theme);
-
         break;
     }
 
@@ -68,6 +68,7 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
         for(const auto &theme : themes)
         {
             if(!theme.hidden()) continue;
+            if (theme.name().compare("Hicolor")) continue;
 
             path = LookupIcon(icon, theme);
             break;
@@ -76,9 +77,7 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
 
     // check in base directories
     if (path.empty())
-    {
         path = LookupFallbackIcon(icon);
-    }
 
     return path;
 }
@@ -218,23 +217,21 @@ int Mere::XDG::IconLookupHelper::DirectorySizeDistance(const IconThemeSubDirecto
 
 std::string Mere::XDG::IconLookupHelper::LookupFallbackIcon(const std::string &icon)
 {
-    std::string path;
-
     std::vector<std::string> filters = IconLookupHelper::filters(icon);
-    for (const std::string &directory : IconThemeDirectory::base())
+
+    const std::vector<std::string> &directories = IconThemeDirectory::base();
+    for (const std::string &directory : directories)
     {
-//        QDir dir(directory.c_str());
-//        if (!dir.exists()) continue;
-
-//        QStringList list = dir.entryList(filters, QDir::Files | QDir::NoSymLinks | QDir::NoDotAndDotDot);
-//        if (list.size() == 0) continue;
-
-        // FIXME priority .png, .svg, .xpm
-//        path = dir.absolutePath().append("/").append(list.at(0)).toStdString();
-        break;
+        for (const std::string &filter : filters)
+        {
+            std::string path(directory);
+            path.append(filter);
+            if (Mere::Utils::FileUtils::isExist(path))
+                return path;
+        }
     }
 
-    return path;
+    return "";
 }
 
 //static
