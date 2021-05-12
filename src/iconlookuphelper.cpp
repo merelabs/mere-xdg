@@ -82,7 +82,6 @@ std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon)
     return path;
 }
 
-
 //static
 std::string Mere::XDG::IconLookupHelper::LookupIcon(const std::string &icon, const IconTheme &theme)
 {
@@ -215,6 +214,7 @@ int Mere::XDG::IconLookupHelper::DirectorySizeDistance(const IconThemeSubDirecto
     return 0;
 }
 
+//static
 std::string Mere::XDG::IconLookupHelper::LookupFallbackIcon(const std::string &icon)
 {
     std::vector<std::string> filters = IconLookupHelper::filters(icon);
