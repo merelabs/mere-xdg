@@ -9,11 +9,10 @@ namespace Mere
 namespace XDG
 {
 
-class MERE_XDG_LIB_SPEC AutostartDirectoryTraverser : public QObject
+class MERE_XDG_LIB_SPEC AutostartDirectoryTraverser
 {
-    Q_OBJECT
 public:
-    explicit AutostartDirectoryTraverser(QObject *parent = nullptr);
+    AutostartDirectoryTraverser() = default;
     std::vector<Mere::XDG::DesktopEntry> traverse() const;
     std::vector<Mere::XDG::DesktopEntry> traverse(DesktopEntry::TypeId type) const;
 
