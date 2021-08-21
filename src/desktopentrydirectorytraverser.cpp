@@ -39,7 +39,6 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
         entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
     }
 
-    qDebug() << "NUMBER OF ENTRIES:" << entries.size();
     return entries;
 }
 
@@ -52,7 +51,6 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
     std::vector<std::string> files = this->files(path);
     for(const std::string &file : files)
     {
-        qDebug() << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" << file.c_str();
         std::string p(base);
 
         DesktopEntryParser parser(p.append(file));
@@ -95,7 +93,6 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
         if (entry.typeId() != type) continue;
         entries.push_back(std::move(entry));
     }
-
 
     //emit traversed(path);
 

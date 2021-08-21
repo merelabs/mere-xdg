@@ -1,6 +1,6 @@
 #include "xsessiondirectorytraverser.h"
-#include "xsessiondirectory.h"
 #include "desktopentrydirectorytraverser.h"
+#include "xsessiondirectory.h"
 
 std::vector<Mere::XDG::DesktopEntry> Mere::XDG::XSessionDirectoryTraverser::traverse() const
 {

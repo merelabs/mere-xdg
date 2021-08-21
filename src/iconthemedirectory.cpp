@@ -9,7 +9,7 @@
 #include <iostream>
 #include <fstream>
 
-const std::string ICON_DIRECTORY = "icons/";
+static const std::string ICON_DIRECTORY = "icons/";
 
 //static
 std::vector<std::string> Mere::XDG::IconThemeDirectory::directories()

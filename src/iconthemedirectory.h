@@ -28,9 +28,6 @@ public:
     static std::vector<std::string> pixmaps();
 
     static std::string iconDirectory(const std::string &path);
-
-private:
-    static const std::string ICON_DIRECTORY;
 };
 }
 }

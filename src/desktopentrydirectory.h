@@ -23,10 +23,6 @@ public:
      */
     static std::vector<std::string> directories();
     static std::string directory(const std::string &path);
-
-private:
-    static const std::string APPLICATION_DIRECTORY;
-
 };
 }
 }

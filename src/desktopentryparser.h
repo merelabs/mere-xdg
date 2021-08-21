@@ -3,7 +3,6 @@
 
 #include "global.h"
 #include "desktopentry.h"
-#include "desktopentryaction.h"
 
 namespace Mere
 {
@@ -24,7 +23,6 @@ private:
     std::string base() const;
 
     std::set<std::string> categories(const std::string &value) const;
-//    std::set<DesktopEntryAction> actions(std::ifstream &file, std::string &line) const;
 
     DesktopEntry::Attribute attribute(const std::string &key) const;
 private:

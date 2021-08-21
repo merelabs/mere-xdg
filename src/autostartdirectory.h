@@ -25,8 +25,6 @@ public:
 
 
 private:
-    static const std::string AUTOSTART_DIRECTORY;
-
     static std::string directory(const std::string &path);
 
 };
