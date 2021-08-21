@@ -9,7 +9,7 @@ namespace Mere
 namespace XDG
 {
 
-class AutostartDirectoryTraverser : public QObject
+class MERE_XDG_LIB_SPEC AutostartDirectoryTraverser : public QObject
 {
     Q_OBJECT
 public:

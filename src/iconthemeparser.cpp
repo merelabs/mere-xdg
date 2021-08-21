@@ -18,7 +18,7 @@ Mere::XDG::IconTheme Mere::XDG::IconThemeParser::parse()
     IconTheme m_theme;
 
     Mere::Config::Spec::BaseEx config(m_path);
-    config.group()->pattern("^\\\[.+\\\]$");
+    config.group()->pattern("^\\[.+\\]$");
     config.group()->delimiter("");
 
     Mere::Config::Parser::GKParser parser(config);

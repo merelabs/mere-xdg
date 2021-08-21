@@ -1,6 +1,7 @@
 #ifndef ICONDIRECTORYTRAVERSER_H
 #define ICONDIRECTORYTRAVERSER_H
 
+#include "global.h"
 #include <QObject>
 
 namespace Mere
@@ -8,7 +9,7 @@ namespace Mere
 namespace XDG
 {
 
-class IconDirectoryTraverser : public QObject
+class MERE_XDG_LIB_SPEC IconDirectoryTraverser : public QObject
 {
     Q_OBJECT
 public:

@@ -1,6 +1,8 @@
 #ifndef BASE_H
 #define BASE_H
 
+#include "global.h"
+
 #include <map>
 #include <string>
 
@@ -9,7 +11,7 @@ namespace Mere
 namespace XDG
 {
 
-class BaseEntry
+class MERE_XDG_LIB_SPEC BaseEntry
 {
 public:
     virtual ~BaseEntry() = default;

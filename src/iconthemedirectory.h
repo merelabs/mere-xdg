@@ -7,7 +7,6 @@ namespace Mere
 {
 namespace XDG
 {
-static const char* ICON_DIRECTORY = "icons/";
 
 class MERE_XDG_LIB_SPEC IconThemeDirectory
 {
@@ -30,6 +29,8 @@ public:
 
     static std::string iconDirectory(const std::string &path);
 
+private:
+    static const std::string ICON_DIRECTORY;
 };
 }
 }
