@@ -47,7 +47,7 @@ void Mere::XDG::Config::scale(const uint &scale)
 
 std::string Mere::XDG::Config::context() const
 {
-    int set = 0;
+    bool set = 0;
     std::string value = this->get("mere.xdg.icon.context", &set);
     if (!set) return "Applications";
 
