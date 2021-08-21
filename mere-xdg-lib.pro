@@ -36,7 +36,8 @@ SOURCES += \
     src/iconthemedirectorytraverser.cpp \
     src/iconthemeparser.cpp \
     src/iconthemesubdirectory.cpp \
-    src/xsessiondirectory.cpp
+    src/xsessiondirectory.cpp \
+    src/xsessiondirectorytraverser.cpp
 
 HEADERS += \
     src/autostartdirectory.h \
@@ -64,7 +65,8 @@ HEADERS += \
     src/iconthemedirectorytraverser.h \
     src/iconthemeparser.h \
     src/iconthemesubdirectory.h \
-    src/xsessiondirectory.h
+    src/xsessiondirectory.h \
+    src/xsessiondirectorytraverser.h
 
 DISTFILES += \
     etc/xdg.conf
@@ -82,16 +84,12 @@ unix {
     target.path = /usr/local/lib
     INSTALLS += target
 
-    INSTALL_PREFIX = /usr/local/include/mere/xdg
+    XDG_PATH = /usr/local/include/mere/xdg
     for(header, HEADERS) {
         sdir = $${dirname(header)}
-        equals(sdir, "$$PWD/src") {
-            sdir = ""
-        } else {
-            sdir = $$replace(sdir, "$$PWD/src/", "")
-        }
-        #message($$sdir)
-        path = $${INSTALL_PREFIX}$${sdir}
+        sdir = $$replace(sdir, "src", "")
+        path = $${XDG_PATH}$${sdir}
+
         eval(headers_$${path}.files += $$header)
         eval(headers_$${path}.path = $$path)
         eval(INSTALLS *= headers_$${path})
