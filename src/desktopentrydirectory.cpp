@@ -2,10 +2,11 @@
 #include "basedirectory.h"
 
 #include "mere/utils/envutils.h"
-#include "mere/utils/binutils.h"
 #include "mere/utils/stringutils.h"
 
 #include <QDir>
+
+const std::string APPLICATION_DIRECTORY = "applications/";
 
 //static
 std::vector<std::string> Mere::XDG::DesktopEntryDirectory::directories()
@@ -37,5 +38,5 @@ std::string Mere::XDG::DesktopEntryDirectory::directory(const std::string &path)
     if (applicationDirectory.back() != '/')
         applicationDirectory.append("/");
 
-    return applicationDirectory.append(Mere::XDG::APPLICATION_DIRECTORY);
+    return applicationDirectory.append(APPLICATION_DIRECTORY);
 }

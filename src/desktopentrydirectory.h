@@ -9,8 +9,6 @@ namespace Mere
 namespace XDG
 {
 
-static const char* APPLICATION_DIRECTORY = "applications/";
-
 class MERE_XDG_LIB_SPEC DesktopEntryDirectory
 {
     DesktopEntryDirectory() = default;
@@ -25,6 +23,10 @@ public:
      */
     static std::vector<std::string> directories();
     static std::string directory(const std::string &path);
+
+private:
+    static const std::string APPLICATION_DIRECTORY;
+
 };
 }
 }
