@@ -9,8 +9,6 @@ namespace Mere
 namespace XDG
 {
 
-static const char* APPLICATION_DIRECTORY = "applications/";
-
 class MERE_XDG_LIB_SPEC DesktopEntryDirectory
 {
     DesktopEntryDirectory() = default;

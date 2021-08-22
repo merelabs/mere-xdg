@@ -9,6 +9,8 @@
 #include <iostream>
 #include <fstream>
 
+static const std::string ICON_DIRECTORY = "icons/";
+
 //static
 std::vector<std::string> Mere::XDG::IconThemeDirectory::directories()
 {
@@ -91,5 +93,5 @@ std::string Mere::XDG::IconThemeDirectory::iconDirectory(const std::string &path
     if (path.back() != '/')
         iconPath = iconPath.append("/");
 
-    return iconPath.append(XDG::ICON_DIRECTORY);
+    return iconPath.append(ICON_DIRECTORY);
 }

@@ -8,8 +8,6 @@ namespace Mere
 namespace XDG
 {
 
-static const char* AUTOSTART_DIRECTORY = "autostart/";
-
 class MERE_XDG_LIB_SPEC AutostartDirectory
 {
     AutostartDirectory() = default;
@@ -25,8 +23,10 @@ public:
      */
     static std::vector<std::string> directories();
 
+
 private:
     static std::string directory(const std::string &path);
+
 };
 
 }

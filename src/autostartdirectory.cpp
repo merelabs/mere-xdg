@@ -4,6 +4,7 @@
 #include "mere/utils/envutils.h"
 #include "mere/utils/stringutils.h"
 
+static const std::string AUTOSTART_DIRECTORY = "autostart/";
 std::vector<std::string> Mere::XDG::AutostartDirectory::directories()
 {
     std::vector<std::string> autostartDirectories;
@@ -33,5 +34,5 @@ std::string Mere::XDG::AutostartDirectory::directory(const std::string &path)
     if (autostartDirectory.back() != '/')
         autostartDirectory.append("/");
 
-    return autostartDirectory.append(XDG::AUTOSTART_DIRECTORY);
+    return autostartDirectory.append(AUTOSTART_DIRECTORY);
 }

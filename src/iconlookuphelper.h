@@ -9,7 +9,7 @@ namespace Mere
 namespace XDG
 {
 
-class IconLookupHelper
+class MERE_XDG_LIB_SPEC IconLookupHelper
 {
     IconLookupHelper() = default;
 public:
