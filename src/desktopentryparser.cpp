@@ -25,7 +25,7 @@ Mere::XDG::DesktopEntry Mere::XDG::DesktopEntryParser::parse()
 
     Mere::Config::Spec::BaseEx config(m_path);
 
-    config.group()->pattern("^\\\[Desktop (Entry|Action).*\\\]$");
+    config.group()->pattern("^\\[Desktop (Entry|Action).*\\]$");
     config.property()->pattern("^[^=]+=.*$");
 
     Mere::Config::Parser::GKParser parser(config);
@@ -104,40 +104,6 @@ std::set<std::string> Mere::XDG::DesktopEntryParser::categories(const std::strin
     return categories;
 }
 
-//std::set<Mere::XDG::DesktopEntryAction> Mere::XDG::DesktopEntryParser::actions(std::ifstream &file, std::string &line) const
-//{
-//    std::set<Mere::XDG::DesktopEntryAction> actions;
-
-//    std::string id = line.substr(16);
-
-//    DesktopEntryAction action(id);
-
-//    while (std::getline(file, line))
-//    {
-//        auto pos = line.find("[Desktop Action");
-//        if (pos != std::string::npos)
-//        {
-//            std::set<Mere::XDG::DesktopEntryAction> _actions = Mere::XDG::DesktopEntryParser::actions(file, line);
-//            actions.insert(_actions.begin(), _actions.end());
-//        }
-
-//        std::string key   = this->key(line);
-//        std::string value = this->value(line);
-
-//        if (key == "Name")
-//            action.set(DesktopEntryAction::Attribute::Name, value);
-//        else if (key == "Icon")
-//            action.set(DesktopEntryAction::Attribute::Icon, value);
-//        else if (key == "Exec")
-//            action.set(DesktopEntryAction::Attribute::Exec, value);
-//    }
-
-//    if (action.valid())
-//        actions.insert(action);
-
-//    return actions;
-//}
-
 Mere::XDG::DesktopEntry::Attribute Mere::XDG::DesktopEntryParser::attribute(const std::string &key) const
 {
     DesktopEntry::Attribute attribute;
@@ -199,7 +165,6 @@ Mere::XDG::DesktopEntry::Attribute Mere::XDG::DesktopEntryParser::attribute(cons
 std::string Mere::XDG::DesktopEntryParser::id() const
 {
     std::string id;
-
     for(const std::string &directory : Mere::XDG::DesktopEntryDirectory::directories())
     {
         if (directory.empty()) continue;

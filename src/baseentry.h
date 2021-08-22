@@ -1,6 +1,8 @@
 #ifndef BASE_H
 #define BASE_H
 
+#include "global.h"
+
 #include <map>
 #include <string>
 
@@ -9,7 +11,7 @@ namespace Mere
 namespace XDG
 {
 
-class BaseEntry
+class MERE_XDG_LIB_SPEC BaseEntry
 {
 public:
     virtual ~BaseEntry() = default;
@@ -18,10 +20,10 @@ public:
     std::string file() const;
     void file(const std::string &file);
 
-    std::string get(const int &attribute, int *set = nullptr) const;
+    std::string get(const int &attribute, bool *set = nullptr) const;
     void set(const int &attribute, const std::string &value);
 
-    std::string  get(const std::string &key, int *set = nullptr) const;
+    std::string  get(const std::string &key, bool *set = nullptr) const;
     void set(const std::string &key, const std::string &value);
 
 private:

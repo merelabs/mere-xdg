@@ -2,11 +2,6 @@
 #include "autostartdirectory.h"
 #include "desktopentrydirectorytraverser.h"
 
-Mere::XDG::AutostartDirectoryTraverser::AutostartDirectoryTraverser(QObject *parent) : QObject(parent)
-{
-
-}
-
 std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectoryTraverser::traverse() const
 {
     std::vector<Mere::XDG::DesktopEntry> entries;

@@ -1,8 +1,9 @@
 #ifndef DESKTOPENTRYCATEGORY_H
 #define DESKTOPENTRYCATEGORY_H
 
+#include "global.h"
 
-class DesktopEntryCategory
+class MERE_XDG_LIB_SPEC DesktopEntryCategory
 {
 public:
     DesktopEntryCategory();

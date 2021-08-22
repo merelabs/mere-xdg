@@ -60,7 +60,7 @@ std::string Mere::XDG::DesktopEntry::icon() const
 
 bool Mere::XDG::DesktopEntry::hidden() const
 {
-    int set;
+    bool set;
     std::string hidden = get(Attribute::Hidden, &set);
 
     if (!set) return false;
@@ -70,7 +70,7 @@ bool Mere::XDG::DesktopEntry::hidden() const
 
 bool Mere::XDG::DesktopEntry::terminal() const
 {
-    int set;
+    bool set;
     std::string terminal = get(Attribute::Terminal, &set);
 
     if (!set) return false;
@@ -80,7 +80,7 @@ bool Mere::XDG::DesktopEntry::terminal() const
 
 bool Mere::XDG::DesktopEntry::nodisplay() const
 {
-    int set;
+    bool set;
     std::string nodisplay = get(Attribute::NoDisplay, &set);
 
     if (!set) return false;
@@ -127,9 +127,15 @@ void Mere::XDG::DesktopEntry::categories(const std::set<std::string> &categories
 
 bool Mere::XDG::DesktopEntry::valid() const
 {
+    // If the desktop file is not installed in an applications subdirectory of
+    // one of the $XDG_DATA_DIRS components, it does not have an ID.
+    // ref: https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html
+    //
+    // So, the desktop file that is installed in xsessions subdirectory will not
+    // have any id!!!
     // Id is required
-    std::string id = get(Attribute::Id);
-    if (id.empty()) return false;
+    //std::string id = get(Attribute::Id);
+    //if (id.empty()) return false;
 
     // Type is required
     std::string type = get(Attribute::Type);

@@ -53,7 +53,7 @@ void Mere::XDG::IconTheme::home(const std::string &home)
 
 bool Mere::XDG::IconTheme::hidden() const
 {
-    int set;
+    bool set;
     std::string hidden = get(Attribute::Hidden, &set);
 
     if (!set) return false;

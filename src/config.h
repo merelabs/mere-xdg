@@ -28,7 +28,6 @@ public:
     static Config* instance(const std::string &path = "mere/xdg.conf")
     {
         static Config *instance = new Config(path);
-
         return instance;
     }
 };

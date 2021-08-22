@@ -1,10 +1,9 @@
 QT      = core
-
 CONFIG += c++11
 CONFIG += shared
 
 TARGET = mere-xdg
-VERSION= 0.0.1
+VERSION= 0.0.1b
 TEMPLATE = lib
 
 DEFINES += LIB_CODE=\\\"xdg\\\"
@@ -36,7 +35,9 @@ SOURCES += \
     src/iconthemedirectory.cpp \
     src/iconthemedirectorytraverser.cpp \
     src/iconthemeparser.cpp \
-    src/iconthemesubdirectory.cpp
+    src/iconthemesubdirectory.cpp \
+    src/xsessiondirectory.cpp \
+    src/xsessiondirectorytraverser.cpp
 
 HEADERS += \
     src/autostartdirectory.h \
@@ -52,7 +53,6 @@ HEADERS += \
     src/desktopentryparser.h \
     src/environment.h \
     src/global.h \
-    src/global.h \
     src/icondirectorytraverser.h \
     src/iconlookuphelper.h \
     src/iconmemorycache.h \
@@ -64,7 +64,9 @@ HEADERS += \
     src/iconthemedirectory.h \
     src/iconthemedirectorytraverser.h \
     src/iconthemeparser.h \
-    src/iconthemesubdirectory.h
+    src/iconthemesubdirectory.h \
+    src/xsessiondirectory.h \
+    src/xsessiondirectorytraverser.h
 
 DISTFILES += \
     etc/xdg.conf
@@ -82,11 +84,11 @@ unix {
     target.path = /usr/local/lib
     INSTALLS += target
 
-    INSTALL_PREFIX = /usr/local/include/mere/xdg
+    XDG_PATH = /usr/local/include/mere/xdg
     for(header, HEADERS) {
         sdir = $${dirname(header)}
         sdir = $$replace(sdir, "src", "")
-        path = $${INSTALL_PREFIX}$${sdir}
+        path = $${XDG_PATH}$${sdir}
 
         eval(headers_$${path}.files += $$header)
         eval(headers_$${path}.path = $$path)
