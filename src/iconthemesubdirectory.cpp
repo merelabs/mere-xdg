@@ -19,7 +19,7 @@ void Mere::XDG::IconThemeSubDirectory::home(const std::string &home)
 
 uint Mere::XDG::IconThemeSubDirectory::size() const
 {
-    int set;
+    bool set;
     std::string size = get(Attribute::Size, &set);
 
     if (!set || size.empty()) return 0;
@@ -29,7 +29,7 @@ uint Mere::XDG::IconThemeSubDirectory::size() const
 
 uint Mere::XDG::IconThemeSubDirectory::minsize() const
 {
-    int set;
+    bool set;
     std::string minsize = get(Attribute::MinSize, &set);
 
     if (!set || minsize.empty()) return 0;
@@ -39,7 +39,7 @@ uint Mere::XDG::IconThemeSubDirectory::minsize() const
 
 uint Mere::XDG::IconThemeSubDirectory::maxsize() const
 {
-    int set;
+    bool set;
     std::string maxsize = get(Attribute::MaxSize, &set);
 
     if (!set || maxsize.empty()) return 0;
@@ -50,7 +50,7 @@ uint Mere::XDG::IconThemeSubDirectory::maxsize() const
 
 uint Mere::XDG::IconThemeSubDirectory::scale() const
 {
-    int set;
+    bool set;
     std::string scale = get(Attribute::Scale, &set);
 
     if (!set || scale.empty()) return 0;
@@ -60,7 +60,7 @@ uint Mere::XDG::IconThemeSubDirectory::scale() const
 
 uint Mere::XDG::IconThemeSubDirectory::threshold() const
 {
-    int set;
+    bool set;
     std::string threshold = get(Attribute::Threshold, &set);
 
     if (!set || threshold.empty()) return 0;

@@ -60,7 +60,7 @@ std::string Mere::XDG::DesktopEntry::icon() const
 
 bool Mere::XDG::DesktopEntry::hidden() const
 {
-    int set;
+    bool set;
     std::string hidden = get(Attribute::Hidden, &set);
 
     if (!set) return false;
@@ -70,7 +70,7 @@ bool Mere::XDG::DesktopEntry::hidden() const
 
 bool Mere::XDG::DesktopEntry::terminal() const
 {
-    int set;
+    bool set;
     std::string terminal = get(Attribute::Terminal, &set);
 
     if (!set) return false;
@@ -80,7 +80,7 @@ bool Mere::XDG::DesktopEntry::terminal() const
 
 bool Mere::XDG::DesktopEntry::nodisplay() const
 {
-    int set;
+    bool set;
     std::string nodisplay = get(Attribute::NoDisplay, &set);
 
     if (!set) return false;
