@@ -8,10 +8,10 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::XSessionDirectoryTraverser::trav
 
     for(const std::string &directory : XSessionDirectory::directories())
     {
-        std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory);
-        if (_entries.empty()) continue;
-
-        entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
+        if (std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory); !_entries.empty())
+        {
+            entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
+        }
     }
 
     return entries;

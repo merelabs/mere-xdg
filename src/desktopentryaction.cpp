@@ -27,8 +27,7 @@ std::string Mere::XDG::DesktopEntryAction::exec() const
 
 std::string Mere::XDG::DesktopEntryAction::get(const Attribute &attribute, int *set) const
 {
-    auto find = m_attributes.find(attribute);
-    if (find != m_attributes.end())
+    if (auto find = m_attributes.find(attribute); find != m_attributes.end())
     {
         if (set) *set = 1;
         return find->second;

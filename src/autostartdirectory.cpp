@@ -4,18 +4,18 @@
 #include "mere/utils/envutils.h"
 #include "mere/utils/stringutils.h"
 
-static const std::string AUTOSTART_DIRECTORY = "autostart/";
+static constexpr char AUTOSTART_DIRECTORY[] = "autostart/";
 std::vector<std::string> Mere::XDG::AutostartDirectory::directories()
 {
     std::vector<std::string> autostartDirectories;
 
-    std::string userConfigHome = BaseDirectory::configHome();
+    auto userConfigHome = BaseDirectory::configHome();
     Mere::Utils::EnvUtils::expandEnvVar(userConfigHome);
 
     if (Mere::Utils::StringUtils::isNotBlank(userConfigHome))
         autostartDirectories.push_back( Mere::XDG::AutostartDirectory::directory(userConfigHome) );
 
-    const std::vector<std::string> directories = BaseDirectory::configDirectories();
+    const auto directories = BaseDirectory::configDirectories();
     for (std::string directory : directories)
     {
         Mere::Utils::EnvUtils::expandEnvVar(directory);

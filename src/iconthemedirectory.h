@@ -3,9 +3,7 @@
 
 #include "global.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconThemeDirectory
@@ -30,6 +28,6 @@ public:
     static std::string iconDirectory(const std::string &path);
 };
 }
-}
+
 
 #endif // MERE_XDG_ICONTHEMEDIRECTORYSPEC_H

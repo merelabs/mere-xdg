@@ -6,9 +6,7 @@
 
 #include <QObject>
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC DesktopEntryDirectoryTraverser : public QObject
@@ -34,7 +32,6 @@ private:
     std::vector<Mere::XDG::DesktopEntry> m_entries;
 };
 
-}
 }
 
 #endif // DESKTOPENTRYDIRECTORYTRAVERSER_H

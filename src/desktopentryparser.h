@@ -4,9 +4,7 @@
 #include "global.h"
 #include "desktopentry.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC DesktopEntryParser
@@ -29,7 +27,6 @@ private:
     std::string m_path;
 };
 
-}
 }
 
 #endif // MERE_XDG_DESKTOPENTRYPARSER_H

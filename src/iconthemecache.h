@@ -7,9 +7,7 @@
 #include <map>
 
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconThemeCache
@@ -25,6 +23,6 @@ private:
 };
 
 }
-}
+
 
 #endif // ICONTHEMECACHE_H

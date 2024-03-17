@@ -3,9 +3,7 @@
 
 #include "global.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC AutostartDirectory
@@ -29,7 +27,6 @@ private:
 
 };
 
-}
 }
 
 #endif // MERE_XDG_AUTOSTARTDIRECTORYSPEC_H

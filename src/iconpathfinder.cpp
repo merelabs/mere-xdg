@@ -2,15 +2,6 @@
 #include "iconlookuphelper.h"
 #include "iconsoftlinkcache.h"
 
-Mere::XDG::IconPathFinder::~IconPathFinder()
-{
-}
-
-Mere::XDG::IconPathFinder::IconPathFinder(QObject *parent)
-    : QObject(parent),
-      m_cache(nullptr)
-{
-}
 
 void Mere::XDG::IconPathFinder::setCache(IconSoftLinkCache *cache)
 {

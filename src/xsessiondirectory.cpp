@@ -4,7 +4,7 @@
 #include "mere/utils/envutils.h"
 #include "mere/utils/stringutils.h"
 
-static const std::string XSESSION_DIRECTORY = "xsessions/";
+static constexpr char XSESSION_DIRECTORY[] = "xsessions/";
 
 //static
 std::vector<std::string> Mere::XDG::XSessionDirectory::directories()

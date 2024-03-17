@@ -23,10 +23,10 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::AutostartDirectoryTraverser::tra
 
     for(const std::string &directory : AutostartDirectory::directories())
     {
-        std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory, type);
-        if (_entries.empty()) continue;
-
-        entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
+        if (const auto & _entries = this->traverse(directory, type); !_entries.empty())
+        {
+            entries.insert(entries.end(), std::make_move_iterator(_entries.cbegin()), std::make_move_iterator(_entries.cend()));
+        }
     }
 
     return entries;

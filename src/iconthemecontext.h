@@ -3,9 +3,7 @@
 
 #include "global.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconThemeContext
@@ -40,5 +38,5 @@ private:
 };
 
 }
-}
+
 #endif // ICONTHEMECONTEXT_H

@@ -6,9 +6,7 @@
 
 #include <set>
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconThemeParser
@@ -30,5 +28,5 @@ private:
 };
 
 }
-}
+
 #endif // ICONTHEMEPARSER_H

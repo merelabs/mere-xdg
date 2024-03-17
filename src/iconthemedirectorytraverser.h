@@ -6,9 +6,7 @@
 
 #include <QObject>
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconThemeDirectoryTraverser : public QObject
@@ -30,6 +28,6 @@ signals:
 
 };
 }
-}
+
 
 #endif // ICONTHEMEDIRECTORYTRAVERSER_H

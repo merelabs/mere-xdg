@@ -1,22 +1,17 @@
-#ifndef BASE_H
-#define BASE_H
+#ifndef MERE_XDG_BASE_H
+#define MERE_XDG_BASE_H
 
 #include "global.h"
 
 #include <map>
 #include <string>
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC BaseEntry
 {
 public:
-    virtual ~BaseEntry() = default;
-    BaseEntry() = default;
-
     std::string file() const;
     void file(const std::string &file);
 
@@ -35,5 +30,5 @@ private:
 };
 
 }
-}
-#endif // BASE_H
+
+#endif // MERE_XDG_BASE_H

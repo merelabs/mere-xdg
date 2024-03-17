@@ -6,7 +6,7 @@
 
 #include <QDir>
 
-static const std::string APPLICATION_DIRECTORY = "applications/";
+static constexpr char APPLICATION_DIRECTORY[] = "applications/";
 
 //static
 std::vector<std::string> Mere::XDG::DesktopEntryDirectory::directories()

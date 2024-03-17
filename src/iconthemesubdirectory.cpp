@@ -1,7 +1,5 @@
 #include "iconthemesubdirectory.h"
 
-#include <QVariant>
-
 std::string Mere::XDG::IconThemeSubDirectory::id() const
 {
     return get(Attribute::Id);
@@ -82,12 +80,10 @@ std::string Mere::XDG::IconThemeSubDirectory::context() const
 bool Mere::XDG::IconThemeSubDirectory::valid() const
 {
     // Id is required
-    std::string id = get(Attribute::Id);
-    if (id.empty()) return false;
+    if (std::string id = get(Attribute::Id); id.empty()) return false;
 
-    // Name is required
-    std::string size = get(Attribute::Size);
-    if (!size.empty()) return false;
+    // Size is required
+    if (std::string size = get(Attribute::Size); size.empty()) return false;
 
     return true;
 }

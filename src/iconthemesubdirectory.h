@@ -1,12 +1,12 @@
-#ifndef ICONTHEMESUBDIRECTORY_H
-#define ICONTHEMESUBDIRECTORY_H
+#ifndef MERE_XDG_ICONTHEMESUBDIRECTORY_H
+#define MERE_XDG_ICONTHEMESUBDIRECTORY_H
 
 #include "global.h"
 #include "baseentry.h"
 
-namespace Mere
-{
-namespace XDG
+#include <QVariant>
+
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconThemeSubDirectory : public BaseEntry
@@ -58,7 +58,7 @@ private:
 };
 
 }
-}
 
 Q_DECLARE_METATYPE(Mere::XDG::IconThemeSubDirectory);
-#endif // ICONTHEMESUBDIRECTORY_H
+
+#endif // MERE_XDG_ICONTHEMESUBDIRECTORY_H

@@ -2,16 +2,12 @@
 #define MERE_XDG_DESKTOPENTRYDIRECTORY_H
 
 #include "global.h"
-#include "desktopentry.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC DesktopEntryDirectory
 {
-    DesktopEntryDirectory() = default;
 public:
     /**
      * @brief applicationDirectories
@@ -25,6 +21,6 @@ public:
     static std::string directory(const std::string &path);
 };
 }
-}
+
 
 #endif // MERE_XDG_DESKTOPENTRYDIRECTORY_H

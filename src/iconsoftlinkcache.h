@@ -5,9 +5,7 @@
 
 #include <map>
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class IconMemoryCache;
@@ -31,7 +29,6 @@ private:
     IconMemoryCache *m_cache;
 };
 
-}
 }
 
 #endif // MERE_XDG_ICONDISKCACHE_H

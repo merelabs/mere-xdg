@@ -5,9 +5,7 @@
 #include "baseentry.h"
 #include "iconthemesubdirectory.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconTheme : public BaseEntry
@@ -80,7 +78,6 @@ private:
     std::vector<IconThemeSubDirectory> m_subdirectories;
 };
 
-}
 }
 
 Q_DECLARE_METATYPE(Mere::XDG::IconTheme);

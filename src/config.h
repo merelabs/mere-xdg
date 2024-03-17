@@ -4,9 +4,7 @@
 #include "global.h"
 #include "mere/config/kvconfig.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC Config : public Mere::Config::KVConfig
@@ -32,5 +30,5 @@ public:
     }
 };
 }
-}
+
 #endif // MERE_XDG_CONFIG_H

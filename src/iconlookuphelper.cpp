@@ -13,7 +13,7 @@
 
 //static
 std::string Mere::XDG::IconLookupHelper::path(const std::string &icon)
-{    
+{
     auto pos = icon.find("/");
     if(pos == 0) return icon;
 

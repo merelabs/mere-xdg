@@ -3,9 +3,7 @@
 
 #include "desktopentry.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC XSessionDirectoryTraverser
@@ -21,5 +19,5 @@ private:
 };
 
 }
-}
+
 #endif // MERE_XDG_XSESSIONDIRECTORYTRAVERSER_H

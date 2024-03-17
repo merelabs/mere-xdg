@@ -7,9 +7,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 typedef std::list<std::string>::iterator KeyIterator;
@@ -40,7 +38,6 @@ private:
     std::unordered_map<KeyIterator, std::string, KeyHash> m_cache;
 };
 
-}
 }
 
 #endif // ICONMEMORYCACHE_H

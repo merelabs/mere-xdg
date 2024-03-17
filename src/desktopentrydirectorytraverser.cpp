@@ -18,10 +18,10 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
 
     for(const std::string &directory : DesktopEntryDirectory::directories())
     {
-        std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory);
-        if (_entries.empty()) continue;
-
-        entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
+        if (const auto &_entries = this->traverse(directory); !_entries.empty())
+        {
+            entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
+        }
     }
 
     return entries;
@@ -33,10 +33,10 @@ std::vector<Mere::XDG::DesktopEntry> Mere::XDG::DesktopEntryDirectoryTraverser::
 
     for(const std::string &directory : DesktopEntryDirectory::directories())
     {
-        std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory, type);
-        if (_entries.empty()) continue;
-
-        entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
+        if (std::vector<Mere::XDG::DesktopEntry> _entries = this->traverse(directory, type); !_entries.empty())
+        {
+            entries.insert(entries.end(), std::make_move_iterator(_entries.begin()), std::make_move_iterator(_entries.end()));
+        }
     }
 
     return entries;

@@ -1,12 +1,10 @@
-#ifndef MERE_XDG_ICONFINDER_H
-#define MERE_XDG_ICONFINDER_H
+#ifndef MERE_XDG_ICONLOOKUPHELPER_H
+#define MERE_XDG_ICONLOOKUPHELPER_H
 
 #include "global.h"
 #include "icontheme.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC IconLookupHelper
@@ -29,5 +27,5 @@ private:
 };
 
 }
-}
-#endif // MERE_XDG_ICONFINDER_H
+
+#endif // MERE_XDG_ICONLOOKUPHELPER_H

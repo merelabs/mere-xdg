@@ -3,14 +3,13 @@
 
 #include "global.h"
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC DesktopEntryAction
 {
 public:
+    ~DesktopEntryAction() = default;
     DesktopEntryAction() = default;
     explicit DesktopEntryAction(const std::string &id);
 
@@ -42,8 +41,7 @@ private:
 };
 
 }
-}
-Q_DECLARE_METATYPE(Mere::XDG::DesktopEntryAction);
 
+Q_DECLARE_METATYPE(Mere::XDG::DesktopEntryAction);
 
 #endif // DESKTOPENTRYACTION_H

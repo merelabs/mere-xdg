@@ -1,5 +1,5 @@
 QT      = core
-CONFIG += c++11
+CONFIG += c++20
 CONFIG += shared
 
 TARGET = mere-xdg
@@ -23,7 +23,6 @@ SOURCES += \
     src/desktopentrydirectory.cpp \
     src/desktopentrydirectorytraverser.cpp \
     src/desktopentryparser.cpp \
-    src/environment.cpp \
     src/icondirectorytraverser.cpp \
     src/iconlookuphelper.cpp \
     src/iconmemorycache.cpp \

@@ -15,9 +15,11 @@ std::vector<Mere::XDG::IconTheme> Mere::XDG::IconThemeDirectoryTraverser::traver
 
     for(const std::string &directory : IconThemeDirectory::directories())
     {
-        std::vector<Mere::XDG::IconTheme> _themes = this->traverse(directory);
-        if (_themes.empty()) continue;
-        themes.insert(themes.end(), std::make_move_iterator(_themes.begin()), std::make_move_iterator(_themes.end()));
+
+        if (std::vector<Mere::XDG::IconTheme> _themes = this->traverse(directory); !_themes.empty())
+        {
+            themes.insert(themes.end(), std::make_move_iterator(_themes.begin()), std::make_move_iterator(_themes.end()));
+        }
     }
 
     return themes;

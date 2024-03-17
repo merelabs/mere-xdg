@@ -2,7 +2,6 @@
 #include "iconthemedirectory.h"
 
 #include "mere/config/parser/gkparser.h"
-#include "mere/utils/stringutils.h"
 
 Mere::XDG::IconThemeParser::~IconThemeParser()
 {
@@ -26,8 +25,7 @@ Mere::XDG::IconTheme Mere::XDG::IconThemeParser::parse()
     m_theme.file(m_path);
     m_theme.set(IconTheme::Attribute::Id, id());
 
-    auto pos = m_path.find_last_of("/");
-    if (pos != std::string::npos)
+    if (auto pos = m_path.find_last_of("/"); pos != std::string::npos)
         m_theme.home(m_path.substr(0, pos + 1));
 
     for(const auto& group : parser.parse())
@@ -56,9 +54,7 @@ Mere::XDG::IconTheme Mere::XDG::IconThemeParser::parse()
         {
             std::string key   = property->name();
             std::string value = property->value();
-
-            IconThemeSubDirectory::Attribute attr = subattribute(key);
-            if (attr != IconThemeSubDirectory::Attribute::Others)
+            if (IconThemeSubDirectory::Attribute attr = subattribute(key); attr != IconThemeSubDirectory::Attribute::Others)
                 subdir.set(attr, value);
             else
                 subdir.set(key, value);

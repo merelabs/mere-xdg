@@ -4,15 +4,15 @@
 #include "desktopentry.h"
 #include <QObject>
 
-namespace Mere
-{
-namespace XDG
+namespace Mere::XDG
 {
 
 class MERE_XDG_LIB_SPEC AutostartDirectoryTraverser
 {
 public:
     AutostartDirectoryTraverser() = default;
+
+
     std::vector<Mere::XDG::DesktopEntry> traverse() const;
     std::vector<Mere::XDG::DesktopEntry> traverse(DesktopEntry::TypeId type) const;
 
@@ -25,5 +25,5 @@ private:
 };
 
 }
-}
+
 #endif // MERE_XDG_AUTOSTARTDIRECTORYTRAVERSER_H
